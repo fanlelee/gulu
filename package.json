@@ -1,0 +1,23 @@
+{
+  "name": "gulu-demo",
+  "version": "1.0.0",
+  "description": "VUE 组件 UI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fanlelee/gulu.git"
+  },
+  "keywords": [
+    "Vue",
+    "UI"
+  ],
+  "author": "fanlelee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fanlelee/gulu/issues"
+  },
+  "homepage": "https://github.com/fanlelee/gulu#readme"
+}
