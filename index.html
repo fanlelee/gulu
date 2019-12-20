@@ -30,24 +30,6 @@
         #app {
             margin: 20px;
         }
-        .g-button {
-            font-size: var(--font-size);
-            height: var(--button-height);
-            padding: 0 2em;
-            background-color: var(--button-bg);
-            border-radius: var(--button-radius);
-            border-color: var(--button-border-color);
-            color: var(--button-color);
-        }
-        .g-button:hover {
-            border-color: var(--button-hover-color);
-        }
-        .g-button:active {
-            background-color: var(--button-active-bg);
-        }
-        .g-button:focus {
-            outline: none;
-        }
 
     </style>
 </head>
@@ -55,12 +37,6 @@
 <div id="app">
     <g-button></g-button>
 </div>
-<script src="./node_modules/vue/dist/vue.min.js"></script>
-<script src="./button.js"></script>
-<script>
-    var vm = new Vue({
-        el: "#app"
-    })
-</script>
+<script src="./src/app.js"></script>
 </body>
 </html>
