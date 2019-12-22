@@ -45,7 +45,12 @@
     <g-button icon="settings" icon-position="left"  :loading="loading3" @click="loading3 = !loading3">
         文字
     </g-button>
-    <g-icon name="down"></g-icon>
+
+    <button-group>
+        <g-button icon="left" icon-position="left">上一页</g-button>
+        <g-button>更多</g-button>
+        <g-button icon="right" icon-position="right">下一页</g-button>
+    </button-group>
 </div>
 <script src="./src/app.js"></script>
 <script src="//at.alicdn.com/t/font_1574908_r76xdq5j7h.js"></script>
