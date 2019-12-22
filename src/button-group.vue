@@ -25,7 +25,9 @@
             /*&:not(:first-child){*/
             /*    border-left: none;*/
             /*}*/
-            margin-left: -1px;
+            &:not(:first-child){
+                margin-left: -1px;
+            }
             &:first-child {
                 border-top-left-radius: var(--button-radius);
                 border-bottom-left-radius: var(--button-radius);
