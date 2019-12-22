@@ -4,7 +4,17 @@
     </div>
 </template>
 <script>
-
+    export default {
+        mounted() {
+            console.log(this.$el.children)
+            for(let node of this.$el.children){
+                console.log(node.nodeName)
+                if(node.nodeName.toLowerCase() !== 'button'){
+                    console.log(`button-group的子元素必须是g-button，但是出现了子元素${node.nodeName.toLowerCase()}`)
+                }
+            }
+        }
+    }
 </script>
 <style lang="scss">
     .g-button-group {
