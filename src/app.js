@@ -19,7 +19,12 @@ new Vue({
 
 //单元测试
 import chai from 'chai'
+import spies from 'chai-spies'
+chai.use(spies)
+
 const expect = chai.expect
+
+
 
 //icon测试用例
 {
@@ -72,4 +77,20 @@ const expect = chai.expect
     expect(order).to.eq('2')//注意用字符串来断言
     vm.$el.remove()
     vm.$destroy()
+}
+
+{
+    const Constructor = Vue.extend(Button)
+    let vm = new Constructor({
+        propsData: {
+            icon: 'settings'
+        }
+    }).$mount()
+
+    let spy = chai.spy(function () {})
+    vm.$on('click', spy)
+
+    vm.$el.click()
+
+    expect(spy).to.have.been.called()
 }
