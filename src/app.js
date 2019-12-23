@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Button from './button'
 import Icon from './icon'
-import  ButtonGroup from  './button-group'
+import ButtonGroup from './button-group'
 
 
 Vue.component('g-button', Button)
@@ -20,10 +20,10 @@ new Vue({
 //单元测试
 import chai from 'chai'
 import spies from 'chai-spies'
+
 chai.use(spies)
 
 const expect = chai.expect
-
 
 
 //icon测试用例
@@ -35,7 +35,7 @@ const expect = chai.expect
         }
     })
     vm.$mount('#test')
-    let useElement =  vm.$el.querySelector('use')
+    let useElement = vm.$el.querySelector('use')
     expect(useElement.getAttribute('xlink:href')).to.equal('#i-settings')
 
     vm.$el.remove()
@@ -87,7 +87,8 @@ const expect = chai.expect
         }
     }).$mount()
 
-    let spy = chai.spy(function () {})
+    let spy = chai.spy(function () {
+    })
     vm.$on('click', spy)
 
     vm.$el.click()
