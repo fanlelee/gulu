@@ -48,7 +48,7 @@
         background-color: var(--button-bg);
         border-radius: var(--button-radius);
         border-color: var(--button-border-color);
-        color: var(--button-color);
+        color: #000;
         vertical-align: middle;
         display: inline-flex;
         justify-content: center;
