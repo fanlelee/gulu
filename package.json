@@ -1,8 +1,8 @@
 {
   "name": "fanlelee-t-1-1",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "VUE 组件 UI",
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-test": "parcel watch test/* --no-cache & karma start",
