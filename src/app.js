@@ -50,7 +50,7 @@ const expect = chai.expect
             icon: 'settings',
             loading: true
         }
-    }).$mount()//可以不显示在页面，就放在内存中
+    }).$mount()//可以不显示在页面，就放在内存中， 叫做 无头浏览器
 
     let href = vm.$el.querySelector('use').getAttribute("xlink:href")
     expect(href).to.eq('#i-loading')
