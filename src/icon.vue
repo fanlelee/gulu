@@ -4,6 +4,7 @@
     </svg>
 </template>
 <script>
+    import './icon.js'
     export default {
         props: ['name']
     }
