@@ -32,28 +32,38 @@
         #app {
             margin: 20px;
         }
+        .wrapper {margin:10px;}
     </style>
 </head>
 <body>
 <div id="app">
-    <g-button :loading="loading1" @click="loading1 = !loading1">
-        文字
-    </g-button>
-    <g-button icon="settings" icon-position="right"  :loading="loading2" @click="loading2 = !loading2">
-        文字
-    </g-button>
-    <g-button icon="settings" icon-position="left"  :loading="loading3" @click="loading3 = !loading3">
-        文字
-    </g-button>
+    <g-input content="王五"></g-input>
+    <g-input content="disabled" disabled="true"></g-input>
+    <g-input content="readonly" read-only="true"></g-input>
+    <div>
+        <g-button :loading="loading1" @click="loading1 = !loading1">
+            文字
+        </g-button>
+        <g-button icon="settings" icon-position="right" :loading="loading2" @click="loading2 = !loading2">
+            文字
+        </g-button>
+        <g-button icon="settings" icon-position="left" :loading="loading3" @click="loading3 = !loading3">
+            文字
+        </g-button>
 
-    <button-group>
-        <g-button icon="left" icon-position="left">上一页</g-button>
-        <g-button>更多</g-button>
-        <g-button icon="right" icon-position="right">下一页</g-button>
-    </button-group>
-    <div id="test"></div>
-    <div id="test2"></div>
+        <button-group>
+            <g-button icon="left" icon-position="left">上一页</g-button>
+            <g-button>更多</g-button>
+            <g-button icon="right" icon-position="right">下一页</g-button>
+        </button-group>
+        <div id="test"></div>
+        <div id="test2"></div>
+
+    </div>
 </div>
+<svg class="icon">
+    <use xlink:href=`#i-loading`></use>
+</svg>
 <script src="./src/app.js"></script>
 </body>
 </html>

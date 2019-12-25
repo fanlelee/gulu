@@ -4,14 +4,13 @@
     </svg>
 </template>
 <script>
-    import './icon.js'
+    // import './icon.js'
+
     export default {
+        name: 'GuluIcon',
         props: ['name']
     }
 </script>
-<style lang="scss">
-    .icon {
-        width: 1em;
-        height: 1em;
-    }
+<style lang="scss" scoped>
+    .icon {width: 1em;height: 1em;}
 </style>
