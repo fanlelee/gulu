@@ -1,19 +1,24 @@
 <template>
     <div class="wrapper">
-        <input type="text" :value="content" :disabled="disabled" :readonly="readOnly">
+        <input :class="{error}" type="text" :value="content" :disabled="disabled" :readonly="readonly">
 
-
+    <template v-if="error">
+        <gulu-icon name="error" class="error-icon"></gulu-icon>
+        <span class="error-message">{{error}}</span>
+    </template>
     </div>
 </template>
 <script>
+    import GuluIcon from "./icon.vue"
     export default {
         name: 'GuluInput',
+        components: {GuluIcon},
         props: {
             content: {
                 type: String,
                 default: ''
             },
-            readOnly: {
+            readonly: {
                 type: Boolean,
                 default: false
             },
@@ -32,24 +37,27 @@
 <style lang="scss" scoped>
     $border-height: 32px;
     $font-size: 14px;
-    $border-raduis: 4px;
+    $border-radius: 4px;
     $border-color: #999;
     $border-hover-color: #666;
     $border-box-shadow: rgba(0, 0, 0, .5);
     $border-padding: 9px 8px;
     $border-font-color: #333;
     $border-disabled-color: #bbb;
+    $error-color:#F1453D;
+    $error-font-size: 12px;
     .wrapper {
         display: inline-flex;
         font-size: $font-size;
         align-items: center;
         > input{
             height: $border-height;
-            border-radius: $border-raduis;
+            border-radius: $border-radius;
             border: 1px solid $border-color;
             outline: none;
             padding: $border-padding;
             color: $border-font-color;
+            font-size: inherit;
 
             &:hover {
                 border: 1px solid $border-hover-color;
@@ -64,6 +72,21 @@
                 color: $border-disabled-color;
             }
         }
+        > .error-message {
+            font-size: $error-font-size;
+            color: $error-color;
 
+        }
+        > .error-icon {
+            font-size: $error-font-size;
+            fill:  $error-color;
+        }
+
+        > :not(:last-child){
+            margin-right: .5em;
+        }
+        > .error {
+            border-color: $error-color;
+        }
     }
 </style>

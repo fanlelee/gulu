@@ -1,10 +1,10 @@
 <template>
     <svg class="icon">
-        <use :xlink:href=`#i-${name}`></use>
+        <use :xlink:href="`#i-${name}`"></use>
     </svg>
 </template>
 <script>
-    // import './icon.js'
+    import './icon.js'
 
     export default {
         name: 'GuluIcon',

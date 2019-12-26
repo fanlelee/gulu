@@ -38,8 +38,11 @@
 <body>
 <div id="app">
     <g-input content="王五"></g-input>
-    <g-input content="disabled" disabled="true"></g-input>
-    <g-input content="readonly" read-only="true"></g-input>
+    <g-input content="disabled" disabled></g-input>
+    <g-input content="readonly" readonly></g-input>
+    <div>
+        <g-input content="12345" error="密码错误"></g-input>
+    </div>
     <div>
         <g-button :loading="loading1" @click="loading1 = !loading1">
             文字
@@ -61,9 +64,6 @@
 
     </div>
 </div>
-<svg class="icon">
-    <use xlink:href=`#i-loading`></use>
-</svg>
 <script src="./src/app.js"></script>
 </body>
 </html>
