@@ -16,10 +16,10 @@ describe('input', () => {
         afterEach(() => {
             vm.$destroy()
         })
-        it('可以设置content', () => {
+        it('可以设置value', () => {
             vm = new Constructor({
                 propsData: {
-                    content: '内容测试'
+                    value: '内容测试'
                 }
             }).$mount()
             const value = vm.$el.querySelector('input').value
@@ -75,10 +75,14 @@ describe('input', () => {
 
                 //触发
                 let event = new Event(eventName)
+                Object.defineProperty(
+                    event, 'target', {
+                    value: {value: 'hi'}, enumerable: true
+                })
                 let inputElement = vm.$el.querySelector('input')
                 inputElement.dispatchEvent(event)
 
-                expect(callback).to.have.been.calledWith(event)
+                expect(callback).to.have.been.calledWith('hi')//$event.target.value
             })
         })
     })

@@ -37,11 +37,15 @@
 </head>
 <body>
 <div id="app">
-    <g-input content="王五" @change="inputChange"></g-input>
-    <g-input content="disabled" disabled></g-input>
-    <g-input content="readonly" readonly></g-input>
+    <g-input value="王五" @change="inputChange"></g-input>
+    <g-input value="disabled" disabled></g-input>
+    <g-input value="readonly" readonly></g-input>
     <div>
-        <g-input content="12345" error="密码错误"></g-input>
+        <g-input value="12345" error="密码错误"></g-input>
+    </div>
+    <div>
+        <g-input v-model="message" ></g-input>
+        <span>{{message}}</span>
     </div>
     <div>
         <g-button :loading="loading1" @click="loading1 = !loading1">
