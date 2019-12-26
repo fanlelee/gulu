@@ -1,6 +1,10 @@
 <template>
     <div class="wrapper">
-        <input :class="{error}" type="text" :value="content" :disabled="disabled" :readonly="readonly">
+        <input :class="{error}" type="text" :value="content" :disabled="disabled" :readonly="readonly"
+       @change="$emit('change', $event)"
+       @input="$emit('input', $event)"
+       @focus="$emit('focus', $event)"
+       @blur="$emit('blur', $event)">
 
     <template v-if="error">
         <gulu-icon name="error" class="error-icon"></gulu-icon>
