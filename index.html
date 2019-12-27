@@ -37,21 +37,31 @@
 </head>
 <body>
 <div id="app">
+<div style="border: 1px solid red">
 
-    <g-row>
-        <g-col></g-col>
-        <g-col></g-col>
-        <g-col></g-col>
+    <g-row gutter="20">
+        <g-col span="10"></g-col>
+        <g-col span="10"></g-col>
+        <g-col span="10"></g-col>
     </g-row>
     <g-row>
         <g-col span="6"></g-col>
         <g-col :span="18"></g-col>
     </g-row>
-    <g-row>
+    <g-row  gutter="20">
         <g-col span="10"></g-col>
         <g-col span="4"></g-col>
         <g-col span="10"></g-col>
     </g-row>
+    <g-row>
+        <g-col span="10"></g-col>
+        <g-col span="10" offset="4"></g-col>
+    </g-row>
+    <g-row gutter="20">
+        <g-col span="10"></g-col>
+        <g-col span="10" offset="4"></g-col>
+    </g-row>
+</div>
 
 
     <br>
