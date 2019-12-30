@@ -37,6 +37,12 @@
             margin: 10px;
         }
 
+        .bootv {
+            border: 1px solid #666;
+            background-color: #999999;
+            height: inherit;
+        }
+
 
     </style>
 </head>
@@ -46,14 +52,19 @@
     <div style="border: 1px solid red">
 
         <g-row>
-            <g-col span="10" :phone="{span:5}" :pad="{span:6}">1</g-col>
-            <g-col span="10" :phone="{span:5}" :pad="{span:6}">2</g-col>
-            <g-col span="10" :phone="{span:14}" :pad="{span:6}">3</g-col>
+            <g-col span="24" :pad="{span:12}" :pc="{span:8}"><div class="bootv"></div></g-col>
+            <g-col span="24" :pad="{span:12}" :pc="{span:8}"><div class="bootv"></div></g-col>
+            <g-col span="24" :pad="{span:12}" :pc="{span:8}"><div class="bootv"></div></g-col>
         </g-row>
         <g-row>
-            <g-col span="10">1</g-col>
-            <g-col span="10">2</g-col>
-            <g-col span="10">3</g-col>
+            <g-col span="10" :phone="{span:24}" :pad="{span:6}">1</g-col>
+            <g-col span="10" :phone="{span:24}" :pad="{span:6}">2</g-col>
+            <g-col span="4" :phone="{span:24}" :pad="{span:12}">3</g-col>
+        </g-row>
+        <g-row>
+            <g-col span="10">11</g-col>
+            <g-col span="10">22</g-col>
+            <g-col span="4">33</g-col>
         </g-row>
         <g-row>
             <g-col span="6"></g-col>
