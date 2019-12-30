@@ -7,11 +7,11 @@
 <script>
     let validator = (value) => {
         let valid = true
-        Object.keys(value).forEach( (key) => {
-            if(!['span', 'offset'].includes(key)){
+        Object.keys(value).forEach((key) => {
+            if (!['span', 'offset'].includes(key)) {
                 valid = false
             }
-        } )
+        })
         return valid
     }
     export default {
@@ -32,20 +32,37 @@
                 gutter: 0
             }
         },
+        methods: {
+            createClasses(obj, str = '') {
+                if (!obj) {
+                    return []
+                }
+                let array = []
+                // str: 'pad-' , 'pc-'
+                if (obj.span) {
+                    array.push(`col-${str}${obj.span}`)
+                }
+                if (obj.offset) {
+                    array.push(`col-${str}${obj.offset}`)
+                }
+                return array
+            }
+        },
+
         computed: {
-            colClass(){
-                let {span, offset, pad, narrowPc, pc, widePc} = this
-                return [span &&`col-${span}`,
-                    offset && `offset-${offset}`,
-                    pad && `col-pad-${pad.span}`,
-                    narrowPc && `col-narrow-pc-${narrowPc.span}`,
-                    pc && `col-pc-${pc.span}`,
-                    widePc && `col-wide-pc-${widePc.span}`
+            colClass() {
+                let {span, offset, pad, narrowPc, pc, widePc,createClasses} = this
+                return [
+                    ...createClasses({'span': span, 'offset': offset}),
+                    ...createClasses(pad, 'pad-'),
+                    ...createClasses(narrowPc, 'narrow-pc-'),
+                    ...createClasses(pc, 'pc-'),
+                    ...createClasses(widePc, 'wide-pc-')
                 ]
             },
-            colStyle(){
+            colStyle() {
                 let {gutter} = this
-                return gutter && {paddingLeft: gutter/2+'px', paddingRight: gutter/2+'px'}
+                return gutter && {paddingLeft: gutter / 2 + 'px', paddingRight: gutter / 2 + 'px'}
             }
         }
     }
@@ -69,7 +86,7 @@
             }
         }
 
-        @media (min-width: 576px){
+        @media (min-width: 576px) {
             $class: col-pad-;
             @for $n from 1 through 24 {
                 &.#{$class}#{$n} {
@@ -84,7 +101,7 @@
                 }
             }
         }
-        @media (min-width: 768px)  {
+        @media (min-width: 768px) {
             $class: col-narrow-pc-;
             @for $n from 1 through 24 {
                 &.#{$class}#{$n} {
