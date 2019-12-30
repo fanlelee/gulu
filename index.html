@@ -45,10 +45,15 @@
 
     <div style="border: 1px solid red">
 
-        <g-row gutter="20">
-            <g-col span="10"><div>1</div></g-col>
-            <g-col span="10"><div>2</div></g-col>
-            <g-col span="10"><div>3</div></g-col>
+        <g-row>
+            <g-col span="10" :phone="{span:5}" :pad="{span:6}">1</g-col>
+            <g-col span="10" :phone="{span:5}" :pad="{span:6}">2</g-col>
+            <g-col span="10" :phone="{span:14}" :pad="{span:6}">3</g-col>
+        </g-row>
+        <g-row>
+            <g-col span="10">1</g-col>
+            <g-col span="10">2</g-col>
+            <g-col span="10">3</g-col>
         </g-row>
         <g-row>
             <g-col span="6"></g-col>
