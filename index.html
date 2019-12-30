@@ -32,36 +32,42 @@
         #app {
             margin: 20px;
         }
-        .wrapper {margin:10px;}
+
+        .wrapper {
+            margin: 10px;
+        }
+
+
     </style>
 </head>
 <body>
 <div id="app">
-<div style="border: 1px solid red">
 
-    <g-row gutter="20">
-        <g-col span="10"></g-col>
-        <g-col span="10"></g-col>
-        <g-col span="10"></g-col>
-    </g-row>
-    <g-row>
-        <g-col span="6"></g-col>
-        <g-col :span="18"></g-col>
-    </g-row>
-    <g-row  gutter="20">
-        <g-col span="10"></g-col>
-        <g-col span="4"></g-col>
-        <g-col span="10"></g-col>
-    </g-row>
-    <g-row>
-        <g-col span="10"></g-col>
-        <g-col span="10" offset="4"></g-col>
-    </g-row>
-    <g-row gutter="20">
-        <g-col span="10"></g-col>
-        <g-col span="10" offset="4"></g-col>
-    </g-row>
-</div>
+    <div style="border: 1px solid red">
+
+        <g-row gutter="20">
+            <g-col span="10"><div>1</div></g-col>
+            <g-col span="10"><div>2</div></g-col>
+            <g-col span="10"><div>3</div></g-col>
+        </g-row>
+        <g-row>
+            <g-col span="6"></g-col>
+            <g-col :span="18"></g-col>
+        </g-row>
+        <g-row gutter="20">
+            <g-col span="10"></g-col>
+            <g-col span="4"></g-col>
+            <g-col span="10"></g-col>
+        </g-row>
+        <g-row>
+            <g-col span="10"></g-col>
+            <g-col span="10" offset="4"></g-col>
+        </g-row>
+        <g-row gutter="20">
+            <g-col span="10"></g-col>
+            <g-col span="10" offset="4"></g-col>
+        </g-row>
+    </div>
 
 
     <br>
@@ -72,7 +78,7 @@
         <g-input value="12345" error="密码错误"></g-input>
     </div>
     <div>
-        <g-input v-model="message" ></g-input>
+        <g-input v-model="message"></g-input>
         <span>{{message}}</span>
     </div>
     <div>

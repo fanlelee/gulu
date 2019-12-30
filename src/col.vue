@@ -1,7 +1,7 @@
 <template>
     <div class="col" :class="colClass"
          :style="colStyle">
-        <div class="content"></div>
+        <slot></slot>
     </div>
 </template>
 <script>
@@ -34,12 +34,7 @@
 <style lang="scss" scoped>
     .col {
         height: 100px;
-        width: 100%;
-
-        > .content {
-            border: 1px solid green;
-            height: inherit;
-        }
+        /*width: 100%;*/
 
         $class: col-;
         @for $n from 1 through 24 {
