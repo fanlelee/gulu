@@ -33,8 +33,19 @@
         }
 
         .demo {
-            border: 1px solid #000;
-            min-height: 100px;
+            height: 200px;
+        }
+        .sider {
+            background-color: #333;
+        }
+        .footer,.header {
+            background-color: #666;
+        }
+        .content {
+            background-color: #999;
+        }
+        .slide-enter, .slide-leave-to {
+            margin-left: -142px;
         }
 
     </style>
@@ -42,7 +53,7 @@
 <body>
 <div id="app">
     <g-layout>
-        <g-sider class="demo" style="flex-grow: 1;">sider</g-sider>
+        <g-sider style="flex-grow: .2;">sider</g-sider>
         <g-layout>
             <g-header class="demo">herder</g-header>
             <g-content class="demo" style="flex-grow: 2;">content</g-content>
