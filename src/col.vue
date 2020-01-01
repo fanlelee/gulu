@@ -43,7 +43,7 @@
                     array.push(`col-${str}${obj.span}`)
                 }
                 if (obj.offset) {
-                    array.push(`col-${str}${obj.offset}`)
+                    array.push(`offset-${str}${obj.offset}`)
                 }
                 return array
             }
