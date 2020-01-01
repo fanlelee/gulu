@@ -30,93 +30,26 @@
         }
 
         #app {
-            margin: 20px;
         }
 
-        .wrapper {
-            margin: 10px;
+        .demo {
+            border: 1px solid #000;
+            min-height: 100px;
         }
-
-        .bootv {
-            border: 1px solid #666;
-            background-color: #999999;
-            height: inherit;
-        }
-
 
     </style>
 </head>
 <body>
 <div id="app">
+    <g-layout>
+        <g-sider class="demo" style="flex-grow: 1;">sider</g-sider>
+        <g-layout>
+            <g-header class="demo">herder</g-header>
+            <g-content class="demo" style="flex-grow: 2;">content</g-content>
+            <g-footer class="demo">footer</g-footer>
+        </g-layout>
+    </g-layout>
 
-    <div style="border: 1px solid red">
-
-        <g-row>
-            <g-col span="24" :pad="{span:12}" :pc="{span:8}"><div class="bootv"></div></g-col>
-            <g-col span="24" :pad="{span:12}" :pc="{span:8}"><div class="bootv"></div></g-col>
-            <g-col span="24" :pad="{span:12}" :pc="{span:8}"><div class="bootv"></div></g-col>
-        </g-row>
-        <g-row>
-            <g-col span="10" :phone="{span:24}" :pad="{span:6}">1</g-col>
-            <g-col span="10" :phone="{span:24}" :pad="{span:6}">2</g-col>
-            <g-col span="4" :phone="{span:24}" :pad="{span:12}">3</g-col>
-        </g-row>
-        <g-row>
-            <g-col span="10">11</g-col>
-            <g-col span="10">22</g-col>
-            <g-col span="4">33</g-col>
-        </g-row>
-        <g-row>
-            <g-col span="6"></g-col>
-            <g-col :span="18"></g-col>
-        </g-row>
-        <g-row gutter="20">
-            <g-col span="10"></g-col>
-            <g-col span="4"></g-col>
-            <g-col span="10"></g-col>
-        </g-row>
-        <g-row>
-            <g-col span="10"></g-col>
-            <g-col span="10" offset="4"></g-col>
-        </g-row>
-        <g-row gutter="20">
-            <g-col span="10"></g-col>
-            <g-col span="10" offset="4"></g-col>
-        </g-row>
-    </div>
-
-
-    <br>
-    <g-input value="王五" @change="inputChange"></g-input>
-    <g-input value="disabled" disabled></g-input>
-    <g-input value="readonly" readonly></g-input>
-    <div>
-        <g-input value="12345" error="密码错误"></g-input>
-    </div>
-    <div>
-        <g-input v-model="message"></g-input>
-        <span>{{message}}</span>
-    </div>
-    <div>
-        <g-button :loading="loading1" @click="loading1 = !loading1">
-            文字
-        </g-button>
-        <g-button icon="settings" icon-position="right" :loading="loading2" @click="loading2 = !loading2">
-            文字
-        </g-button>
-        <g-button icon="settings" icon-position="left" :loading="loading3" @click="loading3 = !loading3">
-            文字
-        </g-button>
-
-        <button-group>
-            <g-button icon="left" icon-position="left">上一页</g-button>
-            <g-button>更多</g-button>
-            <g-button icon="right" icon-position="right">下一页</g-button>
-        </button-group>
-        <div id="test"></div>
-        <div id="test2"></div>
-
-    </div>
 </div>
 <script src="./src/app.js"></script>
 </body>
