@@ -38,7 +38,19 @@ new Vue({
     },
     methods: {
         showToast(message){
-            this.$toast(message)
+            message= '文字'
+            this.$toast(message, {
+                closeButton: {
+                    text: '关闭',
+                    callback(toast){
+                        toast.log()
+                        console.log('调用callback')
+                    }
+                },
+                autoCloseDelay: 50
+
+                    // enableHtml: true
+            })
         }
     }
 })
