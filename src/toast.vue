@@ -1,5 +1,5 @@
 <template>
-    <div class="toast" ref="wrapper">
+    <div class="toast" ref="wrapper" :class="positionClass">
         <div class="message">
             <slot v-if="!enableHtml"></slot>
             <div v-else v-html="$slots.default[0]"></div>
@@ -33,6 +33,18 @@
                 type: Boolean,
                 default: false
             },
+            position: {
+                type: String,
+                default: 'top',
+                validator(value) {
+                    return ['top', 'middle', 'bottom'].indexOf(value) >= 0
+                }
+            }
+        },
+        computed: {
+            positionClass() {
+                return `position-${this.position}`
+            }
         },
         mounted() {
             this.doAutoClose()
@@ -72,12 +84,31 @@
     $font-size: 14px;
     $toast-min-height: 40px;
     $toast-bg: rgba(0, 0, 0, 0.75);
-    .toast {position: fixed;top: 0;left: 50%;transform: translateX(-50%);
-        font-size: $font-size;color: #fff;line-height: 1.8;min-height: $toast-min-height;
+    .toast {position: fixed;font-size: $font-size;color: #fff;
+        line-height: 1.8;min-height: $toast-min-height;
         background: $toast-bg;box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.50);
         border-radius: 4px;padding: 0 16px;display: flex;align-items: center;
-        >.message{padding: 8px 0;}
+        left: 50%;
+
+        > .message {padding: 8px 0;}
+
         > .line {border-left: 1px solid #666;margin-left: 16px;}
+
         > .close {margin-left: 16px;flex-shrink: 0;}
+
+        &.position-top {
+            top: 0;
+            transform: translateX(-50%);
+        }
+
+        &.position-middle {
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        &.position-bottom {
+            bottom: 0;
+            transform: translateX(-50%);
+        }
     }
 </style>

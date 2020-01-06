@@ -47,7 +47,8 @@ new Vue({
                         console.log('调用callback')
                     }
                 },
-                autoCloseDelay: 50
+                autoClose: false,
+                // position: ''
 
                     // enableHtml: true
             })
