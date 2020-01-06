@@ -37,8 +37,8 @@ new Vue({
         message: 'hi'
     },
     methods: {
-        showToast(message){
-            message= '文字'
+        showToast1(message){
+            message= `${parseInt(Math.random()*100)},给个随机数`
             this.$toast(message, {
                 closeButton: {
                     text: '关闭',
@@ -48,7 +48,39 @@ new Vue({
                     }
                 },
                 autoClose: false,
-                // position: ''
+                position: 'top'
+
+                    // enableHtml: true
+            })
+        },
+        showToast2(message){
+            message= `${parseInt(Math.random()*100)},给个随机数`
+            this.$toast(message, {
+                closeButton: {
+                    text: '关闭',
+                    callback(toast){
+                        toast.log()
+                        console.log('调用callback')
+                    }
+                },
+                autoClose: false,
+                position: 'middle'
+
+                    // enableHtml: true
+            })
+        },
+        showToast3(message){
+            message= `${parseInt(Math.random()*100)},给个随机数`
+            this.$toast(message, {
+                closeButton: {
+                    text: '关闭',
+                    callback(toast){
+                        toast.log()
+                        console.log('调用callback')
+                    }
+                },
+                autoClose: false,
+                position: 'bottom'
 
                     // enableHtml: true
             })
