@@ -32,34 +32,11 @@
         #app {
         }
 
-        .demo {
-            height: 200px;
-        }
-        .sider {
-            background-color: #333;
-        }
-        .footer,.header {
-            background-color: #666;
-        }
-        .content {
-            background-color: #999;
-        }
-        .slide-enter, .slide-leave-to {
-            margin-left: -142px;
-        }
-
     </style>
 </head>
 <body>
 <div id="app">
-    <g-layout>
-        <g-sider style="flex-grow: .2;">sider</g-sider>
-        <g-layout>
-            <g-header class="demo">herder</g-header>
-            <g-content class="demo" style="flex-grow: 2;">content</g-content>
-            <g-footer class="demo">footer</g-footer>
-        </g-layout>
-    </g-layout>
+    <button @click="showToast('点击button')">点我</button>
 
 </div>
 <script src="./src/app.js"></script>
