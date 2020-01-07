@@ -59,7 +59,6 @@
                 })
             },
             doAutoClose() {
-                console.log(this.autoClose)
                 if (this.autoClose) {
                     setTimeout(() => {
                         this.close()

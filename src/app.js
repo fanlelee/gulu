@@ -38,7 +38,7 @@ new Vue({
     },
     methods: {
         showToast1(message){
-            message= `${parseInt(Math.random()*100)},给个随机数`
+            message= `${parseInt(Math.random()*100)},给个随机数<strong>hi</strong>`
             this.$toast(message, {
                 closeButton: {
                     text: '关闭',
@@ -48,9 +48,9 @@ new Vue({
                     }
                 },
                 autoClose: false,
-                position: 'top'
+                position: 'top',
 
-                    // enableHtml: true
+                    enableHtml: true
             })
         },
         showToast2(message){
