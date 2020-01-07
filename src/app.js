@@ -79,7 +79,7 @@ new Vue({
                         console.log('调用callback')
                     }
                 },
-                autoClose: false,
+                // autoClose: 3,
                 position: 'bottom'
 
                     // enableHtml: true
