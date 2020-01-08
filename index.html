@@ -36,10 +36,24 @@
 </head>
 <body>
 <div id="app">
-    <button @click="showToast1('点击button')">top</button>
-    <button @click="showToast2('点击button')">middle</button>
-    <button @click="showToast3('点击button')">bottom</button>
-
+    <g-tabs>
+        <g-tabs-head :selected.sync="selectedTab" direction="horizontal">
+            <template slot="actions">
+                <button>设置</button>
+            </template>
+            <g-tabs-item name="woman" disabled>
+                <g-icon name="loading"></g-icon>
+                美女
+            </g-tabs-item>
+            <g-tabs-item name="finance">财金</g-tabs-item>
+            <g-tabs-item name="sports">体育</g-tabs-item>
+        </g-tabs-head>
+        <g-tabs-body>
+            <g-tabs-content name="woman">美女相关资讯</g-tabs-content>
+            <g-tabs-content name="finance">财金相关资讯</g-tabs-content>
+            <g-tabs-content name="sports">体育相关资讯</g-tabs-content>
+        </g-tabs-body>
+    </g-tabs>
 </div>
 <script src="./src/app.js"></script>
 </body>

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Button from './button'
-import Icon from './icon'
+import Icon from './icon.vue'
 import ButtonGroup from './button-group'
 import Input from './input'
 import Row from './row'
@@ -11,7 +11,12 @@ import Content from './content'
 import Sider from './sider'
 import Footer from './footer'
 import Toast from './toast'
-import plugin from './plugin'
+import Plugin from './plugin'
+import Tabs from './tabs'
+import TabsHead from './tabs-head'
+import TabsBody from './tabs-body'
+import TabsItem from './tabs-item'
+import TabsContent from './tabs-content'
 
 
 Vue.component('g-button', Button)
@@ -26,65 +31,20 @@ Vue.component('g-content', Content)
 Vue.component('g-sider', Sider)
 Vue.component('g-footer', Footer)
 Vue.component('g-toast', Toast)
-Vue.use(plugin)
+Vue.use(Plugin)
+
+Vue.component('g-tabs', Tabs)
+Vue.component('g-tabs-head', TabsHead)
+Vue.component('g-tabs-body', TabsBody)
+Vue.component('g-tabs-item', TabsItem)
+Vue.component('g-tabs-content', TabsContent)
 
 new Vue({
     el: "#app",
     data: {
-        loading1: false,
-        loading2: true,
-        loading3: false,
-        message: 'hi'
+        selectedTab:'woman'
     },
     methods: {
-        showToast1(message){
-            message= `${parseInt(Math.random()*100)},给个随机数<strong>hi</strong>`
-            this.$toast(message, {
-                closeButton: {
-                    text: '关闭',
-                    callback(toast){
-                        toast.log()
-                        console.log('调用callback')
-                    }
-                },
-                autoClose: false,
-                position: 'top',
-
-                    enableHtml: true
-            })
-        },
-        showToast2(message){
-            message= `${parseInt(Math.random()*100)},给个随机数`
-            this.$toast(message, {
-                closeButton: {
-                    text: '关闭',
-                    callback(toast){
-                        toast.log()
-                        console.log('调用callback')
-                    }
-                },
-                autoClose: false,
-                position: 'middle'
-
-                    // enableHtml: true
-            })
-        },
-        showToast3(message){
-            message= `${parseInt(Math.random()*100)},给个随机数`
-            this.$toast(message, {
-                closeButton: {
-                    text: '关闭',
-                    callback(toast){
-                        toast.log()
-                        console.log('调用callback')
-                    }
-                },
-                // autoClose: 3,
-                position: 'bottom'
-
-                    // enableHtml: true
-            })
-        }
     }
 })
 
