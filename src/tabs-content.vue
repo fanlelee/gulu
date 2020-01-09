@@ -6,10 +6,17 @@
 <script>
     export default {
         name: 'GuluTabsContent',
+        inject: ['eventBus'],
+        created() {
+            this.eventBus.$on('update:select',(name)=>{
+                console.log(name,'body')
+            })
+        }
+
     }
 </script>
 <style lang="scss" scoped>
-    .tabs-content{
+    .tabs-content {
 
     }
 </style>

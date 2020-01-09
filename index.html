@@ -36,8 +36,8 @@
 </head>
 <body>
 <div id="app">
-    <g-tabs>
-        <g-tabs-head :selected.sync="selectedTab" direction="horizontal">
+    <g-tabs :selected.sync="selectedTab" >
+        <g-tabs-head direction="horizontal">
             <template slot="actions">
                 <button>设置</button>
             </template>

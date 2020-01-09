@@ -7,10 +7,9 @@
 <script>
     export default {
         name: 'GuluTabsHead',
+        inject: ['eventBus'],
         props: {
-            selected: {
-                type: String
-            },
+
             direction: {
                 type: String,
                 default: 'horizontal',
@@ -19,9 +18,9 @@
                 }
             }
         },
-        created() {
-            this.$emit('update:select')
-        }
+        // created() {
+            // console.log(this.eventBus, '爷爷给head的eventBus')
+        // }
     }
 </script>
 <style lang="scss" scoped>
