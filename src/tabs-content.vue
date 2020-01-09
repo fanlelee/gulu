@@ -40,7 +40,4 @@
     .tabs-content {
 
     }
-    .active {
-        color: red;
-    }
 </style>
