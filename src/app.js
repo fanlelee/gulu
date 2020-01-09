@@ -42,7 +42,7 @@ Vue.component('g-tabs-content', TabsContent)
 new Vue({
     el: "#app",
     data: {
-        selectedTab:'woman'
+        selectedTab:'sports'
     },
     methods: {
     }

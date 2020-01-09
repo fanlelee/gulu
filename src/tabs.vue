@@ -5,25 +5,28 @@
 </template>
 <script>
     import Vue from 'vue'
+
     export default {
         name: 'GuluTabs',
-        selected: {
-            type: String
+        props: {
+            selected: {
+                type: String,
+                require: true
+            },
         },
-        data(){
+        data() {
             return {
                 eventBus: new Vue()
             }
         },
-        provide(){
+        provide() {
             return {
                 eventBus: this.eventBus
             }
         },
-        created() {
-            // this.eventBus.$on('update:select', ()=>{
-            //     console.log('tabs在监听')
-            // })
+        mounted() {
+            console.log(this.selected);
+            this.eventBus.$emit('update:selected', this.selected)
         }
     }
 </script>

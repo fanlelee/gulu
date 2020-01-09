@@ -1,7 +1,9 @@
 <template>
     <div class="tabs-head">
         <slot></slot>
-        <slot name="actions"></slot>
+        <div class="actions">
+            <slot name="actions"></slot>
+        </div>
     </div>
 </template>
 <script>
@@ -13,18 +15,26 @@
             direction: {
                 type: String,
                 default: 'horizontal',
-                validator(value){
-                    return ['horizontal', 'vertical'].indexOf(value)>=0
+                validator(value) {
+                    return ['horizontal', 'vertical'].indexOf(value) >= 0
                 }
             }
         },
         // created() {
-            // console.log(this.eventBus, '爷爷给head的eventBus')
+        // console.log(this.eventBus, '爷爷给head的eventBus')
         // }
     }
 </script>
 <style lang="scss" scoped>
-    .tabs-head{
-
+    $tab-height: 40px;
+    .tabs-head {
+        display: flex;
+        height: $tab-height;
+        align-items: center;
+        justify-content: flex-start;
+        > .actions {
+            margin-left: auto;
+        }
     }
+
 </style>

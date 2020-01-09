@@ -1,5 +1,5 @@
 <template>
-    <div class="tabs-content">
+    <div class="tabs-content" :class="activeClass" v-if="active">
         <slot></slot>
     </div>
 </template>
@@ -7,9 +7,30 @@
     export default {
         name: 'GuluTabsContent',
         inject: ['eventBus'],
-        created() {
-            this.eventBus.$on('update:select',(name)=>{
-                console.log(name,'body')
+        data() {
+            return {
+                active: {
+                    type: Boolean,
+                    default: false
+                }
+            }
+        },
+        computed: {
+            activeClass() {
+                return {
+                    active: this.active
+                }
+            }
+        },
+        props: {
+            name: {
+                type: String,
+                require: true
+            }
+        },
+        mounted() {
+            this.eventBus.$on('update:selected', (name) => {
+                this.active = name === this.name
             })
         }
 
@@ -18,5 +39,8 @@
 <style lang="scss" scoped>
     .tabs-content {
 
+    }
+    .active {
+        color: red;
     }
 </style>
