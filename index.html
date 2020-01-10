@@ -35,25 +35,23 @@
     </style>
 </head>
 <body>
-<div id="app">
-    <g-tabs :selected.sync="selectedTab" >
-        <g-tabs-head direction="horizontal">
-            <template slot="actions">
-                <button>设置</button>
-            </template>
-            <g-tabs-item name="woman" disabled>
-                <g-icon name="loading"></g-icon>
-                美女
-            </g-tabs-item>
-            <g-tabs-item name="finance">财金</g-tabs-item>
-            <g-tabs-item name="sports">体育</g-tabs-item>
-        </g-tabs-head>
-        <g-tabs-body>
-            <g-tabs-content name="woman">美女相关资讯</g-tabs-content>
-            <g-tabs-content name="finance">财金相关资讯</g-tabs-content>
-            <g-tabs-content name="sports">体育相关资讯</g-tabs-content>
-        </g-tabs-body>
-    </g-tabs>
+<div id="app" style="padding-top: 100px; padding-left: 100px;">
+    <g-popover>
+        <template slot="content">
+            <div>popover内容</div>
+        </template>
+        <template>
+            <button>按钮</button>
+        </template>
+    </g-popover>
+    <g-popover>
+        <template slot="content">
+            <div>popover内容</div>
+        </template>
+        <template>
+            <button>按钮</button>
+        </template>
+    </g-popover>
 </div>
 <script src="./src/app.js"></script>
 </body>
