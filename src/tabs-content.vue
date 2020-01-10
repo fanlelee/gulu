@@ -10,7 +10,7 @@
         data() {
             return {
                 active: {
-                    type: Boolean,
+                    fast: Boolean,
                     default: false
                 }
             }
