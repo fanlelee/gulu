@@ -1,6 +1,6 @@
 <template>
-    <div class="popover" @click.stop="xxx">
-        <div ref="contentWrapper" class="content-wrapper" v-if="visible" @click.stop>
+    <div class="popover" @click="onClick">
+        <div ref="contentWrapper" class="content-wrapper" v-if="visible">
             <slot name="content"></slot>
         </div>
         <span ref="triggerWrapper">
@@ -17,25 +17,38 @@
             }
         },
         methods: {
-            xxx() {
-                this.visible = !this.visible
-                if (this.visible === true) {
-                    this.$nextTick(() => {
-                        document.body.appendChild(this.$refs.contentWrapper)
-                        const {width,height,top,left} = this.$refs.triggerWrapper.getBoundingClientRect()
-                        this.$refs.contentWrapper.style.top = top+window.scrollY+'px'
-                        this.$refs.contentWrapper.style.left = left+window.scrollX+'px'
-                        let eventHandler = () => {
-                            this.visible = false
-                            document.removeEventListener('click', eventHandler)
-                        }
-                        document.addEventListener('click', eventHandler)
-                    })
+            positionContent() {
+                document.body.appendChild(this.$refs.contentWrapper)
+                const {width, height, top, left} = this.$refs.triggerWrapper.getBoundingClientRect()
+                this.$refs.contentWrapper.style.top = top + window.scrollY + 'px'
+                this.$refs.contentWrapper.style.left = left + window.scrollX + 'px'
+            },
+            removeDocumentListener(event) {
+                if (!this.$refs.triggerWrapper.contains(event.target)
+                    && !this.$refs.contentWrapper.contains(event.target)) {
+                    this.close()
+                }
+            },
+            close() {
+                this.visible = false
+                document.removeEventListener('click', this.removeDocumentListener)
+            },
+            open() {
+                this.visible = true
+                this.$nextTick(() => {
+                    this.positionContent()
+                    document.addEventListener('click', this.removeDocumentListener)
+                })
+            },
+            onClick(e) {
+                if (this.$refs.triggerWrapper.contains(e.target)) {
+                    if (this.visible === false) {
+                        this.open()
+                    } else {
+                        this.close()
+                    }
                 }
             }
-        },
-        mounted() {
-
         }
     }
 
@@ -46,6 +59,7 @@
         display: inline-block;
         position: relative;
     }
+
     .content-wrapper {
         position: absolute;
         box-shadow: 0 0 3px 1px rgba(0, 0, 0, .5);
