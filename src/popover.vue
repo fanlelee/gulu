@@ -1,6 +1,7 @@
 <template>
     <div class="popover" @click="onClick">
-        <div ref="contentWrapper" class="content-wrapper" v-if="visible">
+        <div ref="contentWrapper" class="content-wrapper" v-if="visible"
+             :class="{[`position-${position}`]:true}">
             <slot name="content"></slot>
         </div>
         <span class="trigger-wrapper" ref="triggerWrapper">
@@ -16,12 +17,38 @@
                 visible: false
             }
         },
+        props: {
+            position: {
+                type: String,
+                default: 'top',
+                validator(value) {
+                    return ['top', 'bottom', 'left', 'right'].indexOf(value) >= 0
+                }
+            }
+        },
         methods: {
             positionContent() {
-                document.body.appendChild(this.$refs.contentWrapper)
-                const {width, height, top, left} = this.$refs.triggerWrapper.getBoundingClientRect()
-                this.$refs.contentWrapper.style.top = top + window.scrollY + 'px'
-                this.$refs.contentWrapper.style.left = left + window.scrollX + 'px'
+                const contentWrapper = this.$refs.contentWrapper
+                const triggerWrapper = this.$refs.triggerWrapper
+                document.body.appendChild(contentWrapper)
+                const {width, height, top, left} = triggerWrapper.getBoundingClientRect()
+
+                if (this.position === 'top') {
+                    contentWrapper.style.top = top + window.scrollY + 'px'
+                    contentWrapper.style.left = left + window.scrollX + 'px'
+                } else if (this.position === 'bottom') {
+                    contentWrapper.style.top = top + height + window.scrollY + 'px'
+                    contentWrapper.style.left = left + window.scrollX + 'px'
+                } else if (this.position === 'left') {
+                    const {height: height2} = contentWrapper.getBoundingClientRect()
+                    contentWrapper.style.top = top + (height - height2) / 2 + window.scrollY + 'px'
+                    contentWrapper.style.left = left + window.scrollX + 'px'
+                } else if (this.position === 'right') {
+                    const {height: height2} = contentWrapper.getBoundingClientRect()
+                    contentWrapper.style.top = top + (height - height2) / 2 + window.scrollY + 'px'
+                    contentWrapper.style.left = left + width + window.scrollX + 'px'
+                }
+
             },
             removeDocumentListener(event) {
                 if (!this.$refs.triggerWrapper.contains(event.target)
@@ -68,8 +95,7 @@
 
     .content-wrapper {
         position: absolute;
-        transform: translateY(calc(-100% - 10px));
-        max-width: 20em;
+        max-width: 12em;
         word-break: break-all;
         border-radius: $content-wrapper-border-radius;
         border: 1px solid $content-wrapper-border-color;
@@ -77,22 +103,77 @@
         background: #fff;
         padding: 5px;
 
-        ::before {
+        &::before, &::after {
             content: '';
             border: 10px solid transparent;
-            border-top-color: $content-wrapper-border-color;
             position: absolute;
-            top: 100%;
-            left: 10px;
         }
 
-        ::after {
-            content: '';
-            border: 10px solid transparent;
-            border-top-color: #fff;
-            position: absolute;
-            top: calc(100% - 1px);
-            left: 10px;
+
+        &.position-top {
+            transform: translateY(calc(-100% - 10px));
+            &::before, &::after {
+                left: 10px;
+            }
+            &::before {
+                top: 100%;
+                border-top-color: $content-wrapper-border-color;
+            }
+
+            &::after {
+                border-top-color: #fff;
+                top: calc(100% - 1px);
+            }
+        }
+
+        &.position-bottom {
+            transform: translateY(10px);
+            &::before, &::after {
+                left: 10px;
+            }
+            &::before {
+                bottom: 100%;
+                border-bottom-color: $content-wrapper-border-color;
+            }
+
+            &::after {
+                border-bottom-color: #fff;
+                bottom: calc(100% - 1px);
+            }
+        }
+
+        &.position-left {
+            transform: translateX(calc(-100% - 10px));
+            &::before, &::after {
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            &::before {
+                left: 100%;
+                border-left-color: $content-wrapper-border-color;
+            }
+
+            &::after {
+                left: calc(100% - 1px);
+                border-left-color: #fff;
+            }
+        }
+
+        &.position-right {
+            transform: translateX(10px);
+            &::before, &::after {
+                top: 50%;
+                transform: translate(-100%, -50%);
+            }
+            &::before {
+                left: 0;
+                border-right-color: $content-wrapper-border-color;
+            }
+
+            &::after {
+                left: 1px;
+                border-right-color: #fff;
+            }
         }
     }
 </style>
