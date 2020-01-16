@@ -38,8 +38,9 @@
 <div id="app" style="padding-top: 100px; padding-left: 100px;">
     <div style="padding: 50px;">
         <g-popover position="top" trigger="click">
-            <template slot="content">
-                <div>popoveerpopoverpopoverpopover</div>
+            <template slot="content" slot-scope="{closefunction}">
+                <div>popoveerpopoverpopo<a href="http://www.qq.com">看新闻</a>verpopover</div>
+                <g-button @click="closefunction">关闭</g-button>
             </template>
             <template>
                 <g-button>上</g-button>
