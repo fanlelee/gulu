@@ -24,20 +24,18 @@
             }
         },
         provide() {
-            if (this.single) {
-                return {
-                    eventBus: this.eventBus
-                }
+            return {
+                eventBus: this.eventBus
             }
         },
         mounted() {
-            if (this.selected) {
-                this.eventBus.$emit('update:selected', this)
-
-                this.eventBus.$on('update:selected', (vm)=>{
-                    this.$emit('update:selected',vm.name)
-                })
-            }
+            this.$children.forEach((vm)=>{
+                vm.single = this.single
+            })
+            this.eventBus.$emit('update:selected', this)
+            this.eventBus.$on('update:selected', (vm) => {
+                this.$emit('update:selected', vm.name)
+            })
         }
 
     }

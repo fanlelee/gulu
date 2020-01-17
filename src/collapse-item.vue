@@ -21,7 +21,8 @@
         },
         data() {
             return {
-                open: false
+                open: false,
+                single: false
             }
         },
         methods: {
@@ -44,7 +45,7 @@
                 if (vm === this||(this.name &&vm.selected === this.name)) {
                     this.open = true
                     this.setContentBorder()
-                }else{
+                }else if(this.single){
                     this.open = false
                 }
             })
