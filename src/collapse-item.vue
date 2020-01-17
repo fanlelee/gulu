@@ -10,6 +10,7 @@
 <script>
     export default {
         name: "GuluCollapseItem",
+        inject: ['eventBus'],
         props: {
             title: {
                 type: String,
@@ -23,13 +24,24 @@
         methods: {
             onClick() {
                 this.open = !this.open
+                this.setContentBorder()
+                this.eventBus.$emit('update:selected', this)
+            },
+            setContentBorder() {
                 this.$nextTick(() => {
                     if (this.open === true) {
-                        console.log('top');
                         this.$refs.content.style.borderTop = '1px solid #999'
                     }
                 })
-            }
+            },
+
+        },
+        mounted() {
+            this.eventBus.$on('update:selected', (vm)=>{
+                if(vm !== this){
+                    this.open = false
+                }
+            })
         }
     }
 </script>
