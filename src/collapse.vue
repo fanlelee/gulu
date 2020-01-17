@@ -33,6 +33,10 @@
         mounted() {
             if (this.selected) {
                 this.eventBus.$emit('update:selected', this)
+
+                this.eventBus.$on('update:selected', (vm)=>{
+                    this.$emit('update:selected',vm.name)
+                })
             }
         }
 
