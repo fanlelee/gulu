@@ -22,30 +22,30 @@
         data() {
             return {
                 open: false,
-                single: false
             }
         },
         methods: {
             onClick() {
                 if (this.open) {
-                    this.open = false
+                    this.eventBus && this.eventBus.$emit('update:removeSelected', this.name)
                 } else {
-                    this.eventBus && this.eventBus.$emit('update:selected', this)
+                    console.log('add');
+                    this.eventBus && this.eventBus.$emit('update:addSelected', this.name)
                 }
             },
             setContentBorder() {
                 this.$nextTick(() => {
                     this.$refs.content.style.borderTop = '1px solid #999'
                 })
-            },
+            }
 
         },
         mounted() {
-            this.eventBus && this.eventBus.$on('update:selected', (vm) => {
-                if (vm === this||(this.name &&vm.selected === this.name)) {
+            this.eventBus && this.eventBus.$on('update:selected', (selected) => {
+                if (selected.indexOf(this.name) >= 0) {
                     this.open = true
                     this.setContentBorder()
-                }else if(this.single){
+                } else{
                     this.open = false
                 }
             })

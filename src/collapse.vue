@@ -15,7 +15,7 @@
                 default: false
             },
             selected: {
-                type: String
+                type: Array
             }
         },
         data() {
@@ -28,14 +28,42 @@
                 eventBus: this.eventBus
             }
         },
+        methods: {
+            addListen() {
+                this.eventBus.$on('update:addSelected', (name) => {
+                    let selectedCopy = JSON.parse(JSON.stringify(this.selected))
+                    let updateSelected = this.addSelected(selectedCopy,name)
+                    this.$emit('update:selected', updateSelected)
+                })
+            },
+            removeListen() {
+                this.eventBus.$on('update:removeSelected', (name) => {
+                    let selectedCopy = JSON.parse(JSON.stringify(this.selected))
+                    let updateSelected = this.removeSelected(selectedCopy,name)
+                    this.$emit('update:selected', updateSelected)
+                })
+            },
+            addSelected(selectedCopy,name) {
+                if (this.single) {
+                    selectedCopy = [name]
+                } else {
+                    selectedCopy.push(name)
+                }
+                this.eventBus.$emit('update:selected', selectedCopy)
+                return selectedCopy
+            },
+            removeSelected(selectedCopy,name) {
+                selectedCopy.splice(selectedCopy.indexOf(name), 1)
+                this.eventBus.$emit('update:selected', selectedCopy)
+                return selectedCopy
+            }
+
+        },
         mounted() {
-            this.$children.forEach((vm)=>{
-                vm.single = this.single
-            })
-            this.eventBus.$emit('update:selected', this)
-            this.eventBus.$on('update:selected', (vm) => {
-                this.$emit('update:selected', vm.name)
-            })
+            this.eventBus.$emit('update:selected', this.selected)
+            this.addListen()
+            this.removeListen()
+
         }
 
     }
