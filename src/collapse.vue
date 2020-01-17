@@ -6,16 +6,25 @@
 
 <script>
     import Vue from 'vue'
+
     export default {
         name: "GuluCollapse",
-        data(){
+        props: {
+            single: {
+                type: Boolean,
+                default: false
+            }
+        },
+        data() {
             return {
                 eventBus: new Vue
             }
         },
-        provide(){
-            return {
-                eventBus: this.eventBus
+        provide() {
+            if (this.single) {
+                return {
+                    eventBus: this.eventBus
+                }
             }
         },
 

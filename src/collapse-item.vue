@@ -25,7 +25,7 @@
             onClick() {
                 this.open = !this.open
                 this.setContentBorder()
-                this.eventBus.$emit('update:selected', this)
+                this.eventBus && this.eventBus.$emit('update:selected', this)
             },
             setContentBorder() {
                 this.$nextTick(() => {
@@ -37,8 +37,8 @@
 
         },
         mounted() {
-            this.eventBus.$on('update:selected', (vm)=>{
-                if(vm !== this){
+            this.eventBus && this.eventBus.$on('update:selected', (vm) => {
+                if (vm !== this) {
                     this.open = false
                 }
             })
