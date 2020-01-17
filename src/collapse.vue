@@ -13,6 +13,9 @@
             single: {
                 type: Boolean,
                 default: false
+            },
+            selected: {
+                type: String
             }
         },
         data() {
@@ -27,6 +30,11 @@
                 }
             }
         },
+        mounted() {
+            if (this.selected) {
+                this.eventBus.$emit('update:selected', this)
+            }
+        }
 
     }
 </script>

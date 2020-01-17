@@ -14,6 +14,9 @@
         props: {
             title: {
                 type: String,
+            },
+            name: {
+                type: String,
             }
         },
         data() {
@@ -23,22 +26,25 @@
         },
         methods: {
             onClick() {
-                this.open = !this.open
-                this.setContentBorder()
-                this.eventBus && this.eventBus.$emit('update:selected', this)
+                if (this.open) {
+                    this.open = false
+                } else {
+                    this.eventBus && this.eventBus.$emit('update:selected', this)
+                }
             },
             setContentBorder() {
                 this.$nextTick(() => {
-                    if (this.open === true) {
-                        this.$refs.content.style.borderTop = '1px solid #999'
-                    }
+                    this.$refs.content.style.borderTop = '1px solid #999'
                 })
             },
 
         },
         mounted() {
             this.eventBus && this.eventBus.$on('update:selected', (vm) => {
-                if (vm !== this) {
+                if (vm === this||(this.name &&vm.selected === this.name)) {
+                    this.open = true
+                    this.setContentBorder()
+                }else{
                     this.open = false
                 }
             })
