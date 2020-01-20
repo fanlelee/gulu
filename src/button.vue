@@ -1,6 +1,6 @@
 <template>
     <button class="g-button" :class="{[`icon-${iconPosition}`]: true}"
-    @click="$emit('click')">
+            @click="$emit('click')">
         <g-icon v-if="icon && !loading" :name="icon"></g-icon>
         <g-icon v-if="loading" class="loading" name="loading"></g-icon>
         <div class="content">
@@ -10,6 +10,7 @@
 </template>
 <script>
     import Icon from './icon.vue'
+
     export default {
         name: 'GuluButton',
         components: {
@@ -34,66 +35,40 @@
     }
 </script>
 <style lang="scss" scoped>
+    $button-height: 32px;
+    $font-size: 14px;
+    $button-bg: #fff;
+    $button-radius: 4px;
+    $button-color: #999;
+    $button-border-color: #999;
+    $button-hover-color: #666;
+    $button-active-bg: #eee;
     @keyframes spin {
-        0%{
-            transform: rotate(0deg);
-        }
-        100%{
-            transform: rotate(360deg);
-        }
+        0% {transform: rotate(0deg);}
+        100% {transform: rotate(360deg);}
     }
+
     .g-button {
-        font-size: var(--font-size);
-        height: var(--button-height);
-        padding: 0 1em;
-        background-color: var(--button-bg);
-        border-radius: var(--button-radius);
-        border-color: var(--button-border-color);
-        color: #000;
-        vertical-align: middle;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
+        font-size: var($font-size);height: var($button-height);padding: 0 1em;background-color: var($button-bg);
+        border-radius: var($button-radius);border-color: var($button-border-color);color: #000;
+        vertical-align: middle;display: inline-flex;justify-content: center;align-items: center;
 
-        &:hover {
-            border-color: var(--button-hover-color);
-        }
+        &:hover {border-color: var($button-hover-color);}
 
-        &:active {
-            background-color: var(--button-active-bg);
-        }
+        &:active {background-color: var($button-active-bg);}
 
-        &:focus {
-            outline: none;
-        }
+        &:focus {outline: none;}
 
-        > .content {
-            order: 2;
-        }
+        > .content {order: 2;}
 
-        > .icon {
-            order: 1;
-            margin-left: 0;
-            margin-right: .3em;
-        }
+        > .icon {order: 1;margin-left: 0;margin-right: .3em;}
 
         &.icon-right {
-            > .content {
-                order: 1;
-            }
+            > .content {order: 1;}
 
-            > .icon {
-                order: 2;
-                margin-left: .3em;
-                margin-right: 0;
-            }
+            > .icon {order: 2;margin-left: .3em;margin-right: 0;}
         }
 
-        .loading {
-            animation: spin 1s infinite linear;
-        }
-
-
-
+        .loading {animation: spin 1s infinite linear;}
     }
 </style>
