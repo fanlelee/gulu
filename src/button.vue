@@ -49,13 +49,13 @@
     }
 
     .g-button {
-        font-size: var($font-size);height: var($button-height);padding: 0 1em;background-color: var($button-bg);
-        border-radius: var($button-radius);border-color: var($button-border-color);color: #000;
+        font-size: $font-size;height: $button-height;padding: 0 1em;background-color: $button-bg;
+        border-radius: $button-radius;border-color: $button-border-color;color: #000;
         vertical-align: middle;display: inline-flex;justify-content: center;align-items: center;
 
-        &:hover {border-color: var($button-hover-color);}
+        &:hover {border-color: $button-hover-color;}
 
-        &:active {background-color: var($button-active-bg);}
+        &:active {background-color: $button-active-bg;}
 
         &:focus {outline: none;}
 
