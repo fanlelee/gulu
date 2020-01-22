@@ -35,14 +35,8 @@
     }
 </script>
 <style lang="scss" scoped>
-    $button-height: 32px;
-    $font-size: 14px;
-    $button-bg: #fff;
-    $button-radius: 4px;
-    $button-color: #999;
-    $button-border-color: #999;
-    $button-hover-color: #666;
-    $button-active-bg: #eee;
+    @import 'var';
+
     @keyframes spin {
         0% {transform: rotate(0deg);}
         100% {transform: rotate(360deg);}
