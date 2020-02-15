@@ -68,6 +68,7 @@
 
         > .left {
             height: 100%;
+            overflow: auto;
         }
 
         > .right {
