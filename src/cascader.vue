@@ -1,7 +1,7 @@
 <template>
     <div class="cascader">
         <div class="trigger" @click="popoverVisible = !popoverVisible">
-            <slot></slot>
+            {{result || '请选择'}}
         </div>
         <div class="popover" v-if="popoverVisible">
             <gulu-cascader-items :items="source" :height="popoverHeight" :selected="selected"
@@ -33,7 +33,11 @@
                 popoverVisible: false,
             }
         },
-        computed: {},
+        computed: {
+            result() {
+                return this.selected.map((item) => item.name).join('/')
+            }
+        },
         methods: {
             onUpdateSelected(newSelected) {
                 this.$emit('update:selected', newSelected)
@@ -49,9 +53,13 @@
         position: relative;
 
         > .trigger {
-            height: 32px;
-            width: 100px;
-            border: 1px solid #000;
+            display: inline-flex;
+            align-items: center;
+            padding: 0 1em;
+            height: $input-height;
+            min-width: 10em;
+            border: 1px solid $border-color;
+            border-radius: $border-radius;
         }
 
         > .popover {
@@ -61,6 +69,7 @@
             border-radius: $border-radius;
             position: absolute;
             background-color: #fff;
+            margin-top: 4px;
         }
     }
 </style>

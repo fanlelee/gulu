@@ -36,11 +36,6 @@
                 default: 0
             }
         },
-        data() {
-            return {
-                leftSelected: null
-            }
-        },
         computed: {
             rightItems() {
                 if (this.selected && this.selected[this.level]) {
