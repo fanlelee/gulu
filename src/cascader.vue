@@ -4,7 +4,8 @@
             <slot></slot>
         </div>
         <div class="popover" v-if="popoverVisible">
-            <gulu-cascader-items :items="source" :height="popoverHeight"></gulu-cascader-items>
+            <gulu-cascader-items :items="source" :height="popoverHeight" :selected="selected"
+                                 @update:selected="onUpdateSelected"></gulu-cascader-items>
         </div>
     </div>
 </template>
@@ -22,6 +23,9 @@
             popoverHeight: {
                 type: String,
                 default: '100px'
+            },
+            selected: {
+                type: Array
             }
         },
         data() {
@@ -29,12 +33,18 @@
                 popoverVisible: false,
             }
         },
-        computed: {}
+        computed: {},
+        methods: {
+            onUpdateSelected(newSelected) {
+                this.$emit('update:selected', newSelected)
+            }
+        }
     }
 </script>
 
 <style lang="scss" scoped>
     @import "var";
+
     .cascader {
         position: relative;
 

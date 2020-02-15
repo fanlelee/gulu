@@ -1,7 +1,11 @@
 <template>
     <div class="demo">
+        <div>1{{selected[0]}}</div>
+        <div>2{{selected[1]}}</div>
+        <div>3{{selected[2]}}</div>
         <p>111</p>
-        <g-cascader :source="sources" popover-height="200px"></g-cascader>
+        <g-cascader :source="sources" popover-height="200px" :selected="selected"
+                    @update:selected="selected=$event"></g-cascader>
         <p>222</p>
     </div>
 </template>
@@ -16,6 +20,7 @@
         },
         data() {
             return {
+                selected: [],
                 sources: [{
                     name: '四川',
                     children: [{
