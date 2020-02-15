@@ -4,8 +4,7 @@
         <div>{{selected[1]&&selected[1].name||1}}</div>
         <div>{{selected[2]&&selected[2].name||2}}</div>
         <p>111</p>
-        <g-cascader :source="sources" popover-height="200px" :selected="selected"
-                    @update:selected="selected=$event"></g-cascader>
+        <g-cascader :source="sources" popover-height="200px" :selected.sync="selected"></g-cascader>
         <p>222</p>
     </div>
 </template>
