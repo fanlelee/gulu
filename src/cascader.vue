@@ -26,6 +26,9 @@
             },
             selected: {
                 type: Array
+            },
+            loadData: {
+                type: Function
             }
         },
         data() {
@@ -41,6 +44,12 @@
         methods: {
             onUpdateSelected(newSelected) {
                 this.$emit('update:selected', newSelected)
+                let lastLevelSelected = newSelected[newSelected.length - 1]
+                let updateSource = (result) => {
+                    this.$set(lastLevelSelected, 'children', result)
+                }
+                console.log(lastLevelSelected+2)
+                this.loadData(lastLevelSelected, updateSource)
             }
         }
     }

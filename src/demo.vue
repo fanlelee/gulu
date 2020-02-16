@@ -4,7 +4,7 @@
         <div>{{selected[1]&&selected[1].name||1}}</div>
         <div>{{selected[2]&&selected[2].name||2}}</div>
         <p>111</p>
-        <g-cascader :source="sources" popover-height="200px" :selected.sync="selected"></g-cascader>
+        <g-cascader :source="source" popover-height="200px" :selected.sync="selected" :load-data="loadData"></g-cascader>
         <p>222</p>
     </div>
 </template>
@@ -13,8 +13,11 @@
     import Cascader from './cascader.vue'
     import db from './db.js'
 
-    function ajax(parentId = 0) {
-        return db.filter((item) => item.parentId == parentId)
+    function ajax(parentId=0) {
+        return new Promise((resolve,reject)=>{
+            let result = db.filter((item) => item.parentId == parentId)
+            resolve(result)
+        })
     }
 
     export default {
@@ -25,7 +28,29 @@
         data() {
             return {
                 selected: [],
-                sources: ajax()
+                source: []
+            }
+        },
+        created() {
+            ajax(0).then((result)=>{
+                this.source = result
+            })
+        },
+        methods:{
+            xxx(){
+                ajax(this.selected[0].id).then((result)=>{
+                    console.log(this.selected[0]);
+                    let lastLevelSelected = this.source.filter((item)=>item.id === this.selected[0].id)[0]
+                    this.$set(lastLevelSelected,'children', result)
+                    // console.log(lastLevelSelected);
+                })
+            },
+            loadData({id},todo){
+                console.log(this.source,8);
+                console.log(this.selected,9);
+                ajax(id).then((result)=>{
+                    todo(result)
+                })
             }
         }
     }
