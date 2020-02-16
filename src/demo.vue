@@ -46,8 +46,6 @@
                 })
             },
             loadData({id},todo){
-                console.log(this.source,8);
-                console.log(this.selected,9);
                 ajax(id).then((result)=>{
                     todo(result)
                 })

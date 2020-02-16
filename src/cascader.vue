@@ -46,11 +46,50 @@
                 this.$emit('update:selected', newSelected)
                 let lastLevelSelected = newSelected[newSelected.length - 1]
                 let updateSource = (result) => {
-                    let lastItem = this.source.filter(item => item.id ===lastLevelSelected.id)[0]
-                    this.$set(lastItem, 'children', result)
+                    if (result.length > 0) {
+                        let lastItem = this.findItem(this.source, lastLevelSelected.id)
+                        if (lastItem) {
+                            this.$set(lastItem, 'children', result)
+                        }
+                    }
                 }
-                console.log(lastLevelSelected + 2)
                 this.loadData(lastLevelSelected, updateSource)
+            },
+            findItem(content, id) {
+                let noChildren = []
+                let hasChildren = []
+
+                let simplest = (children, id) => {
+                    return children.filter(item => item.id === id)[0]
+                }
+                let complex = (children, id) => {
+                    children.forEach((item) => {
+                        if (item.children) {
+                            hasChildren.push(item)
+                        } else {
+                            noChildren.push(item)
+                        }
+                    })
+                    let found = simplest(noChildren, id)
+                    if (!found) {
+                        found = simplest(hasChildren, id)
+                        if (found) {
+                            return found
+                        } else {
+                            for (let i = 0; i < hasChildren.length; i++) {
+                                found = complex(hasChildren[i].children, id)
+                                if (found) {
+                                    return found
+                                }
+                            }
+                            return false
+                        }
+                    } else {
+                        return found
+                    }
+                }
+                return complex(content, id)
+
             }
         }
     }
