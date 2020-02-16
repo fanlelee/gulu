@@ -46,9 +46,10 @@
                 this.$emit('update:selected', newSelected)
                 let lastLevelSelected = newSelected[newSelected.length - 1]
                 let updateSource = (result) => {
-                    this.$set(lastLevelSelected, 'children', result)
+                    let lastItem = this.source.filter(item => item.id ===lastLevelSelected.id)[0]
+                    this.$set(lastItem, 'children', result)
                 }
-                console.log(lastLevelSelected+2)
+                console.log(lastLevelSelected + 2)
                 this.loadData(lastLevelSelected, updateSource)
             }
         }
