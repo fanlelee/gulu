@@ -48,23 +48,23 @@
                 let updateSource = (result) => {
                     if (result.length > 0) {
                         let copy = JSON.parse(JSON.stringify(this.source))
-                        let toUpdate = this.findItem(copy,lastLevelSelected.id)
+                        let toUpdate = this.findItem(copy, lastLevelSelected.id)
                         if (toUpdate) {
                             toUpdate.children = result
-                            this.$emit('update:source',copy)
+                            this.$emit('update:source', copy)
                         }
                     }
                 }
                 this.loadData(lastLevelSelected, updateSource)
             },
             findItem(content, id) {
-                let noChildren = []
-                let hasChildren = []
 
                 let simplest = (children, id) => {
                     return children.filter(item => item.id === id)[0]
                 }
                 let complex = (children, id) => {
+                    let noChildren = []
+                    let hasChildren = []
                     children.forEach((item) => {
                         if (item.children) {
                             hasChildren.push(item)
@@ -79,7 +79,9 @@
                             return found
                         } else {
                             for (let i = 0; i < hasChildren.length; i++) {
-                                found = complex(hasChildren[i].children, id)
+                                if (hasChildren[i].children) {
+                                    found = complex(hasChildren[i].children, id)
+                                }
                                 if (found) {
                                     return found
                                 }

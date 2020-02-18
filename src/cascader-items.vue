@@ -38,10 +38,13 @@
         },
         computed: {
             rightItems() {
-                if (this.selected && this.selected[this.level]) {
-                    return this.selected[this.level].children
-                } else {
-                    return null
+                if (this.selected[this.level]) {
+                    let selectedItem = this.items.filter((item) => item.name === this.selected[this.level].name)[0]
+                    if (selectedItem && selectedItem.children && selectedItem.children.length > 0) {
+                        return selectedItem.children
+                    } else {
+                        return null
+                    }
                 }
             }
         },
@@ -49,7 +52,7 @@
             onClickLabel(item) {
                 let copy = JSON.parse(JSON.stringify(this.selected))
                 copy[this.level] = item
-                copy.splice(this.level+1)
+                copy.splice(this.level + 1)
                 this.$emit('update:selected', copy)
             },
             onUpdateSelected(newSelected) {
