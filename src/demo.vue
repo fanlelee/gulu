@@ -16,6 +16,13 @@
     function ajax(parentId=0) {
         return new Promise((resolve,reject)=>{
             let result = db.filter((item) => item.parentId == parentId)
+            result.forEach(item=>{
+                if(db.filter(node=>node.parentId === item.id).length>0){
+                    item.isLeaf = false
+                }else {
+                    item.isLeaf = true
+                }
+            })
             resolve(result)
         })
     }
@@ -37,14 +44,6 @@
             })
         },
         methods:{
-            xxx(){
-                ajax(this.selected[0].id).then((result)=>{
-                    console.log(this.selected[0]);
-                    let lastLevelSelected = this.source.filter((item)=>item.id === this.selected[0].id)[0]
-                    this.$set(lastLevelSelected,'children', result)
-                    // console.log(lastLevelSelected);
-                })
-            },
             loadData({id},todo){
                 ajax(id).then((result)=>{
                     todo(result)

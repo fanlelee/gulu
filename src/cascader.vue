@@ -5,7 +5,7 @@
         </div>
         <div class="popover" v-if="popoverVisible">
             <gulu-cascader-items :items="source" :height="popoverHeight" :selected="selected"
-                                 @update:selected="onUpdateSelected"></gulu-cascader-items>
+                                 @update:selected="onUpdateSelected" :load-data="loadData"></gulu-cascader-items>
         </div>
     </div>
 </template>
@@ -43,19 +43,22 @@
         },
         methods: {
             onUpdateSelected(newSelected) {
+                console.log(this.source);
                 this.$emit('update:selected', newSelected)
-                let lastLevelSelected = newSelected[newSelected.length - 1]
-                let updateSource = (result) => {
-                    if (result.length > 0) {
-                        let copy = JSON.parse(JSON.stringify(this.source))
-                        let toUpdate = this.findItem(copy, lastLevelSelected.id)
-                        if (toUpdate) {
-                            toUpdate.children = result
-                            this.$emit('update:source', copy)
+                if (this.loadData) {
+                    let lastLevelSelected = newSelected[newSelected.length - 1]
+                    let updateSource = (result) => {
+                        if (result.length > 0) {
+                            let copy = JSON.parse(JSON.stringify(this.source))
+                            let toUpdate = this.findItem(copy, lastLevelSelected.id)
+                            if (toUpdate) {
+                                toUpdate.children = result
+                                this.$emit('update:source', copy)
+                            }
                         }
                     }
+                    this.loadData(lastLevelSelected, updateSource)
                 }
-                this.loadData(lastLevelSelected, updateSource)
             },
             findItem(content, id) {
 

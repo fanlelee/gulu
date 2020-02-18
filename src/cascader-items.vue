@@ -2,13 +2,14 @@
     <div class="cascader-items" :style="{height:height}">
         <div class="left">
             <div class="label" v-for="item in items" @click="onClickLabel(item)">
-                {{item.name}}
-                <g-icon class="icon" v-if="item.children" name="right"></g-icon>
+                <span class="name">{{item.name}}</span>
+                <g-icon class="icon" v-if="rightItemVisible(item)" name="right"></g-icon>
             </div>
         </div>
         <div class="right" v-if="rightItems">
             <gulu-cascader-items :items="rightItems" :height="height" :level="level+1"
-                                 :selected="selected" @update:selected="onUpdateSelected"></gulu-cascader-items>
+                                 :selected="selected" @update:selected="onUpdateSelected"
+                                 :load-data="loadData"></gulu-cascader-items>
         </div>
     </div>
 </template>
@@ -34,6 +35,9 @@
             level: {
                 type: Number,
                 default: 0
+            },
+            loadData: {
+                type: Function
             }
         },
         computed: {
@@ -57,6 +61,9 @@
             },
             onUpdateSelected(newSelected) {
                 this.$emit('update:selected', newSelected)
+            },
+            rightItemVisible(item) {
+                return this.loadData ? !item.isLeaf : item.children
             }
         }
     }
@@ -80,12 +87,23 @@
         }
 
         .label {
-            padding: 8px 10px 0 10px;
+            padding: 8px 10px;
             display: flex;
             align-items: center;
+            justify-content: center;
+            cursor: pointer;
+
+            &:hover {
+                background-color: $grey;
+            }
+
+            .name {
+                margin-right: auto;
+                padding: 0 5px;
+            }
 
             .icon {
-                margin-left: 1em;
+                margin-left: auto;
                 transform: scale(.5);
             }
         }
