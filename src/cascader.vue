@@ -47,9 +47,11 @@
                 let lastLevelSelected = newSelected[newSelected.length - 1]
                 let updateSource = (result) => {
                     if (result.length > 0) {
-                        let lastItem = this.findItem(this.source, lastLevelSelected.id)
-                        if (lastItem) {
-                            this.$set(lastItem, 'children', result)
+                        let copy = JSON.parse(JSON.stringify(this.source))
+                        let toUpdate = this.findItem(copy,lastLevelSelected.id)
+                        if (toUpdate) {
+                            toUpdate.children = result
+                            this.$emit('update:source',copy)
                         }
                     }
                 }
