@@ -92,7 +92,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-
+            white-space: nowrap;
             &:hover {
                 background-color: $grey;
             }

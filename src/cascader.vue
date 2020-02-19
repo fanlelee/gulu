@@ -1,9 +1,9 @@
 <template>
     <div class="cascader">
-        <div class="trigger" @click="popoverVisible = !popoverVisible">
+        <div class="trigger" @click="toggle">
             {{result || '请选择'}}
         </div>
-        <div class="popover" v-if="popoverVisible">
+        <div class="popover" v-if="popoverVisible" ref="cascader">
             <gulu-cascader-items :items="source" :height="popoverHeight" :selected="selected"
                                  @update:selected="onUpdateSelected" :load-data="loadData"></gulu-cascader-items>
         </div>
@@ -42,8 +42,26 @@
             }
         },
         methods: {
+            onClickDocument(e) {
+                let {cascader} = this.$refs
+                let {target} = e
+                if (cascader === target || cascader.contains(target)) return
+                this.close()
+            },
+            open() {
+                this.popoverVisible = true
+                setTimeout(() => {
+                    document.addEventListener('click', this.onClickDocument)
+                })
+            },
+            close() {
+                this.popoverVisible = false
+                document.removeEventListener('click', this.onClickDocument)
+            },
+            toggle() {
+                this.popoverVisible ? this.close() : this.open()
+            },
             onUpdateSelected(newSelected) {
-                console.log(this.source);
                 this.$emit('update:selected', newSelected)
                 if (this.loadData) {
                     let lastLevelSelected = newSelected[newSelected.length - 1]
@@ -107,6 +125,7 @@
 
     .cascader {
         position: relative;
+        display: inline-block;
 
         > .trigger {
             display: inline-flex;
