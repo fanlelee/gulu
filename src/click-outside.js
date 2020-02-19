@@ -1,4 +1,5 @@
-document.addEventListener('click', (e) => {
+let elements = []//{el:el,callback:callback}
+let onClickDocument = (e) => {
     let {target} = e
     elements.forEach((item) => {
         let {el, callback} = item
@@ -8,9 +9,10 @@ document.addEventListener('click', (e) => {
             callback()
         }
     })
-})
+}
 
-let elements = []//{el:el,callback:callback}
+document.addEventListener('click', onClickDocument)
+
 export default {
     bind: function (el, binding) {
         elements.push({
@@ -19,3 +21,7 @@ export default {
         })
     }
 }
+let removeListener = () => {
+    document.removeEventListener('click',onClickDocument)
+}
+export {removeListener}

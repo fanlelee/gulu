@@ -4,9 +4,12 @@
         <div>{{selected[1]&&selected[1].name||1}}</div>
         <div>{{selected[2]&&selected[2].name||2}}</div>
         <p>111</p>
-        <g-cascader :source.sync="source" popover-height="200px" :selected.sync="selected" :load-data="loadData"></g-cascader>
-        <g-cascader :source.sync="source" popover-height="200px" :selected.sync="selected" :load-data="loadData"></g-cascader>
-        <g-cascader :source.sync="source" popover-height="200px" :selected.sync="selected" :load-data="loadData"></g-cascader>
+        <g-cascader :source.sync="source" popover-height="200px" :selected.sync="selected"
+                    :load-data="loadData"></g-cascader>
+        <g-cascader :source.sync="source" popover-height="200px" :selected.sync="selected"
+                    :load-data="loadData"></g-cascader>
+        <g-cascader :source.sync="source" popover-height="200px" :selected.sync="selected"
+                    :load-data="loadData"></g-cascader>
         <p>222</p>
     </div>
 </template>
@@ -14,14 +17,15 @@
 <script>
     import Cascader from './cascader.vue'
     import db from './db.js'
+    import {removeListener} from "./click-outside.js";
 
-    function ajax(parentId=0) {
-        return new Promise((resolve,reject)=>{
+    function ajax(parentId = 0) {
+        return new Promise((resolve, reject) => {
             let result = db.filter((item) => item.parentId == parentId)
-            result.forEach(item=>{
-                if(db.filter(node=>node.parentId === item.id).length>0){
+            result.forEach(item => {
+                if (db.filter(node => node.parentId === item.id).length > 0) {
                     item.isLeaf = false
-                }else {
+                } else {
                     item.isLeaf = true
                 }
             })
@@ -41,13 +45,16 @@
             }
         },
         created() {
-            ajax(0).then((result)=>{
+            ajax(0).then((result) => {
                 this.source = result
             })
         },
-        methods:{
-            loadData({id},todo){
-                ajax(id).then((result)=>{
+        destroyed() {
+            removeListener()
+        },
+        methods: {
+            loadData({id}, todo) {
+                ajax(id).then((result) => {
                     todo(result)
                 })
             }
