@@ -5,6 +5,7 @@
         </div>
         <div class="popover" v-if="popoverVisible" ref="cascader">
             <gulu-cascader-items :items="source" :height="popoverHeight" :selected="selected"
+                                 :loading = "loading"
                                  @update:selected="onUpdateSelected" :load-data="loadData"></gulu-cascader-items>
         </div>
     </div>
@@ -36,6 +37,8 @@
         data() {
             return {
                 popoverVisible: false,
+                loading:{},
+                nextItems:false
             }
         },
         computed: {
@@ -66,8 +69,10 @@
                                 this.$emit('update:source', copy)
                             }
                         }
+                        this.loading = {}
                     }
                     this.loadData(lastLevelSelected, updateSource)
+                    this.loading = lastLevelSelected
                 }
             },
             findItem(content, id) {

@@ -3,11 +3,19 @@
         <div class="left">
             <div class="label" v-for="item in items" @click="onClickLabel(item)">
                 <span class="name">{{item.name}}</span>
-                <g-icon class="icon" v-if="rightItemVisible(item)" name="right"></g-icon>
+                <span class="icons" v-if="rightItemVisible(item)">
+                    <template v-if="loading.id && loading.id===item.id">
+                        <g-icon class="load" name="loading"></g-icon>
+                    </template>
+                    <template v-else>
+                        <g-icon class="next" name="right"></g-icon>
+                    </template>
+                </span>
             </div>
         </div>
         <div class="right" v-if="rightItems">
             <gulu-cascader-items :items="rightItems" :height="height" :level="level+1"
+                                 :loading = "loading"
                                  :selected="selected" @update:selected="onUpdateSelected"
                                  :load-data="loadData"></gulu-cascader-items>
         </div>
@@ -38,7 +46,11 @@
             },
             loadData: {
                 type: Function
-            }
+            },
+            loading: {
+                type: Object,
+                default: {}
+            },
         },
         computed: {
             rightItems() {
@@ -93,6 +105,7 @@
             justify-content: center;
             cursor: pointer;
             white-space: nowrap;
+
             &:hover {
                 background-color: $grey;
             }
@@ -102,9 +115,17 @@
                 padding: 0 5px;
             }
 
-            .icon {
+            .icons {
                 margin-left: auto;
-                transform: scale(.5);
+
+                .next {
+                    transform: scale(.5);
+                }
+
+                .load {
+                    animation: spin 1s infinite linear;
+                }
+
             }
         }
     }
