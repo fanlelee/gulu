@@ -31,12 +31,21 @@
                 validator(value) {
                     return ['click', 'hover'].indexOf(value) >= 0
                 }
+            },
+            positionTest: {
+                type: Boolean,
+                default: false
+            }
+        },
+        created() {
+            if (this.positionTest) {
+                this.visible = true
             }
         },
         mounted() {
             if (this.trigger === 'click') {
                 this.$refs.popover.addEventListener('click', this.onClick)
-            } else if(this.trigger === 'hover'){
+            } else if (this.trigger === 'hover') {
                 this.$refs.popover.addEventListener('mouseenter', this.open)
                 this.$refs.popover.addEventListener('mouseleave', this.close)
             }
@@ -44,7 +53,7 @@
         destroyed() {
             if (this.trigger === 'click') {
                 this.$refs.popover.removeEventListener('click', this.onClick)
-            } else if(this.trigger === 'hover'){
+            } else if (this.trigger === 'hover') {
                 this.$refs.popover.removeEventListener('mouseenter', this.open)
                 this.$refs.popover.removeEventListener('mouseleave', this.close)
             }
