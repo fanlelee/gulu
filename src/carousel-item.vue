@@ -35,7 +35,7 @@
     }
 
     .item-enter-active, .item-leave-active {
-        transition: all 1s;
+        transition: all .3s;
     }
 
     .item-enter {
