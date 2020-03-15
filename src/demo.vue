@@ -1,64 +1,33 @@
 <template>
     <div class="demo">
-        <div>
-            <div>{{selected[0]&&selected[0].name||0}}</div>
-            <div>{{selected[1]&&selected[1].name||1}}</div>
-            <div>{{selected[2]&&selected[2].name||2}}</div>
-            <p>111</p>
-            <g-cascader :source.sync="source" popover-height="200px" :selected.sync="selected"
-                        :load-data="loadData"></g-cascader>
-            <p>222</p>
-        </div>
+        <g-carousel :selected.sync="selected">
+            <g-carousel-item name="1">
+                <div class="box">1</div>
+            </g-carousel-item>
+            <g-carousel-item name='2'>
+                <div class="box">2</div>
+            </g-carousel-item>
+            <g-carousel-item name='3'>
+                <div class="box">3</div>
+            </g-carousel-item>
+        </g-carousel>
     </div>
 
 </template>
 
 <script>
-    import Cascader from './cascader.vue'
-    import db from './db.js'
-    import {removeListener} from "./click-outside.js";
-
-    function ajax(parentId = 0) {
-        return new Promise((resolve, reject) => {
-            let result = db.filter((item) => item.parentId == parentId)
-            result.forEach(item => {
-                if (db.filter(node => node.parentId === item.id).length > 0) {
-                    item.isLeaf = false
-                } else {
-                    item.isLeaf = true
-                }
-            })
-            resolve(result)
-        })
-    }
+    import GCarousel from './carousel.vue'
+    import GCarouselItem from './carousel-item.vue'
 
     export default {
         name: "demo",
-        components: {
-            'g-cascader': Cascader
-        },
+        components: {GCarousel, GCarouselItem},
         data() {
             return {
-                selected: [],
-                source: []
+                selected: ''
             }
         },
-        created() {
-            ajax(0).then((result) => {
-                this.source = result
-            })
-        },
-        destroyed() {
-            removeListener()
-        },
-        methods: {
-            loadData({id}, todo) {
-                ajax(id).then((result) => {
-                    setTimeout(() => {
-                        todo(result)
-                    }, 1000)
-                })
-            }
+        mounted() {
         }
     }
 </script>
@@ -68,5 +37,12 @@
 
     .demo {
         font-size: 14px;
+    }
+
+    .box {
+        /*width: 200px;*/
+        height: 300px;
+        border: 1px solid red;
+        background-color: #999999;
     }
 </style>
