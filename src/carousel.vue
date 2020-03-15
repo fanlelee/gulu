@@ -1,6 +1,6 @@
 <template>
     <div class="carousel">
-        <div class="carousel-window">
+        <div class="carousel-window" @mouseenter="pause" @mouseleave="continuePlay">
             <slot></slot>
         </div>
         <div class="carousel-dots">
@@ -25,16 +25,13 @@
             return {
                 childrenLength: 0,
                 selectedIndex: 0,
+                timerId:undefined
             }
         },
         mounted() {
             this.updateChildren()
             this.childrenLength = this.names.length
-            let index = this.names.indexOf(this.getSelected())
-            setTimeout(() => {
-                this.run(index)
-            }, 3000)
-
+            this.playAutomatically()
         },
         updated() {
             this.updateChildren()
@@ -45,6 +42,13 @@
             },
         },
         methods: {
+            pause(){
+                window.clearTimeout(this.timerId)
+                this.timerId = undefined
+            },
+            continuePlay(){
+                this.playAutomatically()
+            },
             updateSelected(index) {
                 this.$children.forEach((vm) => {
                     if ((this.selectedIndex === 0 && index === this.names.length - 1)
@@ -56,19 +60,20 @@
                 })
                 this.$emit("update:selected", this.names[index])
             },
-            run(index) {
-                // if (index === names.length) {
-                //     index = 0
-                // }
-
-                if (index === 0) {
-                    index = this.names.length
+            playAutomatically() {
+                if(this.timerId){
+                    return
                 }
-                this.updateSelected(index - 1)
-                index--
-                setTimeout(() => {
-                    this.run(index)
-                }, 3000)
+                let index = this.names.indexOf(this.getSelected())
+                let run = () => {
+                    if (index === 0) {
+                        index = this.names.length
+                    }
+                    this.updateSelected(index - 1)
+                    index--
+                    this.timerId = setTimeout(run, 3000)
+                }
+                this.timerId = setTimeout(run, 3000)
             },
             getSelected() {
                 return this.selected || this.$children[0].name
