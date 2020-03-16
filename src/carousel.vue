@@ -19,13 +19,17 @@
         props: {
             selected: {
                 type: String
+            },
+            reverse: {
+                type: Boolean,
+                default: false
             }
         },
         data() {
             return {
                 childrenLength: 0,
                 selectedIndex: 0,
-                timerId:undefined
+                timerId: undefined
             }
         },
         mounted() {
@@ -42,17 +46,18 @@
             },
         },
         methods: {
-            pause(){
+            pause() {
                 window.clearTimeout(this.timerId)
                 this.timerId = undefined
             },
-            continuePlay(){
+            continuePlay() {
                 this.playAutomatically()
             },
             updateSelected(index) {
                 this.$children.forEach((vm) => {
-                    if ((this.selectedIndex === 0 && index === this.names.length - 1)
-                        || this.selectedIndex > index) {
+                    if ((index - this.selectedIndex === this.names.length - 1)
+                        || (this.selectedIndex > index
+                            && (this.selectedIndex - index !== this.names.length - 1))) {
                         vm.reverse = true
                     } else {
                         vm.$data.reverse = false
@@ -61,16 +66,25 @@
                 this.$emit("update:selected", this.names[index])
             },
             playAutomatically() {
-                if(this.timerId){
+                if (this.timerId) {
                     return
                 }
                 let index = this.names.indexOf(this.getSelected())
                 let run = () => {
-                    if (index === 0) {
-                        index = this.names.length
+                    if (this.reverse) {
+                        if (index === 0) {
+                            index = this.names.length
+                        }
+                        this.updateSelected(index - 1)
+                        index--
+                    } else {
+                        if (index === this.names.length - 1) {
+                            index = -1
+                        }
+                        this.updateSelected(index + 1)
+                        index++
                     }
-                    this.updateSelected(index - 1)
-                    index--
+
                     this.timerId = setTimeout(run, 3000)
                 }
                 this.timerId = setTimeout(run, 3000)
@@ -88,7 +102,6 @@
                         vm.$data.visible = false
                     }
                 })
-
             }
         }
 

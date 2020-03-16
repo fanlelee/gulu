@@ -1,13 +1,13 @@
 <template>
     <div class="demo">
-        <g-carousel :selected.sync="selected">
-            <g-carousel-item name="1">
+        <g-carousel :selected.sync="selected" :reverse = 'true'>
+            <g-carousel-item name="hi">
                 <div class="box">1</div>
             </g-carousel-item>
-            <g-carousel-item name='2'>
+            <g-carousel-item name='hello'>
                 <div class="box">2</div>
             </g-carousel-item>
-            <g-carousel-item name='3'>
+            <g-carousel-item name='world'>
                 <div class="box">3</div>
             </g-carousel-item>
         </g-carousel>
@@ -24,7 +24,7 @@
         components: {GCarousel, GCarouselItem},
         data() {
             return {
-                selected: ''
+                selected: 'hello'
             }
         },
         mounted() {
