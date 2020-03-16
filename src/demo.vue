@@ -1,6 +1,6 @@
 <template>
     <div class="demo">
-        <g-carousel :selected.sync="selected" :reverse = 'true'>
+        <g-carousel :selected.sync="selected">
             <g-carousel-item name="hi">
                 <div class="box">1</div>
             </g-carousel-item>
@@ -24,7 +24,7 @@
         components: {GCarousel, GCarouselItem},
         data() {
             return {
-                selected: 'hello'
+                selected: 'hi'
             }
         },
         mounted() {
@@ -37,12 +37,14 @@
 
     .demo {
         font-size: 14px;
+        padding: 20px;
     }
 
     .box {
-        /*width: 200px;*/
         height: 300px;
-        border: 1px solid red;
         background-color: #999999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>

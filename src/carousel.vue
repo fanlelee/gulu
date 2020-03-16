@@ -110,24 +110,42 @@
 
 <style lang="scss" scoped>
     .carousel {
-        border: 1px solid black;
-        padding: 20px;
 
         &-window {
             /*display: inline-block;*/
             position: relative;
-            border: 1px solid green;
             overflow: hidden;
         }
 
         &-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
             span {
-                padding: 5px;
+                margin: 5px;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background-color: #ddd;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 10px;
+                &:hover {
+                    cursor: pointer;
+                }
+
+                &.selectedDot {
+                    background-color: #333;
+                    color: #fff;
+                    &:hover{
+                        cursor: default;
+                    }
+                }
             }
 
-            .selectedDot {
-                background-color: red;
-            }
+
         }
     }
 </style>
