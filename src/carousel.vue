@@ -56,8 +56,11 @@
         },
         methods: {
             onClickDot(index) {
+                if (index === this.selectedIndex) {
+                    return
+                }
                 let currentSelectedClassLists = this.$children[this.selectedIndex].$el.className.split(' ')
-                if(currentSelectedClassLists.indexOf('item-enter-active')>-1){
+                if (currentSelectedClassLists.indexOf('item-enter-active') > -1) {
                     return
                 }
                 this.pause()
@@ -94,11 +97,9 @@
                 })
             },
             updateSelected(index) {
-                // this.pause()
                 if (index === -1) {
                     index = this.names.length - 1
                 }
-                console.log(this.timerId, 'timerId');
                 this.$children.forEach((vm) => {
                     vm.reverse = index < this.selectedIndex
                     if (this.timerId) {
@@ -142,7 +143,6 @@
                 let selected = this.getSelected()
                 this.$children.forEach((vm, index) => {
                     if (selected === vm.name) {
-                        console.log('visible');
                         vm.$data.visible = true
                         this.selectedIndex = index
                         vm.first = this.first
