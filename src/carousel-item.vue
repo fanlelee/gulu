@@ -1,6 +1,6 @@
 <template>
     <transition name="item">
-        <div class="carousel-item" v-if="visible" :class='{reverse}'>
+        <div class="carousel-item" v-if="visible" :class='{reverse,first}'>
             <div class="carousel-item-box">
                 <slot></slot>
             </div>
@@ -19,14 +19,15 @@
         data() {
             return {
                 visible: false,
-                reverse:false
+                reverse:false,
+                first:false
             }
         }
     }
 </script>
 
 <style lang="scss" scoped>
-    .item-leave-active {
+    .item-enter-active {
         position: absolute;
         top: 0;
         left: 0;
@@ -35,7 +36,7 @@
     }
 
     .item-enter-active, .item-leave-active {
-        transition: all .2s;
+        transition: all .3s;
     }
 
     .item-enter {
@@ -54,5 +55,11 @@
         transform: translateX(100%);
     }
 
+    .item-enter-active.first{
+        transition: all 0s;
+    }
+    .item-enter.first{
+        transform: translateX(0);
+    }
 
 </style>
