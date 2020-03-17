@@ -59,35 +59,33 @@
         computed: {
             names() {
                 return this.itemLists.map((vm) => vm.name)
-            },
-            running(){
-                let currentSelectedClassLists = this.itemLists[this.selectedIndex].$el.className.split(' ')
-                return currentSelectedClassLists.indexOf('item-enter-active') > -1
             }
         },
         methods: {
+            running() {
+                let currentSelectedClassLists = this.itemLists[this.selectedIndex].$el.className.split(' ')
+                return currentSelectedClassLists.indexOf('item-enter-active') > -1
+            },
             onClickPre() {
-                if (this.running) {
+                if (this.running()) {
                     return
                 }
                 this.pause()
                 this.updateSelected(this.selectedIndex - 1)
             },
             onClickNext() {
-
-                if (this.running) {
+                if (this.running()) {
                     return
                 }
-                console.log('next');
                 this.pause()
                 this.updateSelected(this.selectedIndex + 1)
             },
             onClickDot(index) {
-                if (index === this.selectedIndex||this.running) {
+                if (index === this.selectedIndex || this.running) {
                     return
                 }
                 this.pause()
-                this.updateSelected(index,true)
+                this.updateSelected(index, true)
             },
             onTouchStart(e) {
                 // this.pause()
@@ -96,7 +94,7 @@
             onTouchMove() {
             },
             onTouchEnd(e) {
-                if (this.running) {
+                if (this.running()) {
                     return
                 }
                 this.pause()
@@ -123,7 +121,10 @@
                     this.playAutomatically()
                 })
             },
-            updateSelected(index,dotClick=false) {
+            updateSelected(index, dotClick = false) {
+                if (this.running()) {
+                    return
+                }
                 if (index === -1) {
                     index = this.names.length - 1
                 }
@@ -164,7 +165,7 @@
                     }
                     this.timerId = setTimeout(run, 3000)
                 }
-                this.timerId = setTimeout(run, 3001)
+                this.timerId = setTimeout(run, 3000)
             },
             getSelected() {
                 return this.selected || this.itemLists[0].name
