@@ -1,6 +1,6 @@
 <template>
     <div class="demo">
-        <g-carousel :selected.sync="selected">
+        <g-carousel :selected.sync="selected" :reverse="true">
             <g-carousel-item name="hi">
                 <div class="box">1</div>
             </g-carousel-item>
@@ -12,7 +12,6 @@
             </g-carousel-item>
         </g-carousel>
     </div>
-
 </template>
 
 <script>

@@ -9,11 +9,10 @@
         <div class="carousel-dots">
             <span v-for="n in childrenLength"
                   :class="{selectedDot:n===selectedIndex+1}"
-                  @click="updateSelected(n-1)">
+                  @click="onClickDot(n-1)">
                 {{n}}
             </span>
         </div>
-        <div>xxxx</div>
     </div>
 </template>
 
@@ -35,21 +34,20 @@
                 selectedIndex: 0,
                 timerId: undefined,
                 touchStart: undefined,
-                first:false
+                first: false,
             }
         },
         mounted() {
-            this.first=true
-            // this.updateChildren()
+            this.first = true
             this.childrenLength = this.names.length
-
             // this.playAutomatically()
+            // this.updateChildren()
         },
         updated() {
-            this.updateChildren()
             this.childrenLength = this.names.length
             this.playAutomatically()
-            this.first=false
+            this.updateChildren()
+            this.first = false
         },
         computed: {
             names() {
@@ -57,6 +55,14 @@
             },
         },
         methods: {
+            onClickDot(index) {
+                let currentSelectedClassLists = this.$children[this.selectedIndex].$el.className.split(' ')
+                if(currentSelectedClassLists.indexOf('item-enter-active')>-1){
+                    return
+                }
+                this.pause()
+                this.updateSelected(index)
+            },
             onTouchStart(e) {
                 this.pause()
                 this.touchStart = e.touches[0]
@@ -81,7 +87,6 @@
             pause() {
                 window.clearTimeout(this.timerId)
                 this.timerId = undefined
-                // console.log('qing');
             },
             continuePlay() {
                 this.$nextTick(() => {
@@ -89,13 +94,22 @@
                 })
             },
             updateSelected(index) {
-                this.pause()
+                // this.pause()
                 if (index === -1) {
                     index = this.names.length - 1
                 }
-                // this.$children.forEach((vm, index) => {
-                //
-                // })
+                console.log(this.timerId, 'timerId');
+                this.$children.forEach((vm) => {
+                    vm.reverse = index < this.selectedIndex
+                    if (this.timerId) {
+                        if (this.selectedIndex - index === this.names.length - 1) {
+                            vm.reverse = false
+                        }
+                        if (index - this.selectedIndex === this.names.length - 1) {
+                            vm.reverse = true
+                        }
+                    }
+                })
                 this.$emit("update:selected", this.names[index])
             },
             playAutomatically() {
@@ -127,17 +141,14 @@
             updateChildren() {
                 let selected = this.getSelected()
                 this.$children.forEach((vm, index) => {
-                    if ((index - this.selectedIndex === this.names.length - 1)
-                        || (this.selectedIndex > index
-                            && (this.selectedIndex - index !== this.names.length - 1))) {
-                        vm.reverse = true
-                    } else {
-                        vm.reverse = false
-                    }
                     if (selected === vm.name) {
+                        console.log('visible');
                         vm.$data.visible = true
                         this.selectedIndex = index
-                            vm.first = this.first
+                        vm.first = this.first
+                        if (this.first) {
+                            vm.reverse = this.reverse
+                        }
                     } else {
                         vm.$data.visible = false
                     }
@@ -164,8 +175,8 @@
 
             span {
                 margin: 5px;
-                width: 20px;
-                height: 20px;
+                width: 16px;
+                height: 16px;
                 border-radius: 50%;
                 background-color: #ddd;
                 display: inline-flex;
