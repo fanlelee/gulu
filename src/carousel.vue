@@ -7,18 +7,23 @@
             <slot></slot>
         </div>
         <div class="carousel-dots">
+            <span @click="onClickPre"><g-icon name="left"></g-icon></span>
             <span v-for="n in childrenLength"
                   :class="{selectedDot:n===selectedIndex+1}"
                   @click="onClickDot(n-1)">
                 {{n}}
             </span>
+            <span @click="onClickNext"><g-icon name="right"></g-icon></span>
         </div>
     </div>
 </template>
 
 <script>
+    import GIcon from './icon.vue'
+
     export default {
         name: "GuluCarousel",
+        components: {GIcon},
         props: {
             selected: {
                 type: String
@@ -35,9 +40,11 @@
                 timerId: undefined,
                 touchStart: undefined,
                 first: false,
+                itemLists: {}
             }
         },
         mounted() {
+            this.itemLists = this.$children.filter((vm) => vm.$options.name === 'GuluCarouselItem')
             this.first = true
             this.childrenLength = this.names.length
             // this.playAutomatically()
@@ -51,28 +58,48 @@
         },
         computed: {
             names() {
-                return this.$children.map((vm) => vm.name)
+                return this.itemLists.map((vm) => vm.name)
             },
+            running(){
+                let currentSelectedClassLists = this.itemLists[this.selectedIndex].$el.className.split(' ')
+                return currentSelectedClassLists.indexOf('item-enter-active') > -1
+            }
         },
         methods: {
-            onClickDot(index) {
-                if (index === this.selectedIndex) {
-                    return
-                }
-                let currentSelectedClassLists = this.$children[this.selectedIndex].$el.className.split(' ')
-                if (currentSelectedClassLists.indexOf('item-enter-active') > -1) {
+            onClickPre() {
+                if (this.running) {
                     return
                 }
                 this.pause()
-                this.updateSelected(index)
+                this.updateSelected(this.selectedIndex - 1)
+            },
+            onClickNext() {
+
+                if (this.running) {
+                    return
+                }
+                console.log('next');
+                this.pause()
+                this.updateSelected(this.selectedIndex + 1)
+            },
+            onClickDot(index) {
+                if (index === this.selectedIndex||this.running) {
+                    return
+                }
+                this.pause()
+                this.updateSelected(index,true)
             },
             onTouchStart(e) {
-                this.pause()
+                // this.pause()
                 this.touchStart = e.touches[0]
             },
             onTouchMove() {
             },
             onTouchEnd(e) {
+                if (this.running) {
+                    return
+                }
+                this.pause()
                 let {clientX: x1, clientY: y1} = this.touchStart
                 let {clientX: x2, clientY: y2} = e.changedTouches[0]
 
@@ -96,13 +123,16 @@
                     this.playAutomatically()
                 })
             },
-            updateSelected(index) {
+            updateSelected(index,dotClick=false) {
                 if (index === -1) {
                     index = this.names.length - 1
                 }
-                this.$children.forEach((vm) => {
+                if (index === this.names.length) {
+                    index = 0
+                }
+                this.itemLists.forEach((vm) => {
                     vm.reverse = index < this.selectedIndex
-                    if (this.timerId) {
+                    if (!dotClick) {
                         if (this.selectedIndex - index === this.names.length - 1) {
                             vm.reverse = false
                         }
@@ -134,14 +164,14 @@
                     }
                     this.timerId = setTimeout(run, 3000)
                 }
-                this.timerId = setTimeout(run, 3000)
+                this.timerId = setTimeout(run, 3001)
             },
             getSelected() {
-                return this.selected || this.$children[0].name
+                return this.selected || this.itemLists[0].name
             },
             updateChildren() {
                 let selected = this.getSelected()
-                this.$children.forEach((vm, index) => {
+                this.itemLists.forEach((vm, index) => {
                     if (selected === vm.name) {
                         vm.$data.visible = true
                         this.selectedIndex = index
