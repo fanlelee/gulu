@@ -35,6 +35,10 @@
             reverse: {
                 type: Boolean,
                 default: false
+            },
+            autoplay: {
+                type: Boolean,
+                default: true
             }
         },
         data() {
@@ -127,6 +131,7 @@
                 this.$emit("update:selected", this.names[index])
             },
             playAutomatically() {
+                if (!this.autoplay) return
                 if (this.timerId) return
                 let index = this.names.indexOf(this.getSelected())
                 let run = () => {
