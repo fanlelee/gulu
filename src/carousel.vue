@@ -7,13 +7,17 @@
             <slot></slot>
         </div>
         <div class="carousel-dots">
-            <span @click="onClickPre"><g-icon name="left"></g-icon></span>
+            <span @click="onClickPreOrNext(selectedIndex-1)">
+                <g-icon name="left"></g-icon>
+            </span>
             <span v-for="n in childrenLength"
                   :class="{selectedDot:n===selectedIndex+1}"
                   @click="onClickDot(n-1)">
                 {{n}}
             </span>
-            <span @click="onClickNext"><g-icon name="right"></g-icon></span>
+            <span @click="onClickPreOrNext(selectedIndex+1)">
+                <g-icon name="right"></g-icon>
+            </span>
         </div>
     </div>
 </template>
@@ -66,24 +70,13 @@
                 let currentSelectedClassLists = this.itemLists[this.selectedIndex].$el.className.split(' ')
                 return currentSelectedClassLists.indexOf('item-enter-active') > -1
             },
-            onClickPre() {
-                if (this.running()) {
-                    return
-                }
+            onClickPreOrNext(index) {
+                if (this.running()) return
                 this.pause()
-                this.updateSelected(this.selectedIndex - 1)
-            },
-            onClickNext() {
-                if (this.running()) {
-                    return
-                }
-                this.pause()
-                this.updateSelected(this.selectedIndex + 1)
+                this.updateSelected(index)
             },
             onClickDot(index) {
-                if (index === this.selectedIndex || this.running) {
-                    return
-                }
+                if (index === this.selectedIndex || this.running()) return
                 this.pause()
                 this.updateSelected(index, true)
             },
@@ -94,9 +87,7 @@
             onTouchMove() {
             },
             onTouchEnd(e) {
-                if (this.running()) {
-                    return
-                }
+                if (this.running()) return
                 this.pause()
                 let {clientX: x1, clientY: y1} = this.touchStart
                 let {clientX: x2, clientY: y2} = e.changedTouches[0]
@@ -122,32 +113,21 @@
                 })
             },
             updateSelected(index, dotClick = false) {
-                if (this.running()) {
-                    return
-                }
-                if (index === -1) {
-                    index = this.names.length - 1
-                }
-                if (index === this.names.length) {
-                    index = 0
-                }
+                if (this.running()) return
+                if (index === -1) index = this.names.length - 1
+                if (index === this.names.length) index = 0
+
                 this.itemLists.forEach((vm) => {
                     vm.reverse = index < this.selectedIndex
                     if (!dotClick) {
-                        if (this.selectedIndex - index === this.names.length - 1) {
-                            vm.reverse = false
-                        }
-                        if (index - this.selectedIndex === this.names.length - 1) {
-                            vm.reverse = true
-                        }
+                        if (this.selectedIndex - index === this.names.length - 1) vm.reverse = false
+                        if (index - this.selectedIndex === this.names.length - 1) vm.reverse = true
                     }
                 })
                 this.$emit("update:selected", this.names[index])
             },
             playAutomatically() {
-                if (this.timerId) {
-                    return
-                }
+                if (this.timerId) return
                 let index = this.names.indexOf(this.getSelected())
                 let run = () => {
                     if (this.reverse) {
@@ -167,6 +147,7 @@
                 }
                 this.timerId = setTimeout(run, 3000)
             },
+
             getSelected() {
                 return this.selected || this.itemLists[0].name
             },
