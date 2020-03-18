@@ -12,6 +12,7 @@
             </span>
             <span v-for="n in childrenLength"
                   :class="{selectedDot:n===selectedIndex+1}"
+                  :data-index="n"
                   @click="onClickDot(n-1)">
                 {{n}}
             </span>
@@ -39,6 +40,10 @@
             autoplay: {
                 type: Boolean,
                 default: true
+            },
+            autoPlayDelay:{
+                type: Number,
+                default:3000
             }
         },
         data() {
@@ -148,9 +153,9 @@
                         this.updateSelected(index + 1)
                         index++
                     }
-                    this.timerId = setTimeout(run, 3000)
+                    this.timerId = setTimeout(run, this.autoPlayDelay)
                 }
-                this.timerId = setTimeout(run, 3000)
+                this.timerId = setTimeout(run, this.autoPlayDelay)
             },
 
             getSelected() {
