@@ -1,8 +1,8 @@
 import Vue from "vue"
 import chai, {expect} from 'chai'
 import {mount} from '@vue/test-utils'
-import Carousel from '@/carousel.vue'
-import CarouselItem from '@/carousel-item.vue'
+import Carousel from '../../src/carousel/carousel.vue'
+import CarouselItem from '../../src/carousel/carousel-item.vue'
 
 import sinon from "sinon";
 import sinonChai from "sinon-chai"
@@ -98,7 +98,7 @@ describe('Carousel', () => {
         const wrapper = mount(Carousel, {
             propsData: {
                 autoplay: true,
-                autoPlayDelay: 301,
+                autoPlayDelay: 1,
                 selected: '1'
             },
             slots: {
@@ -119,9 +119,8 @@ describe('Carousel', () => {
             }
         })
         setTimeout(() => {
-            console.log(wrapper.html());
             expect(callback).to.have.been.calledWith('2')
             done()
-        },350)
+        },80)
     })
 })
