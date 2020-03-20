@@ -23,7 +23,7 @@
 </template>
 
 <script>
-    import Icon from './icon.vue'
+    import Icon from '../icon.vue'
 
     export default {
         components: {
@@ -82,7 +82,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "var";
+    @import "src/var";
 
     .cascader-items {
         display: flex;

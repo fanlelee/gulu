@@ -13,7 +13,7 @@
 
 <script>
     import CascaderItems from './cascader-items'
-    import ClickOutside from './click-outside.js'
+    import ClickOutside from '../click-outside.js'
 
     export default {
         name: "GuluCascader",
@@ -118,7 +118,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "var";
+    @import "src/var";
 
     .cascader {
         position: relative;
