@@ -9,7 +9,7 @@
     </button>
 </template>
 <script>
-    import Icon from './icon.vue'
+    import Icon from '../icon.vue'
 
     export default {
         name: 'GuluButton',
@@ -35,7 +35,7 @@
     }
 </script>
 <style lang="scss" scoped>
-    @import 'var';
+    @import 'src/var';
 
     @keyframes spin {
         0% {transform: rotate(0deg);}
