@@ -24,7 +24,7 @@
 </template>
 
 <script>
-    import GIcon from './icon.vue'
+    import GIcon from '../icon.vue'
 
     export default {
         name: "GuluCarousel",

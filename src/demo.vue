@@ -15,8 +15,8 @@
 </template>
 
 <script>
-    import GCarousel from './carousel.vue'
-    import GCarouselItem from './carousel-item.vue'
+    import GCarousel from './carousel/carousel.vue'
+    import GCarouselItem from './carousel/carousel-item.vue'
 
     export default {
         name: "demo",
