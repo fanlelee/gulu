@@ -82,7 +82,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "src/var";
+    @import "../../styles/var";
 
     .cascader-items {
         display: flex;

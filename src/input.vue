@@ -40,7 +40,7 @@
 
 </script>
 <style lang="scss" scoped>
-    @import "var";
+    @import "styles/var";
 
     .wrapper {
         display: inline-flex;
