@@ -1,29 +1,23 @@
 <template>
     <div class="demo">
-        <g-carousel :selected.sync="selected" :reverse="false">
-            <g-carousel-item name="hi">
-                <div class="box">1</div>
-            </g-carousel-item>
-            <g-carousel-item name='hello'>
-                <div class="box">2</div>
-            </g-carousel-item>
-            <g-carousel-item name='world'>
-                <div class="box">3</div>
-            </g-carousel-item>
-        </g-carousel>
+        <g-nav :selected.sync="selected">
+            <g-nav-item name="home">首页</g-nav-item>
+            <g-nav-item name="about">关于</g-nav-item>
+            <g-nav-item name="hire">招聘</g-nav-item>
+        </g-nav>
     </div>
 </template>
 
 <script>
-    import GCarousel from './carousel/carousel.vue'
-    import GCarouselItem from './carousel/carousel-item.vue'
+    import GNav from './nav/nav.vue'
+    import GNavItem from './nav/nav-item.vue'
 
     export default {
         name: "demo",
-        components: {GCarousel, GCarouselItem},
+        components: {GNav,GNavItem},
         data() {
             return {
-                selected: 'hi'
+                selected:['home']
             }
         },
         mounted() {
@@ -37,13 +31,5 @@
     .demo {
         font-size: 14px;
         padding: 20px;
-    }
-
-    .box {
-        height: 300px;
-        background-color: #999999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 </style>
