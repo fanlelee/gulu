@@ -1,16 +1,25 @@
 <template>
     <div class="sub-nav">
-        <span class="sub-nav-title"><slot name="title"></slot></span>
-        <div class="sub-nav-item">
+        <span class="sub-nav-title" @click="open=!open">
+            <slot name="title"></slot>
+        </span>
+        <div class="sub-nav-item" v-show="open">
             <slot></slot>
         </div>
-
     </div>
 </template>
 
 <script>
     export default {
-        name: "GuluSubNav"
+        name: "GuluSubNav",
+        data() {
+            return {
+                open: false
+            }
+        },
+        mounted() {
+            console.log(this.open);
+        }
     }
 </script>
 
@@ -18,8 +27,10 @@
     .sub-nav {
         position: relative;
 
-            padding: 10px 20px;
         &-title {
+            padding: 10px 20px;
+            display: inline-block;
+            vertical-align: top;
         }
 
         &-item {
