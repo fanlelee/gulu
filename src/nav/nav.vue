@@ -17,13 +17,20 @@
                 default: false
             }
         },
+        provide() {
+            return {
+                root: this
+            }
+        },
         data() {
-            return {}
+            return {
+                items:[]
+            }
         },
         computed: {
-            items() {
-                return this.$children.filter((vm) => vm.$options.name === 'GuluNavItem')
-            }
+            // items() {
+            //     return this.$children.filter((vm) => vm.$options.name === 'GuluNavItem')
+            // }
         },
         mounted() {
             this.listenChildren()
@@ -32,8 +39,11 @@
         updated() {
             this.updateChildren()
         },
-        methods:{
-            updateChildren(){
+        methods: {
+            addItem(child){
+                this.items.push(child)
+            },
+            updateChildren() {
                 this.items.forEach((vm) => {
                     if (!this.multiple) {
                         if (this.selected.indexOf(vm.name) >= 0) {
@@ -48,7 +58,7 @@
                     }
                 })
             },
-            listenChildren(){
+            listenChildren() {
                 let copy = JSON.parse(JSON.stringify(this.selected))
                 this.items.forEach((vm) => {
                     vm.$on('add:selected', (selected) => {
@@ -69,5 +79,8 @@
 <style scoped lang="scss">
     .g-nav {
         border: 1px solid red;
+        display: flex;
+
     }
+
 </style>

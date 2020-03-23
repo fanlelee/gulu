@@ -7,6 +7,7 @@
 <script>
     export default {
         name: "GuluNavItem",
+        inject: ['root'],
         props: {
             name: {
                 type: String,
@@ -17,22 +18,26 @@
                 selected: false
             }
         },
+        created() {
+            this.root.addItem(this)
+        },
         mounted() {
 
         },
-        methods:{
-            onclick(){
-                this.$emit('add:selected',this.name)
+        methods: {
+            onclick() {
+                this.$emit('add:selected', this.name)
             }
         }
     }
 </script>
 
 <style scoped lang="scss">
-    .selected{
+    .selected {
         background-color: red;
     }
+
     .g-nav-item {
-        display: inline-block;
+        padding: 10px 20px;
     }
 </style>
