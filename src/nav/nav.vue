@@ -1,5 +1,5 @@
 <template>
-    <div class="g-nav">
+    <div class="g-nav" :class="{vertical}">
         <slot></slot>
     </div>
 </template>
@@ -15,11 +15,16 @@
             multiple: {
                 type: Boolean,
                 default: false
+            },
+            vertical: {
+                type: Boolean,
+                default: false
             }
         },
         provide() {
             return {
-                root: this
+                root: this,
+                vertical:this.vertical
             }
         },
         data() {
@@ -84,6 +89,15 @@
         border-bottom: 1px solid $border-color-light;
         display: flex;
         color: #333;
+
+        &.vertical {
+            flex-direction: column;
+            width: 200px;
+            margin: 20px;
+            border-left: 1px solid $border-color-light;
+            border-top: 1px solid $border-color-light;
+            border-right: 1px solid $border-color-light;
+        }
     }
 
 </style>

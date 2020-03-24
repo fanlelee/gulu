@@ -1,15 +1,21 @@
 <template>
     <div class="sub-nav" v-click-outside="close">
         <span class="sub-nav-title" @click="onclick"
-        :class="{active}">
+              :class="{active}">
             <slot name="title"></slot>
             <span class="sub-nav-icon" :class="{open}">
                 <g-icon name="right"></g-icon>
             </span>
         </span>
-        <div class="sub-nav-popover" v-show="open">
-            <slot></slot>
-        </div>
+        <transition
+                @after-leave="afterLeave"
+                @enter="enter"
+                @after-enter="afterEnter"
+                @leave="leave">
+            <div class="sub-nav-popover" v-show="open" :class="{vertical}">
+                <slot></slot>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -21,7 +27,7 @@
         name: "GuluSubNav",
         components: {GIcon},
         directives: {ClickOutside},
-        inject:['root'],
+        inject: ['root', 'vertical'],
         props: {
             name: {
                 type: String,
@@ -33,23 +39,47 @@
                 open: false,
             }
         },
-        computed:{
-            active(){
-                return this.root.namePath.indexOf(this.name)>=0
-            }
+        computed: {
+            active() {
+                return this.root.namePath.indexOf(this.name) >= 0
+            },
         },
         mounted() {
         },
         methods: {
+            enter: function (el, done) {
+                let {height} = el.getBoundingClientRect()
+                el.style.height = '0'
+                el.getBoundingClientRect()
+                el.style.height = `${height}px`
+                el.addEventListener('transitionend', () => {
+                    done()
+                })
+            },
+            afterEnter(el) {
+                el.style.height = 'auto'
+            },
+            leave(el, done) {
+                let {height} = el.getBoundingClientRect()
+                el.style.height = `${height}px`
+                el.getBoundingClientRect()
+                el.style.height = '0'
+                el.addEventListener('transitionend', () => {
+                    done()
+                })
+            },
+            afterLeave(el) {
+                el.style.height = 'auto'
+            },
             onclick() {
                 this.open = !this.open
             },
             close() {
                 this.open = false
             },
-            updatePath(){
+            updatePath() {
                 this.root.namePath.unshift(this.name)
-                if(this.$parent.$options.name==='GuluSubNav'){
+                if (this.$parent.$options.name === 'GuluSubNav') {
                     this.$parent.updatePath()
                 }
             },
@@ -128,6 +158,15 @@
                     transition: transform 300ms;
                     transform: rotate(180deg);
                 }
+            }
+
+            &.vertical {
+                position: static;
+                margin: 0;
+                border-radius: 0;
+                box-shadow: none;
+                transition: height 300ms;
+                overflow: hidden;
             }
         }
     }
