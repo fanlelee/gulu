@@ -1,21 +1,28 @@
 <template>
     <div class="sub-nav" v-click-outside="close">
         <span class="sub-nav-title" @click="onclick"
-              :class="{active}">
+              :class="{active,vertical}">
             <slot name="title"></slot>
-            <span class="sub-nav-icon" :class="{open}">
+            <span class="sub-nav-icon" :class="{open,vertical}">
                 <g-icon name="right"></g-icon>
             </span>
         </span>
-        <transition
-                @after-leave="afterLeave"
-                @enter="enter"
-                @after-enter="afterEnter"
-                @leave="leave">
-            <div class="sub-nav-popover" v-show="open" :class="{vertical}">
+        <template v-if="vertical">
+            <transition
+                    @after-leave="afterLeave"
+                    @enter="enter"
+                    @after-enter="afterEnter"
+                    @leave="leave">
+                <div class="sub-nav-popover" v-show="open" :class="{vertical}">
+                    <slot></slot>
+                </div>
+            </transition>
+        </template>
+        <template v-else>
+            <div class="sub-nav-popover" v-show="open">
                 <slot></slot>
             </div>
-        </transition>
+        </template>
     </div>
 </template>
 
@@ -109,6 +116,11 @@
                 }
             }
         }
+        >.vertical{
+            &::after {
+                display: none;
+            }
+        }
 
         &-icon {
             display: none;
@@ -140,7 +152,6 @@
                 &::after {
                     display: none;
                 }
-
                 color: #666;
 
                 &.selected {
@@ -149,25 +160,35 @@
                 }
             }
 
-            .sub-nav-icon {
+
+            .sub-nav-icon{
                 display: inline-flex;
                 vertical-align: middle;
                 margin-left: 1.5em;
-
-                &.open {
-                    transition: transform 300ms;
-                    transform: rotate(180deg);
+                &.vertical{
+                    transform: rotate(90deg);
+                    &.open {
+                        transition: transform 300ms;
+                        transform: rotate(-90deg);
+                    }
                 }
             }
+            .sub-nav-icon:not(.vertical) {
+                 &.open {
+                     transition: transform 300ms;
+                     transform: rotate(180deg);
+                 }
+             }
 
             &.vertical {
                 position: static;
-                margin: 0;
                 border-radius: 0;
                 box-shadow: none;
                 transition: height 300ms;
                 overflow: hidden;
+
             }
+
         }
     }
 </style>

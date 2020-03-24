@@ -1,5 +1,5 @@
 <template>
-    <div class="g-nav-item" :class="{selected}" @click="onclick">
+    <div class="g-nav-item" :class="{selected,vertical}" @click="onclick">
         <slot></slot>
     </div>
 </template>
@@ -7,7 +7,7 @@
 <script>
     export default {
         name: "GuluNavItem",
-        inject: ['root'],
+        inject: ['root', 'vertical'],
         props: {
             name: {
                 type: String,
@@ -41,7 +41,7 @@
         padding: 10px 20px;
         position: relative;
 
-        &.selected {
+        &.selected:not(.vertical) {
             &::after {
                 content: '';
                 position: absolute;
@@ -51,5 +51,12 @@
                 border-bottom: 2px solid $blue;
             }
         }
+
+        &.selected {
+            &.vertical {
+                color: $blue;
+            }
+        }
+
     }
 </style>
