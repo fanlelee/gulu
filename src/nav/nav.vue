@@ -24,7 +24,8 @@
         },
         data() {
             return {
-                items:[]
+                items: [],
+                namePath: []
             }
         },
         computed: {
@@ -40,7 +41,7 @@
             this.updateChildren()
         },
         methods: {
-            addItem(child){
+            addItem(child) {
                 this.items.push(child)
             },
             updateChildren() {
@@ -77,10 +78,12 @@
 </script>
 
 <style scoped lang="scss">
-    .g-nav {
-        border: 1px solid red;
-        display: flex;
+    @import '../../styles/var';
 
+    .g-nav {
+        border-bottom: 1px solid $border-color-light;
+        display: flex;
+        color: #333;
     }
 
 </style>

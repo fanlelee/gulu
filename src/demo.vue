@@ -2,15 +2,15 @@
     <div class="demo">
         <g-nav :selected.sync="selected">
             <g-nav-item name="home">首页</g-nav-item>
-            <g-sub-nav>
+            <g-sub-nav name="about">
                 <template slot="title">关于</template>
                 <g-nav-item name="culture">企业文化</g-nav-item>
                 <g-nav-item name="team">开发团队</g-nav-item>
-                <g-sub-nav>
+                <g-sub-nav name="contact">
                     <template slot="title">联系方式</template>
                     <g-nav-item name="qq">qq</g-nav-item>
                     <g-nav-item name="wechat">微信</g-nav-item>
-                    <g-sub-nav>
+                    <g-sub-nav name="tel">
                         <template slot="title">手机</template>
                         <g-nav-item name="ct">电信</g-nav-item>
                         <g-nav-item name="cu">联通</g-nav-item>
@@ -46,6 +46,5 @@
 
     .demo {
         font-size: 14px;
-        padding: 20px;
     }
 </style>
