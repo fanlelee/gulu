@@ -34,7 +34,6 @@ describe('Nav', () => {
             }
         })
         setTimeout(() => {
-            console.log(wrapper.html());
             expect(wrapper.find('[ data-name="home"].selected').exists()).to.be.true
             done()
         })
