@@ -9,12 +9,7 @@
         name: "GuluNav",
         props: {
             selected: {
-                type: Array,
-                default: () => []
-            },
-            multiple: {
-                type: Boolean,
-                default: false
+                type: String
             },
             vertical: {
                 type: Boolean,
@@ -24,7 +19,7 @@
         provide() {
             return {
                 root: this,
-                vertical:this.vertical
+                vertical: this.vertical
             }
         },
         data() {
@@ -51,29 +46,17 @@
             },
             updateChildren() {
                 this.items.forEach((vm) => {
-                    if (!this.multiple) {
-                        if (this.selected.indexOf(vm.name) >= 0) {
-                            vm.selected = true
-                        } else {
-                            vm.selected = false
-                        }
+                    if (this.selected === vm.name) {
+                        vm.selected = true
                     } else {
-                        if (this.selected.indexOf(vm.name) >= 0) {
-                            vm.selected = true
-                        }
+                        vm.selected = false
                     }
                 })
             },
             listenChildren() {
-                let copy = JSON.parse(JSON.stringify(this.selected))
                 this.items.forEach((vm) => {
-                    vm.$on('add:selected', (selected) => {
-                        if (this.multiple) {
-                            copy.push(selected)
-                        } else {
-                            copy = [selected]
-                        }
-                        this.$emit("update:selected", copy)
+                    vm.$on('update:selected', (selected) => {
+                        this.$emit("update:selected", selected)
                     })
 
                 })

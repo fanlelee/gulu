@@ -55,10 +55,15 @@
         components: {GNav, GNavItem, GSubNav},
         data() {
             return {
-                selected: ['home']
+                selected: 'home'
             }
         },
         mounted() {
+        },
+        watch:{
+            selected(newSelected){
+                console.log(newSelected);
+            }
         }
     }
 </script>
