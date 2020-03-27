@@ -10,29 +10,14 @@ export default function validator(data, rules) {
             }
         }
 
-        if (rule.pattern) {
-            let error = validator.pattern(value, rule.pattern)
+       let validators =  Object.keys(rule).filter((key)=>key!=='key'&&key!=='required')
+        validators.forEach((validatorKey)=>{
+            let error = validator[validatorKey](value, rule[validatorKey])
             if (error) {
                 ensureObject(errors, rule.key)
-                errors[rule.key].pattern = error
+                errors[rule.key][validatorKey] = error
             }
-        }
-        if (rule.minLength) {
-            let error = validator.minLength(value, rule.minLength)
-            if (error) {
-                ensureObject(errors, rule.key)
-                errors[rule.key].minLength = error
-            }
-        }
-        if (rule.maxLength) {
-            let error = validator.maxLength(value, rule.maxLength)
-            if (error) {
-                ensureObject(errors, rule.key)
-                errors[rule.key].maxLength = error
-            }
-        }
-
-
+        })
     })
     return errors
 }
