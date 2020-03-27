@@ -9,13 +9,16 @@ export default function validator(data, rules) {
                 return
             }
         }
-
-       let validators =  Object.keys(rule).filter((key)=>key!=='key'&&key!=='required')
-        validators.forEach((validatorKey)=>{
-            let error = validator[validatorKey](value, rule[validatorKey])
-            if (error) {
-                ensureObject(errors, rule.key)
-                errors[rule.key][validatorKey] = error
+        let validators = Object.keys(rule).filter((key) => key !== 'key' && key !== 'required')
+        validators.forEach((validatorKey) => {
+            if (validator[validatorKey]) {
+                let error = validator[validatorKey](value, rule[validatorKey])
+                if (error) {
+                    ensureObject(errors, rule.key)
+                    errors[rule.key][validatorKey] = error
+                }
+            }else{
+                throw `不存在的校验器：${validatorKey}`
             }
         })
     })

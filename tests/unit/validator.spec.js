@@ -13,7 +13,7 @@ describe('Validator', () => {
             'email': 'ddd',
         }
         let rules = [
-            {key:'email',pattern:/^.+@.+$/},
+            {key: 'email', pattern: /^.+@.+$/},
         ]
         let errors = Validator(data, rules)
         expect(errors.email.pattern).to.eq('格式不正确')
@@ -23,7 +23,7 @@ describe('Validator', () => {
             'email': 'ddd',
         }
         let rules = [
-            {key:'email',pattern:'email'},
+            {key: 'email', pattern: 'email'},
         ]
         let errors = Validator(data, rules)
         expect(errors.email.pattern).to.eq('格式不正确')
@@ -33,7 +33,7 @@ describe('Validator', () => {
             'email': '',
         }
         let rules = [
-            {key:'email',pattern:'email',required:true},
+            {key: 'email', pattern: 'email', required: true},
         ]
         let errors = Validator(data, rules)
         expect(errors.email.required).to.eq('必填')
@@ -44,7 +44,7 @@ describe('Validator', () => {
             'email': '',
         }
         let rules = [
-            {key:'email',required:true},
+            {key: 'email', required: true},
         ]
         let errors = Validator(data, rules)
         expect(errors.email.required).to.eq('必填')
@@ -54,7 +54,7 @@ describe('Validator', () => {
             'email': 0,
         }
         let rules = [
-            {key:'email',required:true},
+            {key: 'email', required: true},
         ]
         let errors = Validator(data, rules)
         expect(errors.email).to.not.exist
@@ -64,7 +64,7 @@ describe('Validator', () => {
             'email': 'asdf',
         }
         let rules = [
-            {key:'email',minLength:10,pattern:'email'},
+            {key: 'email', minLength: 10, pattern: 'email'},
         ]
         let errors = Validator(data, rules)
 
@@ -76,9 +76,50 @@ describe('Validator', () => {
             'email': 'asdf@wwwwffffg',
         }
         let rules = [
-            {key:'email',maxLength:10},
+            {key: 'email', maxLength: 10},
         ]
         let errors = Validator(data, rules)
         expect(errors.email.maxLength).to.eq('太长了')
     })
+    it('has many keys', () => {
+        let data = {
+            'email': 'asdffjfjfjfjfjffg',
+        }
+        let rules = [
+            {
+                key: 'email', required: true, minLength: 5, maxLength: 10,
+                hasLowerCafeAndUpperCase: true, hasNumber: true,
+                hasString: true, hasDot: true
+            }
+        ]
+        let errors
+        let fn = () => {
+            errors = Validator(data, rules)
+        }
+        expect(fn).to.throw()
+    })
+    it('自定义测试规则hasNumber', () => {
+        let data = {
+            'email': 'asdffjfjfjffffff'
+        }
+        Validator.hasNumber = (value) => {
+            if (!/\d/.test(value)) {
+                return '必须含有数字'
+            }
+        }
+        let rules = [
+            {
+                key: 'email', required: true, minLength: 5, maxLength: 10, hasNumber: true
+            }
+        ]
+
+
+        let errors
+        let fn = () => {
+            errors = Validator(data, rules)
+        }
+        expect(fn).to.not.throw()
+        expect(errors.email.hasNumber).to.eq('必须含有数字')
+    })
+
 })
