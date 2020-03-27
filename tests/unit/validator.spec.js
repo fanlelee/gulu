@@ -71,4 +71,14 @@ describe('Validator', () => {
         expect(errors.email.minLength).to.eq('太短了')
         expect(errors.email.pattern).to.eq('格式不正确')
     })
+    it('maxLength', () => {
+        let data = {
+            'email': 'asdf@wwwwffffg',
+        }
+        let rules = [
+            {key:'email',maxLength:10},
+        ]
+        let errors = Validator(data, rules)
+        expect(errors.email.maxLength).to.eq('太长了')
+    })
 })
