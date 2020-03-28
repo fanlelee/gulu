@@ -1,4 +1,8 @@
 class Validator {
+    static add(name, fn) {
+        Validator.prototype[name] = fn
+    }
+
     constructor() {
     }
 

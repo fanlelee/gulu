@@ -105,7 +105,7 @@ describe('Validator', () => {
         }
         expect(fn).to.throw()
     })
-    it('自定义测试规则hasNumber', () => {
+    it('自定义新规则hasNumber', () => {
         let data = {
             'email': 'asdffjfjfjffffff'
         }
@@ -138,17 +138,31 @@ describe('Validator', () => {
                 return '必须含有数字'
             }
         }
-        let rules = [
-            {
-                key: 'email', required: true, minLength: 5, maxLength: 10, hasNumber: true
-            }
-        ]
-
+        let rules = [{key: 'email', required: true, minLength: 5, maxLength: 10, hasNumber: true}]
         expect(()=>{
             validator1.validate(data, rules)
         }).to.not.throw()
         expect(()=>{
             validator2.validate(data, rules)
         }).to.throw('不存在的校验器：hasNumber')
+    })
+    it('可以全局添加新规则', () => {
+        let data = {
+            'email': 'asdffjfjfjffffff'
+        }
+        let validator1 = new Validator()
+        let validator2 = new Validator()
+        Validator.add('hasNumber' ,(value) => {
+            if (!/\d/.test(value)) {
+                return '必须含有数字'
+            }
+        })
+        let rules = [{key: 'email', required: true, minLength: 5, maxLength: 10, hasNumber: true}]
+        expect(()=>{
+            validator1.validate(data, rules)
+        }).to.not.throw()
+        expect(()=>{
+            validator2.validate(data, rules)
+        }).to.not.throw()
     })
 })
