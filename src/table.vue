@@ -5,7 +5,7 @@
             <thead>
             <tr>
                 <th>
-                    <input type="checkbox">
+                    <input type="checkbox" @click="onClickAll" ref="allChecked">
                 </th>
                 <th v-for="column in columns">
                     {{column.title}}
@@ -13,9 +13,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="item in dataSource">
+            <tr :key="item.id" v-for="item in dataSource">
                 <td>
-                    <input type="checkbox" @click="onClickChecked($event,item)">
+                    <input type="checkbox" @click="onClickItem($event,item)"
+                           :checked="onChangeItem(item)">
                 </td>
                 <td v-for="column in columns">
                     {{item[column.key]}}
@@ -23,6 +24,7 @@
             </tr>
             </tbody>
         </table>
+        {{selected}}
     </div>
 </template>
 
@@ -32,7 +34,10 @@
         props: {
             dataSource: {
                 type: Array,
-                required: true
+                required: true,
+                validator: (array) => {
+                    return array.filter((item) => item.id === undefined).length <= 0
+                }
             },
             columns: {
                 type: Array,
@@ -55,22 +60,49 @@
                 default: true
             }
         },
+        watch: {
+            selected() {
+                let {length: selectedLength} = this.selected
+                let {length: dataSourceLength} = this.dataSource
+                if (selectedLength === dataSourceLength) {
+                    this.$refs.allChecked.checked = true
+                    this.$refs.allChecked.indeterminate = false
+                } else if (selectedLength < dataSourceLength && selectedLength > 0) {
+                    this.$refs.allChecked.checked = false
+                    this.$refs.allChecked.indeterminate = true
+                } else if (selectedLength === 0) {
+                    this.$refs.allChecked.checked = false
+                    this.$refs.allChecked.indeterminate = false
+                }
+            }
+        },
         methods: {
-            onClickChecked(e, item) {
+            // checkIfAllSelected(){
+            //     console.log(this.selected.length,'this.selected.length');
+            //     console.log(this.dataSource.length,'this.dataSource.length');
+            //     return this.selected.length === this.dataSource.length?true:false
+            // },
+            onChangeItem(item) {
+                return this.selected.filter((vm) => vm.id === item.id).length > 0
+            },
+            onClickItem(e, item) {
                 let copy = JSON.parse(JSON.stringify(this.selected))
                 if (e.target.checked) {
                     copy.push(item)
                 } else {
                     let itemIndex
                     copy.forEach((vm, index) => {
-                        if (JSON.stringify(vm) === JSON.stringify(item)) {
+                        if (vm.id === item.id) {
                             itemIndex = index
                         }
                     })
                     copy.splice(itemIndex, 1)
                 }
                 this.$emit('update:selected', copy)
-            }
+            },
+            onClickAll(e) {
+                this.$emit('update:selected', e.target.checked ? this.dataSource : [])
+            },
         }
     }
 </script>
