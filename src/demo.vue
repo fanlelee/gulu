@@ -1,6 +1,12 @@
 <template>
     <div class="demo">
-        <g-table :data-source="dataSource" :columns="columns" :selected.sync="selected"></g-table>
+        {{sortRules}}
+        <g-table :data-source="dataSource"
+                 :columns="columns"
+                 :selected.sync="selected"
+                 :sort-rules.sync="sortRules"
+                 @update:sortRules="x"
+        ></g-table>
     </div>
 </template>
 
@@ -21,15 +27,27 @@
                     {id: 6, name: '王母娘娘', age: 99, hobby: '养花'},
                 ],
                 columns: [
-                    {title: '姓名', key: 'name', dataIndex: 1},
-                    {title: '年龄', key: 'age', dataIndex: 2},
-                    {title: '爱好', key: 'hobby', dataIndex: 3},
+                    {title: '姓名', key: 'name'},
+                    {title: '年龄', key: 'age'},
+                    {title: '爱好', key: 'hobby'},
                 ],
+                sortRules:{
+                    age:'asc',
+                    hobby:'desc'
+                },
                 selected:[]
             }
         },
         mounted() {
         },
+        methods:{
+            x(){
+                // ajax(url,sortRules)
+                //     .then((response)=>{
+                    this.dataSource = this.dataSource.sort((a,b)=>a.age-b.age)
+                //     })
+            }
+        }
     }
 </script>
 

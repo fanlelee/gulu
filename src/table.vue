@@ -11,7 +11,17 @@
                            :checked="areAllItemsSelected">
                 </th>
                 <th v-for="column in columns">
-                    {{column.title}}
+                    <span class="gulu-table-sort-head"
+                          :class="{'gulu-table-unordered':!sortRules[column.key]}"
+                          @click="OnClickSort(column.key,sortRules[column.key])">
+                        {{column.title}}
+                        <template v-if="column.key in sortRules">
+                            <g-icon name="sort" v-if="sortRules[column.key]===true"></g-icon>
+                            <g-icon v-else name="sort-desc"
+                                    :class="{asc:sortRules[column.key]==='asc'}"
+                            ></g-icon>
+                        </template>
+                    </span>
                 </th>
             </tr>
             </thead>
@@ -32,8 +42,11 @@
 </template>
 
 <script>
+    import GIcon from "./icon.vue"
+
     export default {
         name: "GuluTable",
+        components: {GIcon},
         props: {
             dataSource: {
                 type: Array,
@@ -49,6 +62,10 @@
             selected: {
                 type: Array,
                 default: () => []
+            },
+            sortRules: {
+                type: Object,
+                default: () => ({})
             },
             bordered: {
                 type: Boolean,
@@ -84,18 +101,25 @@
                     let a = this.selected.map((item) => item.id).sort((a, b) => a - b)
                     let b = this.dataSource.map((item) => item.id).sort((a, b) => a - b)
                     a.forEach((el, idx) => {
-                        if (el !== b[idx])return false
+                        if (el !== b[idx]) return false
                     })
                     return true
                 }
             }
         },
         methods: {
-            // checkIfAllSelected(){
-            //     console.log(this.selected.length,'this.selected.length');
-            //     console.log(this.dataSource.length,'this.dataSource.length');
-            //     return this.selected.length === this.dataSource.length?true:false
-            // },
+            OnClickSort(key, lastValue) {
+                if (!lastValue) return
+                let copy = JSON.parse(JSON.stringify(this.sortRules))
+                if (lastValue === 'asc') {
+                    copy[key] = 'desc'
+                } else if (lastValue === 'desc') {
+                    copy[key] = true
+                } else if (lastValue === true) {
+                    copy[key] = 'asc'
+                }
+                this.$emit('update:sortRules',copy)
+            },
             onChangeItem(item) {
                 return this.selected.filter((vm) => vm.id === item.id).length > 0
             },
@@ -142,6 +166,17 @@
             &.striped {
                 & tr {
                     &:nth-child(even) {background-color: $grey;}
+                }
+            }
+            &-sort-head {
+                display: inline-flex;
+                align-items: center;
+                cursor: pointer;
+                & .asc {
+                    transform: rotate(180deg);
+                }
+                &.gulu-table-unordered {
+                    cursor: default;
                 }
             }
         }
