@@ -5,7 +5,10 @@
             <thead>
             <tr>
                 <th>
-                    <input type="checkbox" @click="onClickAll" ref="allChecked">
+                    <input type="checkbox"
+                           @click="onClickAll"
+                           ref="allChecked"
+                           :checked="areAllItemsSelected">
                 </th>
                 <th v-for="column in columns">
                     {{column.title}}
@@ -65,14 +68,25 @@
                 let {length: selectedLength} = this.selected
                 let {length: dataSourceLength} = this.dataSource
                 if (selectedLength === dataSourceLength) {
-                    this.$refs.allChecked.checked = true
                     this.$refs.allChecked.indeterminate = false
                 } else if (selectedLength < dataSourceLength && selectedLength > 0) {
-                    this.$refs.allChecked.checked = false
                     this.$refs.allChecked.indeterminate = true
                 } else if (selectedLength === 0) {
-                    this.$refs.allChecked.checked = false
                     this.$refs.allChecked.indeterminate = false
+                }
+            }
+        },
+        computed: {
+            areAllItemsSelected() {
+                if (this.selected.length !== this.dataSource.length) {
+                    return false
+                } else {
+                    let a = this.selected.map((item) => item.id).sort((a, b) => a - b)
+                    let b = this.dataSource.map((item) => item.id).sort((a, b) => a - b)
+                    a.forEach((el, idx) => {
+                        if (el !== b[idx])return false
+                    })
+                    return true
                 }
             }
         },
