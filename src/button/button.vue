@@ -37,11 +37,6 @@
 <style lang="scss" scoped>
     @import '../../styles/var';
 
-    @keyframes spin {
-        0% {transform: rotate(0deg);}
-        100% {transform: rotate(360deg);}
-    }
-
     .g-button {
         font-size: $font-size;height: $button-height;padding: 0 1em;background-color: $button-bg;
         border-radius: $button-radius;border-color: $button-border-color;color: #000;
@@ -63,6 +58,6 @@
             > .icon {order: 2;margin-left: .3em;margin-right: 0;}
         }
 
-        .loading {animation: spin 1s infinite linear;}
+        .loading {@include spin;}
     }
 </style>
