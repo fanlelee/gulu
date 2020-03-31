@@ -37,7 +37,9 @@
             </tr>
             </tbody>
         </table>
-        {{selected}}
+        <div class="gulu-table-loading" v-if="loading">
+            <g-icon name="loading"></g-icon>
+        </div>
     </div>
 </template>
 
@@ -78,6 +80,10 @@
             striped: {
                 type: Boolean,
                 default: true
+            },
+            loading:{
+                type:Boolean,
+                default:true
             }
         },
         watch: {
@@ -178,6 +184,24 @@
                 &.gulu-table-unordered {
                     cursor: default;
                 }
+            }
+        }
+        position: relative;
+        & .gulu-table-loading{
+            position: absolute;
+            top:0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255,255,255,.8);
+            svg{
+                @include spin;
+                width: 10%;
+                height: 10%;
+
             }
         }
     }

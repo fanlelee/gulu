@@ -1,11 +1,11 @@
 <template>
     <div class="demo">
-        {{sortRules}}
         <g-table :data-source="dataSource"
                  :columns="columns"
                  :selected.sync="selected"
                  :sort-rules.sync="sortRules"
                  @update:sortRules="x"
+                 :loading="loading"
         ></g-table>
     </div>
 </template>
@@ -31,21 +31,26 @@
                     {title: '年龄', key: 'age'},
                     {title: '爱好', key: 'hobby'},
                 ],
-                sortRules:{
-                    age:'asc',
-                    hobby:'desc'
+                sortRules: {
+                    age: 'asc',
+                    hobby: 'desc'
                 },
-                selected:[]
+                selected: [],
+                loading: false
             }
         },
         mounted() {
         },
-        methods:{
-            x(){
-                // ajax(url,sortRules)
-                //     .then((response)=>{
-                    this.dataSource = this.dataSource.sort((a,b)=>a.age-b.age)
-                //     })
+        methods: {
+            x() {
+                this.loading = true
+                setTimeout(() => {
+                    // ajax(url,sortRules)
+                    //     .then((response)=>{
+                    this.dataSource = this.dataSource.sort((a, b) => a.age - b.age)
+                    this.loading = false
+                    //     })
+                }, 3000)
             }
         }
     }
