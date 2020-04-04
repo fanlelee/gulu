@@ -25,11 +25,24 @@
                     {id: 4, name: '哪吒', age: 12, hobby: '游泳'},
                     {id: 5, name: '玉皇大帝', age: 120, hobby: '钓鱼'},
                     {id: 6, name: '王母娘娘', age: 99, hobby: '养花'},
+                    {id: 7, name: '小刘', age: 39, hobby: '打麻将'},
+                    {id: 8, name: '小王子', age: 20, hobby: '涉猎'},
+                    {id: 9, name: '豌豆公主', age: 17, hobby: '化妆'},
+                    {id: 10, name: '哪吒', age: 12, hobby: '游泳'},
+                    {id: 11, name: '玉皇大帝', age: 120, hobby: '钓鱼'},
+                    {id: 12, name: '王母娘娘', age: 99, hobby: '养花'},
+                    {id: 13, name: '豌豆公主', age: 17, hobby: '化妆'},
+                    {id: 14, name: '哪吒', age: 12, hobby: '游泳'},
+                    {id: 15, name: '玉皇大帝', age: 120, hobby: '钓鱼'},
+                    {id: 16, name: '王母娘娘', age: 99, hobby: '养花'},
+                    {id: 17, name: '小刘', age: 39, hobby: '打麻将'},
+                    {id: 18, name: '小王子', age: 20, hobby: '涉猎'},
+                    {id: 19, name: '豌豆公主', age: 17, hobby: '化妆'},
                 ],
                 columns: [
-                    {title: '姓名', key: 'name'},
-                    {title: '年龄', key: 'age'},
-                    {title: '爱好', key: 'hobby'},
+                    {title: '姓名', key: 'name', width: '230'},
+                    {title: '年龄', key: 'age', width: '200'},
+                    {title: '爱好', key: 'hobby', width: '300'},
                 ],
                 sortRules: {
                     age: 'asc',
@@ -50,7 +63,7 @@
                     this.dataSource = this.dataSource.sort((a, b) => a.age - b.age)
                     this.loading = false
                     //     })
-                }, 3000)
+                }, 1000)
             }
         }
     }
