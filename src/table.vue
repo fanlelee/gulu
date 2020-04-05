@@ -1,6 +1,6 @@
 <template>
     <div class="gulu-table-wrapper" ref="wrapper">
-        <div :style="{overflow:'auto',height}" ref="tableWrapper">
+        <div :style="{overflow:'auto',height:`${scrollHeight}px`}" ref="tableWrapper">
             <table class="gulu-table"
                    :class="{bordered,compact,striped}"
                    ref="table">

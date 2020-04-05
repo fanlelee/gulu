@@ -6,6 +6,7 @@
                  :sort-rules.sync="sortRules"
                  @update:sortRules="x"
                  :loading="loading"
+                 :scroll-height="scrollHeight"
         ></g-table>
     </div>
 </template>
@@ -49,7 +50,8 @@
                     hobby: 'desc'
                 },
                 selected: [],
-                loading: false
+                loading: false,
+                scrollHeight:400
             }
         },
         mounted() {
