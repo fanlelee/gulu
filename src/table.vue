@@ -6,14 +6,14 @@
                    ref="table">
                 <thead>
                 <tr>
-                    <th :style="{minWidth: '50px'}" v-if="checkBox">
+                    <th :style="{width: '50px'}" v-if="checkBox">
                         <input type="checkbox"
                                @click="onClickAll"
                                ref="allChecked"
                                :checked="areAllItemsSelected">
                     </th>
-                    <th :style="{minWidth: '50px'}" v-if="expandDescription"></th>
-                    <th v-for="column in columns" :style="{minWidth:column.width+'px'}">
+                    <th :style="{width: '50px'}" v-if="expandDescription"></th>
+                    <th v-for="column in columns" :style="{width:column.width+'px'}">
                         <span class="gulu-table-sort-head"
                               :class="{'gulu-table-unordered':!sortRules[column.key]}"
                               @click="OnClickSort(column.key,sortRules[column.key])">
@@ -26,16 +26,17 @@
                             </template>
                         </span>
                     </th>
+                    <th v-if="$scopedSlots.default" ref="actionsHeader"></th>
                 </tr>
                 </thead>
                 <tbody>
                 <template v-for="(item,index) in dataSource">
                     <tr :key="item.id" :class="{stripedItem:index%2===0}">
-                        <td :style="{minWidth: '50px'}" v-if="checkBox">
+                        <td :style="{width: '50px'}" v-if="checkBox">
                             <input type="checkbox" @click="onClickItem($event,item)"
                                    :checked="onChangeItem(item)">
                         </td>
-                        <td :style="{minWidth: '50px'}" v-if="expandDescription">
+                        <td :style="{width: '50px'}" v-if="expandDescription">
                             <div class="gulu-table-expand-icon"
                                  v-if="item[expandDescription]"
                                  @click="onClickExpand(item.id)">
@@ -44,11 +45,13 @@
                                 </g-icon>
                             </div>
                         </td>
-                        <td v-for="column in columns" :style="{minWidth:column.width+'px'}">
+                        <td v-for="column in columns" :style="{width:column.width+'px'}">
                             {{item[column.key]}}
                         </td>
-                        <td v-if="edit">
-                            <slot :item="item"></slot>
+                        <td v-if="$scopedSlots.default">
+                            <div ref="actions">
+                                <slot :item="item"></slot>
+                            </div>
                         </td>
                     </tr>
                     <tr v-if="inExpandIds(item.id)" class="gulu-table-expand">
@@ -105,7 +108,7 @@
             },
             bordered: {
                 type: Boolean,
-                default: false
+                default: true
             },
             compact: {
                 type: Boolean,
@@ -123,10 +126,6 @@
                 type: Boolean,
                 default: false
             },
-            edit:{
-                type: Boolean,
-                default: false
-            }
         },
         mounted() {
             let table2 = this.$refs.table.cloneNode(false)
@@ -139,6 +138,22 @@
             let {height} = thead.getBoundingClientRect()
             this.$refs.wrapper.style.marginTop = height + 'px'
             table2.style.top = -height + 'px'
+
+            if (this.$scopedSlots.default) {
+                let div = this.$refs.actions[0]
+                let {width} = div.getBoundingClientRect()
+                let parent = div.parentNode
+                let styles = getComputedStyle(parent)
+                let paddingLeft = styles.getPropertyValue('padding-left')
+                let paddingRight = styles.getPropertyValue('padding-right')
+                let borderLeft = styles.getPropertyValue('border-left-width')
+                let borderRight = styles.getPropertyValue('border-right-width')
+                let width2 = width + parseInt(paddingLeft) + parseInt(paddingRight) + parseInt(borderLeft) + parseInt(borderRight) + 'px'
+                this.$refs.actionsHeader.style.width = width2
+                this.$refs.actions.map(div => {
+                    div.parentNode.style.width = width2
+                })
+            }
         },
         watch: {
             selected() {
@@ -167,7 +182,7 @@
                 let colLength = this.columns.length
                 if (this.expandDescription) {colLength++}
                 if (this.checkBox) {colLength++}
-                if( this.edit){colLength++}
+                if( this.$scopedSlots.default ){colLength++}
                 return colLength
             }
         },
@@ -225,11 +240,11 @@
     .gulu-table {
         border-collapse: collapse;
         width: 100%;
-        &.bordered {border: 1px solid darken($grey, 10%);;}
+        &.bordered {border: 1px solid darken($grey, 10%);}
         & thead > tr {background-color: #fefefe;box-shadow: #efefef 0 0 5px 1px inset;color: #2d2d2d;}
         & tbody > tr {border-bottom: 1px solid darken($grey, 3%);}
-        & th {text-align: left;padding: 8px;}
-        & td {padding: 8px;}
+        & th {text-align: left;padding: 8px;border: 1px solid darken($grey, 10%);}
+        & td {padding: 8px;border: 1px solid darken($grey, 10%); }
         &.compact {
             & th {padding: 4px;}
             & td {padding: 4px;}
