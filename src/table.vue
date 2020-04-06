@@ -1,5 +1,4 @@
 <template>
-
     <div class="gulu-table-wrapper" ref="wrapper">
         <div :style="{overflow:'auto',height:`${scrollHeight}px`}" ref="tableWrapper">
             <table class="gulu-table"
@@ -30,8 +29,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <template v-for="item in dataSource">
-                    <tr :key="item.id" :class="{stripedItem:item.id%2===0}">
+                <template v-for="(item,index) in dataSource">
+                    <tr :key="item.id" :class="{stripedItem:index%2===0}">
                         <td :style="{minWidth: '50px'}">
                             <input type="checkbox" @click="onClickItem($event,item)"
                                    :checked="onChangeItem(item)">
