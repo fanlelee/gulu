@@ -6,7 +6,7 @@
                    ref="table">
                 <thead>
                 <tr>
-                    <th :style="{minWidth: '50px'}">
+                    <th :style="{minWidth: '50px'}" v-if="checkBox">
                         <input type="checkbox"
                                @click="onClickAll"
                                ref="allChecked"
@@ -31,7 +31,7 @@
                 <tbody>
                 <template v-for="(item,index) in dataSource">
                     <tr :key="item.id" :class="{stripedItem:index%2===0}">
-                        <td :style="{minWidth: '50px'}">
+                        <td :style="{minWidth: '50px'}" v-if="checkBox">
                             <input type="checkbox" @click="onClickItem($event,item)"
                                    :checked="onChangeItem(item)">
                         </td>
@@ -49,8 +49,7 @@
                         </td>
                     </tr>
                     <tr v-if="inExpandIds(item.id)" class="gulu-table-expand">
-                        <td :colspan="columns.length+2">
-                            {{item[expandDescription]}}
+                        <td :colspan="expandColspan">
                         </td>
                     </tr>
                 </template>
@@ -115,6 +114,10 @@
             loading: {
                 type: Boolean,
                 default: true
+            },
+            checkBox: {
+                type: Boolean,
+                default: false
             }
         },
         mounted() {
@@ -128,8 +131,6 @@
             let {height} = thead.getBoundingClientRect()
             this.$refs.wrapper.style.marginTop = height + 'px'
             table2.style.top = -height + 'px'
-
-
         },
         watch: {
             selected() {
@@ -153,6 +154,16 @@
                     if (a[i] !== b[i]) return false
                 }
                 return true
+            },
+            expandColspan() {
+                let colLength = this.columns.length
+                if (this.expandDescription) {
+                    colLength++
+                }
+                if (this.checkBox) {
+                    colLength++
+                }
+                return colLength
             }
         },
         methods: {

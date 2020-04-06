@@ -8,6 +8,7 @@
                  :loading="loading"
                  :scroll-height="scrollHeight"
                  :expand-description="expandDescription"
+                 :check-box="true"
         ></g-table>
     </div>
 </template>
