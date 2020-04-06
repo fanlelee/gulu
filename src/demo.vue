@@ -7,6 +7,7 @@
                  @update:sortRules="x"
                  :loading="loading"
                  :scroll-height="scrollHeight"
+                 :expand-description="expandDescription"
         ></g-table>
     </div>
 </template>
@@ -20,8 +21,8 @@
         data() {
             return {
                 dataSource: [
-                    {id: 1, name: '小刘', age: 39, hobby: '打麻将'},
-                    {id: 2, name: '小王子', age: 20, hobby: '涉猎'},
+                    {id: 1, name: '小刘', age: 39, hobby: '打麻将',description:'ffff'},
+                    {id: 2, name: '小王子', age: 20, hobby: '涉猎',description:'xxxx'},
                     {id: 3, name: '豌豆公主', age: 17, hobby: '化妆'},
                     {id: 4, name: '哪吒', age: 12, hobby: '游泳'},
                     {id: 5, name: '玉皇大帝', age: 120, hobby: '钓鱼'},
@@ -51,7 +52,8 @@
                 },
                 selected: [],
                 loading: false,
-                scrollHeight:400
+                scrollHeight:400,
+                expandDescription:'description'
             }
         },
         mounted() {

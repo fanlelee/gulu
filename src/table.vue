@@ -1,4 +1,5 @@
 <template>
+
     <div class="gulu-table-wrapper" ref="wrapper">
         <div :style="{overflow:'auto',height:`${scrollHeight}px`}" ref="tableWrapper">
             <table class="gulu-table"
@@ -12,6 +13,7 @@
                                ref="allChecked"
                                :checked="areAllItemsSelected">
                     </th>
+                    <th :style="{minWidth: '50px'}" v-if="expandDescription"></th>
                     <th v-for="column in columns" :style="{minWidth:column.width+'px'}">
                         <span class="gulu-table-sort-head"
                               :class="{'gulu-table-unordered':!sortRules[column.key]}"
@@ -28,15 +30,31 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr :key="item.id" v-for="item in dataSource">
-                    <td :style="{minWidth: '50px'}">
-                        <input type="checkbox" @click="onClickItem($event,item)"
-                               :checked="onChangeItem(item)">
-                    </td>
-                    <td v-for="column in columns" :style="{minWidth:column.width+'px'}">
-                        {{item[column.key]}}
-                    </td>
-                </tr>
+                <template v-for="item in dataSource">
+                    <tr :key="item.id" :class="{stripedItem:item.id%2===0}">
+                        <td :style="{minWidth: '50px'}">
+                            <input type="checkbox" @click="onClickItem($event,item)"
+                                   :checked="onChangeItem(item)">
+                        </td>
+                        <td :style="{minWidth: '50px'}" v-if="expandDescription">
+                            <div class="gulu-table-expand-icon"
+                                 v-if="item[expandDescription]"
+                                 @click="onClickExpand(item.id)">
+                                <g-icon name="right"
+                                        :class="{'gulu-table-expanded':inExpandIds(item.id)}">
+                                </g-icon>
+                            </div>
+                        </td>
+                        <td v-for="column in columns" :style="{minWidth:column.width+'px'}">
+                            {{item[column.key]}}
+                        </td>
+                    </tr>
+                    <tr v-if="inExpandIds(item.id)" class="gulu-table-expand">
+                        <td :colspan="columns.length+2">
+                            {{item[expandDescription]}}
+                        </td>
+                    </tr>
+                </template>
                 </tbody>
             </table>
         </div>
@@ -52,7 +70,15 @@
     export default {
         name: "GuluTable",
         components: {GIcon},
+        data() {
+            return {
+                expandIds: []
+            }
+        },
         props: {
+            expandDescription: {
+                type: String
+            },
             scrollHeight: {
                 type: Number
             },
@@ -131,12 +157,16 @@
             }
         },
         methods: {
-            updateHeadersWidth() {
-                let table2Headers = this.table.getElementsByTagName('th')
-                this.headers.forEach((header, index) => {
-                    console.log(header.getBoundingClientRect().width);
-                    table2Headers[index].style.width = header.getBoundingClientRect().width + 'px'
-                })
+            inExpandIds(id) {
+                return this.expandIds.indexOf(id) >= 0
+            },
+            onClickExpand(id) {
+                let index = this.expandIds.indexOf(id)
+                if (index >= 0) {
+                    this.expandIds.splice(index, 1)
+                } else {
+                    this.expandIds.push(id)
+                }
             },
             OnClickSort(key, lastValue) {
                 if (!lastValue) return
@@ -181,17 +211,16 @@
         border-collapse: collapse;
         width: 100%;
         &.bordered {border: 1px solid darken($grey, 10%);;}
-        & tr {border-bottom: 1px solid darken($grey, 10%);}
-        & th {text-align: left;padding: 8px;border: 1px solid $grey;}
-        & td {padding: 8px;border: 1px solid $grey;}
+        & thead > tr {background-color: #fefefe;box-shadow: #efefef 0 0 5px 1px inset;color: #2d2d2d;}
+        & tbody > tr {border-bottom: 1px solid darken($grey, 3%);}
+        & th {text-align: left;padding: 8px;}
+        & td {padding: 8px;}
         &.compact {
             & th {padding: 4px;}
             & td {padding: 4px;}
         }
         &.striped {
-            & tr {
-                &:nth-child(even) {background-color: $grey;}
-            }
+            & .stripedItem {background-color: $grey;}
         }
         &-sort-head {
             display: inline-flex;
@@ -208,5 +237,12 @@
         }
         &-copy {position: absolute;top: 0;left: 0;background-color: #fff;
         }
+        &-expand {
+            background-color: lighten($grey, 4%);
+            text-align: center;
+            transition: height 5s;
+        }
+        &-expand-icon {display: flex;align-items: center;justify-content: flex-start;}
+        &-expanded {transform: rotate(90deg);transition: all .3s;}
     }
 </style>
