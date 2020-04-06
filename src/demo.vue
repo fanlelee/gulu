@@ -9,6 +9,7 @@
                  :scroll-height="scrollHeight"
                  :expand-description="expandDescription"
                  :check-box="true"
+                 :cell="true"
         >
             <template slot-scope="xxx">
                 <button @click="edit(xxx.item)">编辑</button>
@@ -27,10 +28,12 @@
         data() {
             return {
                 dataSource: [
-                    {id: 0, name: '小丁', age: 39, hobby: '老婆',description:'爱老婆' +
-                            ''},
-                    {id: 1, name: '小刘', age: 39, hobby: '打麻将',description:'ffff'},
-                    {id: 2, name: '小王子', age: 20, hobby: '涉猎',description:'xxxx'},
+                    {
+                        id: 0, name: '小丁', age: 39, hobby: '老婆', description: '爱老婆' +
+                            ''
+                    },
+                    {id: 1, name: '小刘', age: 39, hobby: '打麻将', description: 'ffff'},
+                    {id: 2, name: '小王子', age: 20, hobby: '涉猎', description: 'xxxx'},
                     {id: 3, name: '豌豆公主', age: 17, hobby: '化妆'},
                     {id: 4, name: '哪吒', age: 12, hobby: '游泳'},
                     {id: 5, name: '玉皇大帝', age: 120, hobby: '钓鱼'},
@@ -51,7 +54,7 @@
                 ],
                 columns: [
                     {title: '姓名', key: 'name', width: '230'},
-                    {title: '年龄', key: 'age',width: '150'},
+                    {title: '年龄', key: 'age', width: '150'},
                     {title: '爱好', key: 'hobby', width: '200'},
                 ],
                 sortRules: {
@@ -60,8 +63,8 @@
                 },
                 selected: [],
                 loading: false,
-                scrollHeight:400,
-                expandDescription:'description',
+                scrollHeight: 400,
+                expandDescription: 'description',
             }
         },
         mounted() {
@@ -77,11 +80,11 @@
                     //     })
                 }, 1000)
             },
-            edit(item){
-                console.log(item,'编辑')
+            edit(item) {
+                console.log(item, '编辑')
             },
-            cut(item){
-                console.log(item,'删除')
+            cut(item) {
+                console.log(item, '删除')
             },
         }
     }

@@ -2,7 +2,7 @@
     <div class="gulu-table-wrapper" ref="wrapper">
         <div :style="{overflow:'auto',height:`${scrollHeight}px`}" ref="tableWrapper">
             <table class="gulu-table"
-                   :class="{bordered,compact,striped}"
+                   :class="{bordered,compact,striped,cell}"
                    ref="table">
                 <thead>
                 <tr>
@@ -126,6 +126,10 @@
                 type: Boolean,
                 default: false
             },
+            cell: {
+                type: Boolean,
+                default: false
+            },
         },
         mounted() {
             let table2 = this.$refs.table.cloneNode(false)
@@ -180,9 +184,15 @@
             },
             expandColspan() {
                 let colLength = this.columns.length
-                if (this.expandDescription) {colLength++}
-                if (this.checkBox) {colLength++}
-                if( this.$scopedSlots.default ){colLength++}
+                if (this.expandDescription) {
+                    colLength++
+                }
+                if (this.checkBox) {
+                    colLength++
+                }
+                if (this.$scopedSlots.default) {
+                    colLength++
+                }
                 return colLength
             }
         },
@@ -241,10 +251,14 @@
         border-collapse: collapse;
         width: 100%;
         &.bordered {border: 1px solid darken($grey, 10%);}
+        &.cell {
+            & th {border: 1px solid darken($grey, 10%);}
+            & td {border: 1px solid darken($grey, 10%);}
+        }
         & thead > tr {background-color: #fefefe;box-shadow: #efefef 0 0 5px 1px inset;color: #2d2d2d;}
         & tbody > tr {border-bottom: 1px solid darken($grey, 3%);}
-        & th {text-align: left;padding: 8px;border: 1px solid darken($grey, 10%);}
-        & td {padding: 8px;border: 1px solid darken($grey, 10%); }
+        & th {text-align: left;padding: 8px;}
+        & td {padding: 8px;}
         &.compact {
             & th {padding: 4px;}
             & td {padding: 4px;}
