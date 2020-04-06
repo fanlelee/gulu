@@ -47,9 +47,13 @@
                         <td v-for="column in columns" :style="{minWidth:column.width+'px'}">
                             {{item[column.key]}}
                         </td>
+                        <td v-if="edit">
+                            <slot :item="item"></slot>
+                        </td>
                     </tr>
                     <tr v-if="inExpandIds(item.id)" class="gulu-table-expand">
                         <td :colspan="expandColspan">
+                            {{item[expandDescription]}}
                         </td>
                     </tr>
                 </template>
@@ -118,6 +122,10 @@
             checkBox: {
                 type: Boolean,
                 default: false
+            },
+            edit:{
+                type: Boolean,
+                default: false
             }
         },
         mounted() {
@@ -157,12 +165,9 @@
             },
             expandColspan() {
                 let colLength = this.columns.length
-                if (this.expandDescription) {
-                    colLength++
-                }
-                if (this.checkBox) {
-                    colLength++
-                }
+                if (this.expandDescription) {colLength++}
+                if (this.checkBox) {colLength++}
+                if( this.edit){colLength++}
                 return colLength
             }
         },

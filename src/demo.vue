@@ -9,7 +9,13 @@
                  :scroll-height="scrollHeight"
                  :expand-description="expandDescription"
                  :check-box="true"
-        ></g-table>
+                 :edit="false"
+        >
+            <template slot-scope="xxx">
+                <button @click="edit(xxx.item)">编辑</button>
+                <button @click="cut(xxx.item)">删除</button>
+            </template>
+        </g-table>
     </div>
 </template>
 
@@ -54,7 +60,7 @@
                 selected: [],
                 loading: false,
                 scrollHeight:400,
-                expandDescription:'description'
+                expandDescription:'description',
             }
         },
         mounted() {
@@ -69,7 +75,13 @@
                     this.loading = false
                     //     })
                 }, 1000)
-            }
+            },
+            edit(item){
+                console.log(item,'编辑')
+            },
+            cut(item){
+                console.log(item,'删除')
+            },
         }
     }
 </script>
