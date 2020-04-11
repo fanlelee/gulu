@@ -51,6 +51,9 @@
             fileList: {
                 type: Array,
                 default: () => []
+            },
+            limitSize:{
+                type: Number
             }
         },
         methods: {
@@ -73,30 +76,39 @@
             },
             beforeUpload(file, newName) {
                 let {size, type} = file
-                this.$emit('update:fileList', [...this.fileList, {name: newName, size, type, status: 'uploading'}])
+                if (size > this.limitSize) {
+                    this.$emit('error', '图片超过限制大小')
+                    return false
+                } else {
+                    this.$emit('update:fileList', [...this.fileList, {name: newName, size, type, status: 'uploading'}])
+                    return  true
+                }
             },
             updateFile(file) {
                 let newName = this.avoidSameName(file.name)
-                this.beforeUpload(file, newName)
+                if(!this.beforeUpload(file, newName))return
 
                 let formData = new FormData()
                 formData.append(this.name, file)
                 this.doUpdateFile(formData, (response) => {
                     let url = this.parseResponse(response)
-                    this.afterUpload(newName,url)
-                },(msg)=>{
-                      this.errorUpload(newName)
+                    this.afterUpload(newName, url)
+                }, (xhr) => {
+                    this.errorUpload(newName, xhr)
                 })
             },
-            afterUpload(newName,url) {
+            afterUpload(newName, url) {
                 let copy = JSON.parse(JSON.stringify(this.fileList))
                 copy.filter((f) => f.name === newName)[0].status = 'success'
                 copy.filter((f) => f.name === newName)[0].url = url
                 this.$emit('update:fileList', copy)
             },
-            errorUpload(newName){
+            errorUpload(newName, xhr) {
                 let copy = JSON.parse(JSON.stringify(this.fileList))
                 copy.filter((f) => f.name === newName)[0].status = 'error'
+                if (xhr.status === 0) {
+                    this.$emit('error', '网络无法连接')
+                }
                 this.$emit('update:fileList', copy)
             },
             avoidSameName(name) {
@@ -108,14 +120,14 @@
                 }
                 return name
             },
-            doUpdateFile(formData, success,fail) {
+            doUpdateFile(formData, success, fail) {
                 let xhr = new XMLHttpRequest();
                 xhr.open(this.method, this.action)
                 xhr.onload = () => {
                     success(xhr.response)
                 }
-                xhr.onerror = ()=>{
-                   fail('服务器异常')
+                xhr.onerror = () => {
+                    fail(xhr)
                 }
                 xhr.send(formData)
             }
@@ -151,11 +163,11 @@
                     }
                 }
             }
-            & .loading{
+            & .loading {
                 @include spin;
             }
-            & .success{color:darkgreen;}
-            & .error{color:darkred;}
+            & .success {color: darkgreen;}
+            & .error {color: darkred;}
         }
     }
 </style>
