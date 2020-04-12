@@ -76,10 +76,17 @@
                 input.click()
             },
             uploadFile(files) {
+                let newNames = []
                 for (let i = 0; i < files.length; i++) {
                     let file = files[i]
                     let newName = this.avoidSameName(file.name)
-                    if (!this.beforeUpload(file, newName)) return
+                    newNames[i] = newName
+                }
+                if (!this.beforeUpload(files, newNames)) return
+
+                for (let i = 0; i < files.length; i++) {
+                    let file = files[i]
+                    let newName = newNames[i]
 
                     let formData = new FormData()
                     formData.append(this.name, file)
@@ -103,23 +110,25 @@
                 }
                 xhr.send(formData)
             },
-            beforeUpload(file, newName) {
-                let {size, type} = file
-                if (size > this.limitSize) {
-                    this.$emit('error', '图片超过限制大小')
-                    return false
-                } else {
-                    console.log('1');
-                    this.$emit('x', {name: newName, size, type, status: 'uploading'})
-                    return true
+            beforeUpload(files, newNames) {
+                let copy = JSON.parse(JSON.stringify(this.fileList))
+                for (let i = 0; i < files.length; i++) {
+                    let {size, type} = files[i]
+                    let newName = newNames[i]
+                    if (size > this.limitSize) {
+                        this.$emit('error', '图片超过限制大小')
+                        return false
+                    } else {
+                        copy.push({name: newName, size, type, status: 'uploading'})
+                    }
                 }
+                this.$emit('update:fileList', copy)
+                return true
             },
             afterUpload(newName, url) {
                 let copy = JSON.parse(JSON.stringify(this.fileList))
-                console.log(this.fileList);
                 copy.filter((f) => f.name === newName)[0].status = 'success'
                 copy.filter((f) => f.name === newName)[0].url = url
-                console.log('2');
                 this.$emit('update:fileList', copy)
             },
             errorUpload(newName, xhr) {
