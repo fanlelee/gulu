@@ -7,7 +7,8 @@
                 :parse-response="parseResponse"
                 :file-list.sync="fileList"
                 @error="doError($event)"
-                :limit-size="3*1024*1024">
+                :limit-size="3*1024*1024"
+                @x="x($event)">
             <g-button icon="upload">上传</g-button>
         </g-uploader>
     </div>
@@ -33,6 +34,9 @@
             },
             doError(e) {
                 this.$refs.error.innerText = e
+            },
+            x(e){
+                this.fileList.push(e)
             }
         }
     }

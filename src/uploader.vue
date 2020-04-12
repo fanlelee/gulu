@@ -52,7 +52,7 @@
                 type: Array,
                 default: () => []
             },
-            limitSize:{
+            limitSize: {
                 type: Number
             }
         },
@@ -67,12 +67,41 @@
             onClickUpload() {
                 let input = document.createElement('input')
                 input.type = 'file'
+                input.multiple = true
                 input.addEventListener('change', () => {
-                    let file = input.files[0]
+                    let files = input.files
                     input.remove()
-                    this.updateFile(file)
+                    this.uploadFile(files)
                 })
                 input.click()
+            },
+            uploadFile(files) {
+                for (let i = 0; i < files.length; i++) {
+                    let file = files[i]
+                    let newName = this.avoidSameName(file.name)
+                    if (!this.beforeUpload(file, newName)) return
+
+                    let formData = new FormData()
+                    formData.append(this.name, file)
+                    this.doUploadFile(formData, (response) => {
+
+                        let url = this.parseResponse(response)
+                        this.afterUpload(newName, url)
+                    }, (xhr) => {
+                        this.errorUpload(newName, xhr)
+                    })
+                }
+            },
+            doUploadFile(formData, success, fail) {
+                let xhr = new XMLHttpRequest();
+                xhr.open(this.method, this.action)
+                xhr.onload = () => {
+                    success(xhr.response)
+                }
+                xhr.onerror = () => {
+                    fail(xhr)
+                }
+                xhr.send(formData)
             },
             beforeUpload(file, newName) {
                 let {size, type} = file
@@ -80,27 +109,17 @@
                     this.$emit('error', '图片超过限制大小')
                     return false
                 } else {
-                    this.$emit('update:fileList', [...this.fileList, {name: newName, size, type, status: 'uploading'}])
-                    return  true
+                    console.log('1');
+                    this.$emit('x', {name: newName, size, type, status: 'uploading'})
+                    return true
                 }
-            },
-            updateFile(file) {
-                let newName = this.avoidSameName(file.name)
-                if(!this.beforeUpload(file, newName))return
-
-                let formData = new FormData()
-                formData.append(this.name, file)
-                this.doUpdateFile(formData, (response) => {
-                    let url = this.parseResponse(response)
-                    this.afterUpload(newName, url)
-                }, (xhr) => {
-                    this.errorUpload(newName, xhr)
-                })
             },
             afterUpload(newName, url) {
                 let copy = JSON.parse(JSON.stringify(this.fileList))
+                console.log(this.fileList);
                 copy.filter((f) => f.name === newName)[0].status = 'success'
                 copy.filter((f) => f.name === newName)[0].url = url
+                console.log('2');
                 this.$emit('update:fileList', copy)
             },
             errorUpload(newName, xhr) {
@@ -120,17 +139,6 @@
                 }
                 return name
             },
-            doUpdateFile(formData, success, fail) {
-                let xhr = new XMLHttpRequest();
-                xhr.open(this.method, this.action)
-                xhr.onload = () => {
-                    success(xhr.response)
-                }
-                xhr.onerror = () => {
-                    fail(xhr)
-                }
-                xhr.send(formData)
-            }
 
 
         }
