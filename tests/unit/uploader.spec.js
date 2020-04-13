@@ -1,37 +1,58 @@
 import Vue from "vue";
-import { shallowMount,mount } from '@vue/test-utils'
-import chai,{expect} from 'chai'
+import {shallowMount, mount} from '@vue/test-utils'
+import chai, {expect} from 'chai'
 import sinon from "sinon";
 import sinonChai from "sinon-chai"
 import Uploader from '../../src/uploader.vue'
+import http from '../../src/http.js'
+
 chai.use(sinonChai)
 
 describe('Uploader.vue', () => {
     it('存在Uploader.', () => {
         expect(Uploader).to.be.ok
     })
-    it('xxx.', () => {
-        const wrapper = mount(Uploader,{
+    it('文件会先旋转加载、可以上传文件', (done) => {
+        http.post = (url, options) => {
+            setTimeout(() => {
+                let use = wrapper.find('use').element
+                expect(use.getAttribute('xlink:href')).to.eq('#i-loading')
+                options.success(JSON.stringify({id: '12345'}))
+            })
+        }
+        const wrapper = mount(Uploader, {
             propsData: {
-                name:'xx',
-                action:'/upload',
-                parseResponse:()=>{}
+                name: 'file',
+                action: '/upload',
+                method: 'post',
+                parseResponse: (res) => {
+                    return JSON.parse(res).id
+                },
+                fileList: []
             },
-            slots:{
-                default:`<button id="button">点我</button>`
+            slots: {
+                default: `<button id="button">点我</button>`
+            },
+            listeners: {
+                'update:fileList': (x) => {
+                    wrapper.setProps({fileList: x})
+                },
+                'uploaded':(x)=>{
+                    setTimeout(()=>{
+                       expect(wrapper.find('use').element.getAttribute('xlink:href')).to.not.eq('#i-loading')
+                       expect(wrapper.props().fileList[0].url).to.eq('12345')
+                       done()
+                   })
+                }
             }
         })
 
         wrapper.find('#button').trigger('click')
         let input = wrapper.find("input[type='file']").element
-
-        let file1 = new File([1,2,3],'a.txt')
-        let file2 = new File([1,2,4],'b.txt')
-
+        let file1 = new File(['1,2,3'], 'a.txt', {type: 'image/png'})
         const data = new DataTransfer();
         data.items.add(file1)
-        data.items.add(file2)
-
         input.files = data.files
+        wrapper.find("input[type='file']").trigger('change')
     })
 })

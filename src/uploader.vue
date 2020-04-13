@@ -8,7 +8,7 @@
                 <template v-if="file.status==='uploading'">
                     <g-icon class="loading" name="loading"></g-icon>
                 </template>
-                <template v-else-if="file.status==='success'">
+                <template v-else-if="file.type.indexOf('image')===0&&file.status==='success'">
                     <img style="width: 32px;height: 32px;" :src="file.url" alt="" ref="preview">
                 </template>
                 <template v-else-if="file.status==='error'">
@@ -97,7 +97,6 @@
                     let formData = new FormData()
                     formData.append(this.name, file)
                     this.doUploadFile(formData, (response) => {
-
                         let url = this.parseResponse(response)
                         this.afterUpload(newName, url)
                     }, (xhr) => {
@@ -128,6 +127,7 @@
                 copy.filter((f) => f.name === newName)[0].status = 'success'
                 copy.filter((f) => f.name === newName)[0].url = url
                 this.$emit('update:fileList', copy)
+                this.$emit('uploaded',this.fileList)
             },
             errorUpload(newName, xhr) {
                 let copy = JSON.parse(JSON.stringify(this.fileList))
