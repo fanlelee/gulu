@@ -27,6 +27,7 @@
 <script>
     import GIcon from './icon.vue'
     import GButton from './button/button'
+    import http from './http.js'
 
     export default {
         name: "GuluUploader",
@@ -104,15 +105,7 @@
                 }
             },
             doUploadFile(formData, success, fail) {
-                let xhr = new XMLHttpRequest();
-                xhr.open(this.method, this.action)
-                xhr.onload = () => {
-                    success(xhr.response)
-                }
-                xhr.onerror = () => {
-                    fail(xhr)
-                }
-                xhr.send(formData)
+                http(this.method, this.action, {success, fail, data: formData})
             },
             beforeUpload(files, newNames) {
                 let copy = JSON.parse(JSON.stringify(this.fileList))
