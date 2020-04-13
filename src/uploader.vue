@@ -73,6 +73,7 @@
                 this.$refs.input.appendChild(input)
                 input.type = 'file'
                 input.multiple = true
+                input.accept = 'image/*'
                 input.addEventListener('change', () => {
                     let files = input.files
                     input.remove()
