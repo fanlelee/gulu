@@ -20,6 +20,7 @@
                 </span>
             </li>
         </ol>
+        <div ref="input" style="width:0;height: 0;overflow: hidden;"></div>
     </div>
 </template>
 
@@ -36,9 +37,11 @@
         props: {
             name: {
                 type: String,
+                required: true
             },
             action: {
-                type: String
+                type: String,
+                required: true
             },
             method: {
                 type: String,
@@ -46,7 +49,7 @@
             },
             parseResponse: {
                 type: Function,
-                require: true
+                required: true
             },
             fileList: {
                 type: Array,
@@ -66,6 +69,7 @@
             },
             onClickUpload() {
                 let input = document.createElement('input')
+                this.$refs.input.appendChild(input)
                 input.type = 'file'
                 input.multiple = true
                 input.addEventListener('change', () => {
