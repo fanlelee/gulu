@@ -105,7 +105,7 @@
                 }
             },
             doUploadFile(formData, success, fail) {
-                http(this.method, this.action, {success, fail, data: formData})
+                http[this.method.toLowerCase()](this.action, {success, fail, data: formData})
             },
             beforeUpload(files, newNames) {
                 let copy = JSON.parse(JSON.stringify(this.fileList))
