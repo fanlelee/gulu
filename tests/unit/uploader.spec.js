@@ -13,13 +13,14 @@ describe('Uploader.vue', () => {
         expect(Uploader).to.be.ok
     })
     it('文件会先旋转加载、可以上传文件', (done) => {
-        http.post = (url, options) => {
+        let stub = sinon.stub(http,'post').callsFake((url, options) => {
             setTimeout(() => {
+                console.log('假');
                 let use = wrapper.find('use').element
                 expect(use.getAttribute('xlink:href')).to.eq('#i-loading')
                 options.success(JSON.stringify({id: '12345'}))
             })
-        }
+        })
         const wrapper = mount(Uploader, {
             propsData: {
                 name: 'file',
@@ -41,6 +42,7 @@ describe('Uploader.vue', () => {
                     setTimeout(()=>{
                        expect(wrapper.find('use').element.getAttribute('xlink:href')).to.not.eq('#i-loading')
                        expect(wrapper.props().fileList[0].url).to.eq('12345')
+                        stub.restore()
                        done()
                    })
                 }
