@@ -14,14 +14,26 @@
                 sticky: false,
                 height: undefined,
                 left: undefined,
-                width: undefined
+                width: undefined,
+                top:undefined
             }
         },
         mounted() {
-            let top = this.topScroll().top
-            window.addEventListener('scroll', () => {
+            this.top = this.topScroll().top
+            this.windowScrollHandler = this._windowScrollHandler.bind(this)
+            window.addEventListener('scroll', this.windowScrollHandler)
+        },
+        beforeDestroy() {
+            window.removeEventListener('scroll', this.windowScrollHandler)
+        },
+        methods: {
+            topScroll() {
+                let {top, height} = this.$refs.sticky.getBoundingClientRect()
+                return {top: top + window.scrollY, height}
+            },
+            _windowScrollHandler() {
                 let scrollY = window.scrollY
-                if (scrollY < top) {
+                if (scrollY < this.top) {
                     this.sticky = false
                 } else {
                     this.height = this.topScroll().height + 'px'
@@ -30,12 +42,6 @@
                     this.width = width + 'px'
                     this.sticky = true
                 }
-            })
-        },
-        methods: {
-            topScroll() {
-                let {top, height} = this.$refs.sticky.getBoundingClientRect()
-                return {top: top + window.scrollY, height}
             }
         }
     }
