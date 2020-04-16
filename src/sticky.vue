@@ -1,7 +1,7 @@
 <template>
     <div class="gulu-sticky-wrapper" ref="wrapper" :style="{height}">
         <div class="gulu-sticky" ref="sticky" :class="{sticky}"
-             :style="{left,width}">
+             :style="{left,width,top}">
             <slot></slot>
         </div>
     </div>
@@ -15,11 +15,19 @@
                 height: undefined,
                 left: undefined,
                 width: undefined,
-                top:undefined
+                top: undefined,
+                scrollTop: undefined
+            }
+        },
+        props: {
+            distance: {
+                type: Number,
+                default: 0
             }
         },
         mounted() {
-            this.top = this.topScroll().top
+            console.log(this)
+            this.scrollTop = this.topScroll().top
             this.windowScrollHandler = this._windowScrollHandler.bind(this)
             window.addEventListener('scroll', this.windowScrollHandler)
         },
@@ -33,13 +41,18 @@
             },
             _windowScrollHandler() {
                 let scrollY = window.scrollY
-                if (scrollY < this.top) {
+                if (scrollY < this.scrollTop - this.distance) {
+                    this.height = undefined
+                    this.left = undefined
+                    this.width = undefined
+                    this.top = undefined
                     this.sticky = false
                 } else {
                     this.height = this.topScroll().height + 'px'
                     let {left, width} = this.$refs.wrapper.getBoundingClientRect()
                     this.left = left + 'px'
                     this.width = width + 'px'
+                    this.top = this.distance + 'px'
                     this.sticky = true
                 }
             }

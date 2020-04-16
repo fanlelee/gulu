@@ -51,7 +51,7 @@
             <p>段落48</p>
             <p>段落49</p>
             <p>段落50</p>
-            <g-sticky>
+            <g-sticky :distance="100">
                 <div>sticky内容</div>
             </g-sticky>
             <p>段落1</p>
