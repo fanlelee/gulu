@@ -26,7 +26,6 @@
             }
         },
         mounted() {
-            console.log(this)
             this.scrollTop = this.topScroll().top
             this.windowScrollHandler = this._windowScrollHandler.bind(this)
             window.addEventListener('scroll', this.windowScrollHandler)
