@@ -2,7 +2,6 @@
   "name": "fanlelee-t-1-1",
   "version": "0.0.8",
   "description": "VUE 组件 UI",
-  "private": true,
   "main":"dist/guluLib.umd.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
