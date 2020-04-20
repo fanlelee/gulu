@@ -2,7 +2,7 @@ import Vue from "vue";
 import chai, {expect} from 'chai'
 import sinonChai from "sinon-chai";
 import {mount} from '@vue/test-utils'
-import Popover from '@/popover.vue'
+import Popover from '../../src/popover.vue'
 
 chai.use(sinonChai)
 
