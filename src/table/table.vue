@@ -15,18 +15,18 @@
                     <th :style="{width: '50px'}" v-if="expandDescription"></th>
                     <th v-for="column in columns" :style="{width:column.width+'px'}">
                         <span class="gulu-table-sort-head"
-                              :class="{'gulu-table-unordered':!sortRules[column.key]}"
-                              @click="OnClickSort(column.key,sortRules[column.key])">
+                              :class="{'gulu-table-unordered':!sortRules[column.field]}"
+                              @click="OnClickSort(column.field,sortRules[column.field])">
                             {{column.title}}
-                            <template v-if="column.key in sortRules">
-                                <g-icon name="sort" v-if="sortRules[column.key]===true"></g-icon>
+                            <template v-if="column.field in sortRules">
+                                <g-icon name="sort" v-if="sortRules[column.field]===true"></g-icon>
                                 <g-icon v-else name="sort-desc"
-                                        :class="{asc:sortRules[column.key]==='asc'}"
+                                        :class="{asc:sortRules[column.field]==='asc'}"
                                 ></g-icon>
                             </template>
                         </span>
                     </th>
-                    <th v-if="$scopedSlots.default" ref="actionsHeader"></th>
+                    <th v-if="$scopedSlots.handle" ref="actionsHeader"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -46,11 +46,16 @@
                             </div>
                         </td>
                         <td v-for="column in columns" :style="{width:column.width+'px'}">
-                            {{item[column.key]}}
+                            <template v-if="column.render">
+                                <vnodes :vnodes="column.render({value:item[column.field]})"></vnodes>
+                            </template>
+                            <template v-else>
+                                {{item[column.field]}}
+                            </template>
                         </td>
-                        <td v-if="$scopedSlots.default">
+                        <td v-if="$scopedSlots.handle">
                             <div ref="actions">
-                                <slot :item="item"></slot>
+                                <slot name="handle" :item="item"></slot>
                             </div>
                         </td>
                     </tr>
@@ -70,14 +75,21 @@
 </template>
 
 <script>
-    import GIcon from "./icon.vue"
+    import GIcon from "../icon.vue"
 
     export default {
         name: "GuluTable",
-        components: {GIcon},
+        components: {
+            GIcon,
+            vnodes: {
+                functional: true,
+                render: (h, context) => context.props.vnodes
+            }
+        },
         data() {
             return {
-                expandIds: []
+                expandIds: [],
+                columns: []
             }
         },
         props: {
@@ -93,10 +105,6 @@
                 validator: (array) => {
                     return array.filter((item) => item.id === undefined).length <= 0
                 }
-            },
-            columns: {
-                type: Array,
-                required: true
             },
             selected: {
                 type: Array,
@@ -132,6 +140,13 @@
             },
         },
         mounted() {
+            this.columns = this.$slots.default.map((node) => {
+                let {title, field, width} = node.componentOptions.propsData
+                let render = node.data.scopedSlots.default
+                return {title, field, width, render}
+            })
+
+
             let table2 = this.$refs.table.cloneNode(false)
             table2.classList.add('gulu-table-copy')
 
@@ -143,21 +158,6 @@
             this.$refs.wrapper.style.marginTop = height + 'px'
             table2.style.top = -height + 'px'
 
-            if (this.$scopedSlots.default) {
-                let div = this.$refs.actions[0]
-                let {width} = div.getBoundingClientRect()
-                let parent = div.parentNode
-                let styles = getComputedStyle(parent)
-                let paddingLeft = styles.getPropertyValue('padding-left')
-                let paddingRight = styles.getPropertyValue('padding-right')
-                let borderLeft = styles.getPropertyValue('border-left-width')
-                let borderRight = styles.getPropertyValue('border-right-width')
-                let width2 = width + parseInt(paddingLeft) + parseInt(paddingRight) + parseInt(borderLeft) + parseInt(borderRight) + 'px'
-                this.$refs.actionsHeader.style.width = width2
-                this.$refs.actions.map(div => {
-                    div.parentNode.style.width = width2
-                })
-            }
         },
         watch: {
             selected() {
@@ -190,7 +190,7 @@
                 if (this.checkBox) {
                     colLength++
                 }
-                if (this.$scopedSlots.default) {
+                if (this.$scopedSlots.handle) {
                     colLength++
                 }
                 return colLength
@@ -208,15 +208,15 @@
                     this.expandIds.push(id)
                 }
             },
-            OnClickSort(key, lastValue) {
+            OnClickSort(field, lastValue) {
                 if (!lastValue) return
                 let copy = JSON.parse(JSON.stringify(this.sortRules))
                 if (lastValue === 'asc') {
-                    copy[key] = 'desc'
+                    copy[field] = 'desc'
                 } else if (lastValue === 'desc') {
-                    copy[key] = true
+                    copy[field] = true
                 } else if (lastValue === true) {
-                    copy[key] = 'asc'
+                    copy[field] = 'asc'
                 }
                 this.$emit('update:sortRules', copy)
             },
@@ -246,10 +246,11 @@
 </script>
 
 <style scoped lang="scss">
-    @import "styles/var";
+    @import "../../styles/var";
     .gulu-table {
         border-collapse: collapse;
         width: 100%;
+        table-layout:fixed;
         &.bordered {border: 1px solid darken($grey, 10%);}
         &.cell {
             & th {border: 1px solid darken($grey, 10%);}
@@ -286,7 +287,7 @@
             text-align: center;
             transition: height 5s;
         }
-        &-expand-icon {display: flex;align-items: center;justify-content: flex-start;}
+        &-expand-icon {display: flex;align-items: center;justify-content: center;}
         &-expanded {transform: rotate(90deg);transition: all .3s;}
     }
 </style>
