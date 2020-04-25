@@ -4,12 +4,12 @@
             <template v-slot:content>
                 <div class="gulu-date-picker-pop">
                     <div class="gulu-date-picker-nav">
-                        <span><</span>
-                        <span><<</span>
+                        <span><g-icon name="left"></g-icon></span>
+                        <span><g-icon name="leftleft"></g-icon></span>
                         <span @click="onClickYear">年</span>
                         <span @click="onClickMonth">月</span>
-                        <span>></span>
-                        <span>>></span>
+                        <span><g-icon name="right"></g-icon></span>
+                        <span><g-icon name="rightright"></g-icon></span>
                     </div>
                     <div class="gulu-date-picker-panels">
                         <div v-if="mode==='years'" class="gulu-date-picker-content">
@@ -41,11 +41,12 @@
 <script>
     import GInput from '../input'
     import GPopover from '../popover'
-    import helper from "./helper";
+    import GIcon from '../icon.vue'
+    import helper from './helper'
 
     export default {
         name: "GuluDatePicker",
-        components: {GInput, GPopover},
+        components: {GInput, GPopover, GIcon},
         data() {
             return {
                 helper: helper,
