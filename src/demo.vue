@@ -1,100 +1,20 @@
 <template>
     <div class="demo">
-        <g-table :data-source="dataSource"
-                 :selected.sync="selected"
-                 :sort-rules.sync="sortRules"
-                 @update:sortRules="x"
-                 :loading="loading"
-                 :scroll-height="scrollHeight"
-                 :expand-description="expandDescription"
-                 :check-box="true"
-                 :cell="true"
-        >
-                        <template v-slot:handle="props" >
-                            <g-button @click="edit(props.item)">编辑</g-button>
-                            <g-button @click="cut(props.item)">删除</g-button>
-                        </template>
-            <g-table-column title="姓名" field="name" :width="230">
-                <template v-slot:default="props">
-                    <a href="#">{{props.value}}</a>
-                </template>
-            </g-table-column>
-            <g-table-column title="年龄" field="age" :width="90">
-                <template slot-scope="props">
-                    {{props.value}}
-                </template>
-            </g-table-column>
-            <g-table-column title="爱好" field="hobby" :width="200">
-                <template slot-scope="props">
-                    {{props.value}}
-                </template>
-            </g-table-column>
-        </g-table>
+        <g-date-picker></g-date-picker>
     </div>
 </template>
 
 <script>
-    import GTable from './table/table'
-    import GTableColumn from './table/table-column'
-    import GButton from './button/button'
-
+    import GDatePicker from './date-picker/date-picker'
     export default {
         name: "demo",
-        components: {GTable, GTableColumn,GButton},
+        components: {GDatePicker},
         data() {
             return {
-                dataSource: [
-                    {id: 0, name: '小丁', age: 39, hobby: '老婆', description: '爱老婆'},
-                    {id: 1, name: '小刘', age: 39, hobby: '打麻将', description: 'ffff'},
-                    {id: 2, name: '小王子', age: 20, hobby: '涉猎', description: 'xxxx'},
-                    {id: 3, name: '豌豆公主', age: 17, hobby: '化妆'},
-                    {id: 4, name: '哪吒', age: 12, hobby: '游泳'},
-                    {id: 5, name: '玉皇大帝', age: 120, hobby: '钓鱼'},
-                    {id: 6, name: '王母娘娘', age: 99, hobby: '养花'},
-                    {id: 7, name: '小刘', age: 39, hobby: '打麻将'},
-                    {id: 8, name: '小王子', age: 20, hobby: '涉猎'},
-                    {id: 9, name: '豌豆公主', age: 17, hobby: '化妆'},
-                    {id: 10, name: '哪吒', age: 12, hobby: '游泳'},
-                    {id: 11, name: '玉皇大帝', age: 120, hobby: '钓鱼'},
-                    {id: 12, name: '王母娘娘', age: 99, hobby: '养花'},
-                    {id: 13, name: '豌豆公主', age: 17, hobby: '化妆'},
-                    {id: 14, name: '哪吒', age: 12, hobby: '游泳'},
-                    {id: 15, name: '玉皇大帝', age: 120, hobby: '钓鱼'},
-                    {id: 16, name: '王母娘娘', age: 99, hobby: '养花'},
-                    {id: 17, name: '小刘', age: 39, hobby: '打麻将'},
-                    {id: 18, name: '小王子', age: 20, hobby: '涉猎'},
-                    {id: 19, name: '豌豆公主', age: 17, hobby: '化妆'},
-                ],
-                sortRules: {
-                    age: 'asc',
-                    hobby: 'desc'
-                },
-                selected: [],
-                loading: false,
-                scrollHeight: 400,
-                expandDescription: 'description',
             }
         },
         mounted() {
         },
-        methods: {
-            x() {
-                this.loading = true
-                setTimeout(() => {
-                    // ajax(url,sortRules)
-                    //     .then((response)=>{
-                    this.dataSource = this.dataSource.sort((a, b) => a.age - b.age)
-                    this.loading = false
-                    //     })
-                }, 1000)
-            },
-            edit(item) {
-                console.log(item, '编辑')
-            },
-            cut(item) {
-                console.log(item, '删除')
-            },
-        }
     }
 </script>
 

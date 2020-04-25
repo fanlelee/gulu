@@ -52,7 +52,6 @@
             border-radius: $border-radius;
             border: 1px solid $border-color;
             outline: none;
-            padding: $border-padding;
             color: $border-font-color;
             font-size: inherit;
 
