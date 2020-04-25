@@ -19,8 +19,11 @@
                             <span>月</span>
                         </div>
                         <div v-else class="gulu-date-picker-content">
-                            <div v-for="i in helper.range(1,7)">
-                                <span v-for="j in helper.range(1,8)">
+                            <div :class="c('weeks')">
+                                <span v-for="i in [1,2,3,4,5,6,0]">{{weeks[i]}}</span>
+                            </div>
+                            <div :class="c('row')" v-for="i in helper.range(1,7)">
+                                <span :class="c('col')" v-for="j in helper.range(1,8)">
                                     {{visibleDays[(i-1)*7+j-1].getDate()}}*
                                 </span>
                             </div>
@@ -46,7 +49,8 @@
         data() {
             return {
                 helper: helper,
-                mode: 'days'
+                mode: 'days',
+                weeks: ['七', '一', '二', '三', '四', '五', '六']
             }
         },
         props: {},
@@ -77,6 +81,9 @@
         mounted() {
         },
         methods: {
+            c(className) {
+                return `gulu-date-picker-${className}`
+            },
             onClickYear() {
                 this.mode = 'years'
             },
