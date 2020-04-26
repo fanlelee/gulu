@@ -1,6 +1,9 @@
 <template>
     <div class="gulu-date-picker" ref="datePickerWrapper">
         <g-popover position="bottom" :container="popoverContainer">
+            <template>
+                <g-input :value="formattedDate"></g-input>
+            </template>
             <template v-slot:content>
                 <div :class="c('pop')">
                     <div :class="c('nav')">
@@ -25,16 +28,15 @@
                                 <span :class="c('week-item')" v-for="i in [1,2,3,4,5,6,0]" :key="i">{{weeks[i]}}</span>
                             </div>
                             <div :class="c('row')" v-for="i in helper.range(1,7)" :key="i">
-                                <span :class="c('cell')" v-for="j in helper.range(1,8)" :key="j">
+                                <span :class="c('cell')"
+                                      v-for="j in helper.range(1,8)" :key="j"
+                                      @click="onClickDay(visibleDays[(i-1)*7+j-1])">
                                     {{visibleDays[(i-1)*7+j-1].getDate()}}
                                 </span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </template>
-            <template>
-                <g-input></g-input>
             </template>
         </g-popover>
     </div>
@@ -57,8 +59,16 @@
                 popoverContainer: null,
             }
         },
-        props: {},
+        props: {
+            value:{
+                type: Date,
+            }
+        },
         computed: {
+            formattedDate(){
+                let [year,month,day] = helper.yearMonthDay(this.value)
+                return `${year}-${month+1}-${day}`
+            },
             visibleDays() {
                 let date = new Date()
                 let firstDate = helper.firstDayOfMonth(date)
@@ -75,6 +85,9 @@
             this.popoverContainer = this.$refs.datePickerWrapper
         },
         methods: {
+            onClickDay(date){
+                this.$emit('input',date)
+            },
             c(className) {
                 return `gulu-date-picker-${className}`
             },
