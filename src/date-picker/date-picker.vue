@@ -30,8 +30,8 @@
                             <div :class="c('row')" v-for="i in helper.range(1,7)" :key="i">
                                 <span :class="c('cell')"
                                       v-for="j in helper.range(1,8)" :key="j"
-                                      @click="onClickDay(visibleDays[(i-1)*7+j-1])">
-                                    {{visibleDays[(i-1)*7+j-1].getDate()}}
+                                      @click="onClickDay(getVisibleDay(i,j))">
+                                    {{getVisibleDay(i,j).getDate()}}
                                 </span>
                             </div>
                         </div>
@@ -60,14 +60,14 @@
             }
         },
         props: {
-            value:{
+            value: {
                 type: Date,
             }
         },
         computed: {
-            formattedDate(){
-                let [year,month,day] = helper.yearMonthDay(this.value)
-                return `${year}-${month+1}-${day}`
+            formattedDate() {
+                let [year, month, day] = helper.yearMonthDay(this.value)
+                return `${year}-${month + 1}-${day}`
             },
             visibleDays() {
                 let date = new Date()
@@ -85,8 +85,11 @@
             this.popoverContainer = this.$refs.datePickerWrapper
         },
         methods: {
-            onClickDay(date){
-                this.$emit('input',date)
+            getVisibleDay(row, col) {
+                return this.visibleDays[(row - 1) * 7 + col - 1]
+            },
+            onClickDay(date) {
+                this.$emit('input', date)
             },
             c(className) {
                 return `gulu-date-picker-${className}`
