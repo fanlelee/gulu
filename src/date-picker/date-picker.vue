@@ -28,7 +28,7 @@
                                 <span :class="c('week-item')" v-for="i in [1,2,3,4,5,6,0]" :key="i">{{weeks[i]}}</span>
                             </div>
                             <div :class="c('row')" v-for="i in helper.range(1,7)" :key="i">
-                                <span :class="c('cell')"
+                                <span :class="[c('cell'),{'inCurrentMonth':isInCurrentMonth(getVisibleDay(i,j))}]"
                                       v-for="j in helper.range(1,8)" :key="j"
                                       @click="onClickDay(getVisibleDay(i,j))">
                                     {{getVisibleDay(i,j).getDate()}}
@@ -85,11 +85,19 @@
             this.popoverContainer = this.$refs.datePickerWrapper
         },
         methods: {
+            isInCurrentMonth(date) {
+                let [year1, month1] = helper.yearMonthDay(date)
+                let [year2, month2] = helper.yearMonthDay(this.value)
+                return year1 === year2 && month1 === month2
+            },
             getVisibleDay(row, col) {
+                console.log(this.visibleDays[(row - 1) * 7 + col - 1], 'this.visibleDays[(row - 1) * 7 + col - 1]');
                 return this.visibleDays[(row - 1) * 7 + col - 1]
             },
             onClickDay(date) {
-                this.$emit('input', date)
+                if (this.isInCurrentMonth(date)) {
+                    this.$emit('input', date)
+                }
             },
             c(className) {
                 return `gulu-date-picker-${className}`
@@ -122,6 +130,12 @@
             justify-content: center;
             align-items: center;
 
+        }
+        &-cell {
+            color: #bbbbbb;
+            &.inCurrentMonth {
+                color: black;
+            }
         }
 
         /deep/ .gulu-popover-content-wrapper {
