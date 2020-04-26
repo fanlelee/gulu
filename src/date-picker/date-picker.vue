@@ -7,14 +7,22 @@
             <template v-slot:content>
                 <div :class="c('pop')">
                     <div :class="c('nav')">
-                        <span :class="c('nav-icon')"><g-icon name="leftleft"></g-icon></span>
-                        <span :class="c('nav-icon')"><g-icon name="left"></g-icon></span>
-                        <span :class="c('yearAndMonth')">
-                            <span @click="onClickYear">年</span>
-                            <span @click="onClickMonth">月</span>
+                        <span :class="c('nav-icon')" @click="onClickPreYear">
+                            <g-icon name="leftleft"></g-icon>
                         </span>
-                        <span :class="c('nav-icon')"><g-icon name="right"></g-icon></span>
-                        <span :class="c('nav-icon')"><g-icon name="rightright"></g-icon></span>
+                        <span :class="c('nav-icon')" @click="onClickPreMonth">
+                            <g-icon name="left"></g-icon>
+                        </span>
+                        <span :class="c('yearAndMonth')">
+                            <span @click="onClickYear">{{displayYearAndMonth.year}}年</span>
+                            <span @click="onClickMonth">{{displayYearAndMonth.month+1}}月</span>
+                        </span>
+                        <span :class="c('nav-icon')" @click="onClickNextMonth">
+                            <g-icon name="right"></g-icon>
+                        </span>
+                        <span :class="c('nav-icon')" @click="onClickNextYear">
+                            <g-icon name="rightright"></g-icon>
+                        </span>
                     </div>
                     <div class="gulu-date-picker-panel">
                         <div v-if="mode==='years'" class="gulu-date-picker-content">
@@ -28,7 +36,7 @@
                                 <span :class="c('week-item')" v-for="i in [1,2,3,4,5,6,0]" :key="i">{{weeks[i]}}</span>
                             </div>
                             <div :class="c('row')" v-for="i in helper.range(1,7)" :key="i">
-                                <span :class="[c('cell'),{'inCurrentMonth':isInCurrentMonth(getVisibleDay(i,j))}]"
+                                <span :class="[c('cell'),{'inCurrentMonth':isInDisplayMonth(getVisibleDay(i,j))}]"
                                       v-for="j in helper.range(1,8)" :key="j"
                                       @click="onClickDay(getVisibleDay(i,j))">
                                     {{getVisibleDay(i,j).getDate()}}
@@ -52,11 +60,13 @@
         name: "GuluDatePicker",
         components: {GInput, GPopover, GIcon},
         data() {
+            let [year, month] = helper.yearMonthDay(new Date())
             return {
                 helper: helper,
                 mode: 'days',
                 weeks: ['七', '一', '二', '三', '四', '五', '六'],
                 popoverContainer: null,
+                displayYearAndMonth: {year, month}
             }
         },
         props: {
@@ -70,7 +80,7 @@
                 return `${year}-${month + 1}-${day}`
             },
             visibleDays() {
-                let date = new Date()
+                let date = new Date(this.displayYearAndMonth.year, this.displayYearAndMonth.month, 1)
                 let firstDate = helper.firstDayOfMonth(date)
                 let data = []
                 let m = firstDate.getDay() === 0 ? 6 : firstDate.getDay() - 1
@@ -85,17 +95,15 @@
             this.popoverContainer = this.$refs.datePickerWrapper
         },
         methods: {
-            isInCurrentMonth(date) {
+            isInDisplayMonth(date) {
                 let [year1, month1] = helper.yearMonthDay(date)
-                let [year2, month2] = helper.yearMonthDay(this.value)
-                return year1 === year2 && month1 === month2
+                return year1 === this.displayYearAndMonth.year && month1 === this.displayYearAndMonth.month
             },
             getVisibleDay(row, col) {
-                console.log(this.visibleDays[(row - 1) * 7 + col - 1], 'this.visibleDays[(row - 1) * 7 + col - 1]');
                 return this.visibleDays[(row - 1) * 7 + col - 1]
             },
             onClickDay(date) {
-                if (this.isInCurrentMonth(date)) {
+                if (this.isInDisplayMonth(date)) {
                     this.$emit('input', date)
                 }
             },
@@ -107,6 +115,23 @@
             },
             onClickMonth() {
                 this.mode = 'months'
+            },
+            onClickPreYear() {
+                if (this.displayYearAndMonth.year <= 0) return
+                this.displayYearAndMonth.year -= 1
+            },
+            onClickPreMonth() {
+                let newDate = helper.addMonth(new Date(this.displayYearAndMonth.year, this.displayYearAndMonth.month), -1)
+                let [year, month] = helper.yearMonthDay(newDate)
+                this.displayYearAndMonth = {year, month}
+            },
+            onClickNextYear() {
+                this.displayYearAndMonth.year += 1
+            },
+            onClickNextMonth() {
+                let newDate = helper.addMonth(new Date(this.displayYearAndMonth.year, this.displayYearAndMonth.month), 1)
+                let [year, month] = helper.yearMonthDay(newDate)
+                this.displayYearAndMonth = {year, month}
             },
         }
     }
