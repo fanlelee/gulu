@@ -2,16 +2,18 @@
     <div class="gulu-date-picker" ref="datePickerWrapper">
         <g-popover position="bottom" :container="popoverContainer">
             <template v-slot:content>
-                <div class="gulu-date-picker-pop">
-                    <div class="gulu-date-picker-nav">
-                        <span><g-icon name="left"></g-icon></span>
-                        <span><g-icon name="leftleft"></g-icon></span>
-                        <span @click="onClickYear">年</span>
-                        <span @click="onClickMonth">月</span>
-                        <span><g-icon name="right"></g-icon></span>
-                        <span><g-icon name="rightright"></g-icon></span>
+                <div :class="c('pop')">
+                    <div :class="c('nav')">
+                        <span :class="c('nav-icon')"><g-icon name="leftleft"></g-icon></span>
+                        <span :class="c('nav-icon')"><g-icon name="left"></g-icon></span>
+                        <span :class="c('yearAndMonth')">
+                            <span @click="onClickYear">年</span>
+                            <span @click="onClickMonth">月</span>
+                        </span>
+                        <span :class="c('nav-icon')"><g-icon name="right"></g-icon></span>
+                        <span :class="c('nav-icon')"><g-icon name="rightright"></g-icon></span>
                     </div>
-                    <div class="gulu-date-picker-panels">
+                    <div class="gulu-date-picker-panel">
                         <div v-if="mode==='years'" class="gulu-date-picker-content">
                             <span>年</span>
                         </div>
@@ -20,11 +22,11 @@
                         </div>
                         <div v-else class="gulu-date-picker-content">
                             <div :class="c('weeks')">
-                                <span v-for="i in [1,2,3,4,5,6,0]">{{weeks[i]}}</span>
+                                <span :class="c('week-item')" v-for="i in [1,2,3,4,5,6,0]" :key="i">{{weeks[i]}}</span>
                             </div>
-                            <div :class="c('row')" v-for="i in helper.range(1,7)">
-                                <span :class="c('col')" v-for="j in helper.range(1,8)">
-                                    {{visibleDays[(i-1)*7+j-1].getDate()}}*
+                            <div :class="c('row')" v-for="i in helper.range(1,7)" :key="i">
+                                <span :class="c('cell')" v-for="j in helper.range(1,8)" :key="j">
+                                    {{visibleDays[(i-1)*7+j-1].getDate()}}
                                 </span>
                             </div>
                         </div>
@@ -88,6 +90,24 @@
 
 <style scoped lang="scss">
     .gulu-date-picker {
+        &-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        &-yearAndMonth {
+            margin: auto;
+        }
+
+        &-cell, &-week-item, &-nav-icon {
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+
         /deep/ .gulu-popover-content-wrapper {
             padding: 0;
         }

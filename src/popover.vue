@@ -135,7 +135,6 @@
 
     .gulu-popover-content-wrapper {
         position: absolute;
-        max-width: 12em;
         word-break: break-all;
         border-radius: $content-wrapper-border-radius;
         border: 1px solid $content-wrapper-border-color;
