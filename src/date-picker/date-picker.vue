@@ -53,30 +53,18 @@
                 mode: 'days',
                 weeks: ['七', '一', '二', '三', '四', '五', '六'],
                 popoverContainer: null,
-                console:console
             }
         },
         props: {},
         computed: {
             visibleDays() {
                 let date = new Date()
-                let [year, month] = helper.yearMonthDay(date)
                 let firstDate = helper.firstDayOfMonth(date)
-                let lastDate = helper.lastDayOfMonth(date)
                 let data = []
-
-                for (let i = 1; i < lastDate.getDate() + 1; i++) {
-                    data.push(new Date(year, month, i))
-                }
-
                 let m = firstDate.getDay() === 0 ? 6 : firstDate.getDay() - 1
-                for (let i = 0; i < m; i++) {
-                    data.unshift(new Date(year, month, -i))
-                }
-
-                let n = 6 * 7 - data.length
-                for (let i = 1; i <= n; i++) {
-                    data.push(new Date(year, month + 1, i))
+                let firstDateOfPanel = firstDate - m * 3600 * 24 * 1000
+                for (let i = 0; i < 6 * 7; i++) {
+                    data.push(new Date(firstDateOfPanel + i * 3600 * 24 * 1000))
                 }
                 return data
             }
@@ -99,8 +87,8 @@
 </script>
 
 <style scoped lang="scss">
-    .gulu-date-picker{
-        /deep/ .gulu-popover-content-wrapper{
+    .gulu-date-picker {
+        /deep/ .gulu-popover-content-wrapper {
             padding: 0;
         }
     }
