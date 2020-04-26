@@ -1,6 +1,6 @@
 <template>
-    <div class="gulu-date-picker">
-        <g-popover position="bottom">
+    <div class="gulu-date-picker" ref="datePickerWrapper">
+        <g-popover position="bottom" :container="popoverContainer">
             <template v-slot:content>
                 <div class="gulu-date-picker-pop">
                     <div class="gulu-date-picker-nav">
@@ -51,7 +51,9 @@
             return {
                 helper: helper,
                 mode: 'days',
-                weeks: ['七', '一', '二', '三', '四', '五', '六']
+                weeks: ['七', '一', '二', '三', '四', '五', '六'],
+                popoverContainer: null,
+                console:console
             }
         },
         props: {},
@@ -80,6 +82,7 @@
             }
         },
         mounted() {
+            this.popoverContainer = this.$refs.datePickerWrapper
         },
         methods: {
             c(className) {
@@ -96,5 +99,9 @@
 </script>
 
 <style scoped lang="scss">
-
+    .gulu-date-picker{
+        /deep/ .gulu-popover-content-wrapper{
+            padding: 0;
+        }
+    }
 </style>

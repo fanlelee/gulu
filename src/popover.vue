@@ -1,6 +1,6 @@
 <template>
-    <div class="popover" ref="popover">
-        <div ref="contentWrapper" class="content-wrapper" v-if="visible"
+    <div class="gulu-popover" ref="popover">
+        <div ref="contentWrapper" class="gulu-popover-content-wrapper" v-if="visible"
              :class="{[`position-${position}`]:true}">
             <slot name="content" :closefunction="close"></slot>
         </div>
@@ -18,6 +18,9 @@
             }
         },
         props: {
+            container: {
+                type: Element
+            },
             position: {
                 type: String,
                 default: 'top',
@@ -61,8 +64,8 @@
         methods: {
             positionContent() {
                 const contentWrapper = this.$refs.contentWrapper
-                const triggerWrapper = this.$refs.triggerWrapper
-                document.body.appendChild(contentWrapper)
+                const triggerWrapper = this.$refs.triggerWrapper;
+                (this.container || document.body).appendChild(contentWrapper)
                 const {width, height, top, left} = triggerWrapper.getBoundingClientRect()
                 const {height: height2} = contentWrapper.getBoundingClientRect()
 
@@ -121,7 +124,7 @@
 <style lang="scss" scoped>
     $content-wrapper-border-radius: 5px;
     $content-wrapper-border-color: #333;
-    .popover {
+    .gulu-popover {
         display: inline-block;
         position: relative;
 
@@ -130,7 +133,7 @@
         }
     }
 
-    .content-wrapper {
+    .gulu-popover-content-wrapper {
         position: absolute;
         max-width: 12em;
         word-break: break-all;

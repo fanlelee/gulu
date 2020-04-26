@@ -20,4 +20,7 @@
 
 <style scoped>
     * {margin: 0;padding: 0;box-sizing: border-box;}
+    .demo {
+        padding: 50px 300px;
+    }
 </style>
