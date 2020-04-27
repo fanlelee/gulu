@@ -1,6 +1,6 @@
 <template>
     <div class="demo">
-        <g-date-picker :value="date" @input="date = $event"></g-date-picker>
+        <g-date-picker @input="date = $event" :scope="scope"></g-date-picker>
     </div>
 </template>
 
@@ -11,7 +11,8 @@
         components: {GDatePicker},
         data() {
             return {
-                date: new Date()
+                date: new Date(),
+                scope:[new Date(1960,3),new Date(2019,10)]
             }
         },
         mounted() {

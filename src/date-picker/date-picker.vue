@@ -14,7 +14,7 @@
                             <g-icon name="left"></g-icon>
                         </span>
                         <span :class="c('yearAndMonth')">
-                            <span @click="onClickMonth">{{displayYearAndMonth.year}}年{{displayYearAndMonth.month+1}}月</span>
+                            <span @click="onClickMonthsAndYears">{{displayYearAndMonth.year}}年{{displayYearAndMonth.month+1}}月</span>
                         </span>
                         <span :class="c('nav-icon')" @click="onClickNextMonth">
                             <g-icon name="right"></g-icon>
@@ -27,43 +27,11 @@
                         <div class="gulu-date-picker-content">
                             <template v-if="mode==='months'">
                                 <div :class="c('selectYearAndMonth')">
-                                    <select :value="displayYearAndMonth.year" name=""  @change="onChangeSelectYear">
-                                        <option value="2001">2001</option>
-                                        <option value="2002">2002</option>
-                                        <option value="2003">2003</option>
-                                        <option value="2004">2004</option>
-                                        <option value="2005">2005</option>
-                                        <option value="2006">2006</option>
-                                        <option value="2007">2007</option>
-                                        <option value="2008">2008</option>
-                                        <option value="2009">2009</option>
-                                        <option value="2010">2010</option>
-                                        <option value="2011">2011</option>
-                                        <option value="2012">2012</option>
-                                        <option value="2013">2013</option>
-                                        <option value="2014">2014</option>
-                                        <option value="2015">2015</option>
-                                        <option value="2016">2016</option>
-                                        <option value="2017">2017</option>
-                                        <option value="2018">2018</option>
-                                        <option value="2019">2019</option>
-                                        <option value="2020">2020</option>
-                                        <option value="2021">2021</option>
-                                        <option value="2022">2022</option>
+                                    <select :value="displayYearAndMonth.year" @change="onChangeSelectYear">
+                                        <option v-for="year in scopeYears" :value="year">{{year}}</option>
                                     </select>
                                     <select :value="displayYearAndMonth.month" @change="onChangeSelectMonth">
-                                        <option value="0">1</option>
-                                        <option value="1">2</option>
-                                        <option value="2">3</option>
-                                        <option value="3">4</option>
-                                        <option value="4">5</option>
-                                        <option value="5">6</option>
-                                        <option value="6">7</option>
-                                        <option value="7">8</option>
-                                        <option value="8">9</option>
-                                        <option value="9">10</option>
-                                        <option value="10">11</option>
-                                        <option value="11">12</option>
+                                        <option :value="month" v-for="month in helper.range(0,12)">{{month+1}}</option>
                                     </select>
                                 </div>
                             </template>
@@ -111,6 +79,11 @@
         props: {
             value: {
                 type: Date,
+                default: ()=>new Date()
+            },
+            scope: {
+                type: Array,
+                default: () => [new Date(1900, 0, 1), new Date(2121, 0, 0)]
             }
         },
         computed: {
@@ -128,17 +101,40 @@
                     data.push(new Date(firstDateOfPanel + i * 3600 * 24 * 1000))
                 }
                 return data
+            },
+            scopeYears() {
+                let yearBeganAt = this.scope[0].getFullYear()
+                let yearEndedAt = this.scope[1].getFullYear()
+                return helper.range(yearBeganAt, yearEndedAt + 1)
             }
         },
         mounted() {
             this.popoverContainer = this.$refs.datePickerWrapper
         },
         methods: {
-            onChangeSelectYear(e){
-                this.displayYearAndMonth.year = e.target.value-0
+            onChangeSelectYear(e) {
+                let year = e.target.value - 0
+                let d = new Date(year, this.displayYearAndMonth.month)
+
+                if (d > this.scope[0] && d < this.scope[1]) {
+                    this.displayYearAndMonth.year = year
+                } else {
+                    alert("no");
+                    e.target.value = this.displayYearAndMonth.year;
+                }
             },
-            onChangeSelectMonth(e){
-                this.displayYearAndMonth.month = e.target.value-0
+            onChangeSelectMonth(e) {
+                this.displayYearAndMonth.month = e.target.value - 0
+
+                let month = e.target.value - 0
+                let d = new Date(this.displayYearAndMonth.year, month)
+
+                if (d > this.scope[0] && d < this.scope[1]) {
+                    this.displayYearAndMonth.month = month
+                } else {
+                    alert("no");
+                    e.target.value = this.displayYearAndMonth.month;
+                }
             },
             isInDisplayMonth(date) {
                 let [year1, month1] = helper.yearMonthDay(date)
@@ -155,7 +151,7 @@
             c(className) {
                 return `gulu-date-picker-${className}`
             },
-            onClickMonth() {
+            onClickMonthsAndYears() {
                 if (this.mode === 'months') {
                     this.mode = 'days'
                 } else {
