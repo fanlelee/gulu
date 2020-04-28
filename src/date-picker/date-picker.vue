@@ -135,7 +135,6 @@
                 let reg = /^\d{4}-\d{2}-\d{2}$/g
                 if (value.match(reg)) {
                     let [year, month, day] = value.split('-')
-                    console.log(day);
                     month = month - 1
                     year = year - 0
                     this.displayYearAndMonth = {month,year}
