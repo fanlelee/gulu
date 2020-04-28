@@ -5,7 +5,7 @@
                    :container="popoverContainer"
                    @open="mode='days'">
             <template>
-                <g-input :value="formattedDate"></g-input>
+                <g-input ref="input" :value="formattedDate" @input="onInput" @change="onChange"></g-input>
             </template>
             <template v-slot:content>
                 <div :class="c('pop')" @selectstart.prevent>
@@ -128,6 +128,20 @@
             this.popoverContainer = this.$refs.datePickerWrapper
         },
         methods: {
+            onChange(){
+                this.$refs.input.setRawValue(this.formattedDate)
+            },
+            onInput(value) {
+                let reg = /^\d{4}-\d{2}-\d{2}$/g
+                if (value.match(reg)) {
+                    let [year, month, day] = value.split('-')
+                    console.log(day);
+                    month = month - 1
+                    year = year - 0
+                    this.displayYearAndMonth = {month,year}
+                    this.$emit('input', new Date(year,month,day))
+                }
+            },
             onClickToday() {
                 this.$emit('input', new Date())
                 let [y, m] = helper.yearMonthDay(new Date())

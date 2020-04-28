@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <input :class="{error}" type="text" :value="value" :disabled="disabled" :readonly="readonly"
+        <input ref="input" :class="{error}" type="text" :value="value" :disabled="disabled" :readonly="readonly"
                @change="$emit('change', $event.target.value)"
                @input="$emit('input', $event.target.value)"
                @focus="$emit('focus', $event.target.value)"
@@ -35,6 +35,11 @@
                 type: String,
                 default: ''
             },
+        },
+        methods:{
+            setRawValue(value){
+                this.$refs.input.value = value
+            }
         }
     }
 
