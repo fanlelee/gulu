@@ -1,6 +1,6 @@
 $border-box-shadow: rgba(0, 0, 0, .5);
 $border-color: #999;
-$border-color-light: lighten($border-color,20%);
+$border-color-light: lighten($border-color, 20%);
 $border-disabled-color: #bbb;
 $border-font-color: #333;
 $border-height: 32px;
@@ -18,14 +18,15 @@ $error-color: #F1453D;
 $error-font-size: 12px;
 $font-size: 14px;
 $input-height: 32px;
-$grey:#eee;
-$blue:#2295FE;
+$grey: #eee;
+$blue: #2295FE;
+$lighten-black: lighten(black, 20%);
 .box-shadow {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
 }
 @keyframes spin {
-  0%{ transform: rotate(0deg);}
-  100%{ transform: rotate(360deg); }
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg); }
 }
 @mixin spin {
   animation: spin 1s infinite linear;

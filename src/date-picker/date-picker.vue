@@ -42,7 +42,8 @@
                                 <div :class="c('row')" v-for="i in helper.range(1,7)" :key="i">
                                 <span :class="[c('cell'),
                                             {'inCurrentMonth':isInDisplayMonth(getVisibleDay(i,j)),
-                                            'selected':isSelectedDay(getVisibleDay(i,j))}]"
+                                            'selected':isSelectedDay(getVisibleDay(i,j)),
+                                            'today':isToday(getVisibleDay(i,j))}]"
                                       v-for="j in helper.range(1,8)" :key="j"
                                       @click="onClickDay(getVisibleDay(i,j))">
                                     {{getVisibleDay(i,j).getDate()}}
@@ -50,6 +51,10 @@
                                 </div>
                             </template>
                         </div>
+                    </div>
+                    <div :class="c('action')">
+                        <g-button @click="onClickToday">今天</g-button>
+                        <g-button @click="onClickClear">清除</g-button>
                     </div>
                 </div>
             </template>
@@ -62,10 +67,11 @@
     import GPopover from '../popover'
     import GIcon from '../icon.vue'
     import helper from './helper'
+    import GButton from '../button/button'
 
     export default {
         name: "GuluDatePicker",
-        components: {GInput, GPopover, GIcon},
+        components: {GInput, GPopover, GIcon, GButton},
         data() {
             let [year, month] = helper.yearMonthDay(new Date())
             return {
@@ -112,6 +118,20 @@
             this.popoverContainer = this.$refs.datePickerWrapper
         },
         methods: {
+            onClickToday(){
+                this.$emit('input',new Date())
+                let [y,m] = helper.yearMonthDay(new Date())
+                this.displayYearAndMonth.year = y
+                this.displayYearAndMonth.month = m
+            },
+            onClickClear(){
+
+            },
+            isToday(date){
+                let [y1,m1,d1] = helper.yearMonthDay(date)
+                let [y2,m2,d2] = helper.yearMonthDay(new Date())
+                return y1 === y2 && m1 === m2 && d1 === d2
+            },
             isSelectedDay(date) {
                 let [y1, m1, d1] = helper.yearMonthDay(date)
                 let [y2, m2, d2] = helper.yearMonthDay(this.value)
@@ -186,8 +206,8 @@
 
 <style scoped lang="scss">
     @import "styles/var";
-    $blue: #6fb3f9;
     .gulu-date-picker {
+        color: $lighten-black;
         &-nav {
             display: flex;
             justify-content: center;
@@ -210,15 +230,21 @@
             color: #bbbbbb;
             border-radius: $border-radius;
             &.inCurrentMonth {
-                color: black;
+                color: $lighten-black;
                 &:hover {
                     cursor: pointer;
-                    background-color: $blue;
-                    color: #fff;
+                    background-color: #eee;
                 }
             }
             &.selected {
-                border: 1px solid $blue;
+                background-color: $blue;
+                color: #fff;
+                &:hover {
+                    background-color: $blue;
+                }
+            }
+            &.today{
+                border:1px solid $blue
             }
         }
 
@@ -232,6 +258,14 @@
 
         /deep/ .gulu-popover-content-wrapper {
             padding: 0;
+        }
+        &-action {
+            text-align: right;
+            padding: 4px;
+            .gulu-button{
+                height: 24px;
+                padding: 0 .2em;
+            }
         }
     }
 </style>
