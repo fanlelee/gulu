@@ -13,9 +13,7 @@
                         <span :class="c('nav-icon')" @click="onClickPreMonth">
                             <g-icon name="left"></g-icon>
                         </span>
-                        <span :class="c('yearAndMonth')">
-                            <span @click="onClickMonthsAndYears">{{displayYearAndMonth.year}}年{{displayYearAndMonth.month+1}}月</span>
-                        </span>
+                        <span :class="c('yearAndMonth')" @click="onClickMonthsAndYears">{{displayYearAndMonth.year}}年{{displayYearAndMonth.month+1}}月</span>
                         <span :class="c('nav-icon')" @click="onClickNextMonth">
                             <g-icon name="right"></g-icon>
                         </span>
@@ -42,7 +40,9 @@
                                           :key="i">{{weeks[i]}}</span>
                                 </div>
                                 <div :class="c('row')" v-for="i in helper.range(1,7)" :key="i">
-                                <span :class="[c('cell'),{'inCurrentMonth':isInDisplayMonth(getVisibleDay(i,j))}]"
+                                <span :class="[c('cell'),
+                                            {'inCurrentMonth':isInDisplayMonth(getVisibleDay(i,j)),
+                                            'selected':isSelectedDay(getVisibleDay(i,j))}]"
                                       v-for="j in helper.range(1,8)" :key="j"
                                       @click="onClickDay(getVisibleDay(i,j))">
                                     {{getVisibleDay(i,j).getDate()}}
@@ -79,7 +79,7 @@
         props: {
             value: {
                 type: Date,
-                default: ()=>new Date()
+                default: () => new Date()
             },
             scope: {
                 type: Array,
@@ -112,6 +112,11 @@
             this.popoverContainer = this.$refs.datePickerWrapper
         },
         methods: {
+            isSelectedDay(date) {
+                let [y1, m1, d1] = helper.yearMonthDay(date)
+                let [y2, m2, d2] = helper.yearMonthDay(this.value)
+                return y1 === y2 && m1 === m2 && d1 === d2
+            },
             onChangeSelectYear(e) {
                 let year = e.target.value - 0
                 let d = new Date(year, this.displayYearAndMonth.month)
@@ -180,6 +185,8 @@
 </script>
 
 <style scoped lang="scss">
+    @import "styles/var";
+    $blue: #6fb3f9;
     .gulu-date-picker {
         &-nav {
             display: flex;
@@ -188,6 +195,7 @@
         }
         &-yearAndMonth {
             margin: auto;
+            cursor: pointer;
         }
 
         &-cell, &-week-item, &-nav-icon {
@@ -200,8 +208,17 @@
         }
         &-cell {
             color: #bbbbbb;
+            border-radius: $border-radius;
             &.inCurrentMonth {
                 color: black;
+                &:hover {
+                    cursor: pointer;
+                    background-color: $blue;
+                    color: #fff;
+                }
+            }
+            &.selected {
+                border: 1px solid $blue;
             }
         }
 
