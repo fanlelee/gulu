@@ -99,6 +99,7 @@
             close() {
                 this.visible = false
                 document.removeEventListener('click', this.removeDocumentListener)
+                this.$emit('close')
             },
             open() {
                 this.visible = true
@@ -106,6 +107,7 @@
                     this.positionContent()
                     document.addEventListener('click', this.removeDocumentListener)
                 })
+                this.$emit('open')
             },
             onClick(e) {
                 if (this.$refs.triggerWrapper.contains(e.target)) {

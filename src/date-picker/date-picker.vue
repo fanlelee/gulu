@@ -1,6 +1,9 @@
 <template>
     <div class="gulu-date-picker" ref="datePickerWrapper">
-        <g-popover ref="datePickerPopover" position="bottom" :container="popoverContainer">
+        <g-popover ref="datePickerPopover"
+                   position="bottom"
+                   :container="popoverContainer"
+                   @open="mode='days'">
             <template>
                 <g-input :value="formattedDate"></g-input>
             </template>
@@ -34,7 +37,9 @@
                                             </option>
                                         </select>
                                     </div>
-                                    <div @click.stop="mode='days'"><button>返回</button></div>
+                                    <div @click.stop="mode='days'">
+                                        <button>返回</button>
+                                    </div>
                                 </div>
                             </template>
 
@@ -49,7 +54,7 @@
                                             'selected':isSelectedDay(getVisibleDay(i,j)),
                                             'today':isToday(getVisibleDay(i,j))}]"
                                       v-for="j in helper.range(1,8)" :key="j"
-                                      @click="onClickDay(getVisibleDay(i,j))">
+                                      @click="onClickDay(getVisibleDay(i,j),$event)">
                                     {{getVisibleDay(i,j).getDate()}}
                                 </span>
                                 </div>
@@ -57,8 +62,8 @@
                         </div>
                     </div>
                     <div :class="c('action')">
-                        <g-button @click.stop="onClickToday">今天</g-button>
-                        <g-button @click.stop="onClickClear">清除</g-button>
+                        <span @click="onClickToday"><g-button>今天</g-button></span>
+                        <span @click="onClickClear"><g-button>清除</g-button></span>
                     </div>
                 </div>
             </template>
@@ -173,7 +178,7 @@
             getVisibleDay(row, col) {
                 return this.visibleDays[(row - 1) * 7 + col - 1]
             },
-            onClickDay(date) {
+            onClickDay(date, e) {
                 if (this.isInDisplayMonth(date)) {
                     this.$emit('input', date)
                 }
@@ -272,10 +277,14 @@
         &-action {
             text-align: right;
             padding: 4px;
-            .gulu-button {
-                height: 24px;
-                padding: 0 .2em;
+            span {
+                margin-left: 4px;
+                .gulu-button {
+                    height: 24px;
+                    padding: 0 .2em;
+                }
             }
+
         }
     }
 </style>
