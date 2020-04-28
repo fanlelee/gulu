@@ -21,8 +21,14 @@ export default {
     addMonth(date, n) {
         let [_1, month, _2] = yearMonthDay(date)
         let copy = new Date(date)
-        copy.setMonth(month+n)
+        copy.setMonth(month + n)
         return copy
+    },
+    pad2(number) {
+        if (typeof number != 'number') {
+            throw new Error('wrong param')
+        }
+        return (number>=10?'':'0')+number
     }
 }
 

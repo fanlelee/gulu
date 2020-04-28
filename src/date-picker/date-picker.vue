@@ -105,7 +105,7 @@
             formattedDate() {
                 if (!this.value) return
                 let [year, month, day] = helper.yearMonthDay(this.value)
-                return `${year}-${month + 1}-${day}`
+                return `${helper.pad2(year)}-${helper.pad2(month + 1)}-${helper.pad2(day)}`
             },
             visibleDays() {
                 let date = new Date(this.displayYearAndMonth.year, this.displayYearAndMonth.month, 1)
