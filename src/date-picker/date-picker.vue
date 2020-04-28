@@ -85,7 +85,7 @@
         props: {
             value: {
                 type: Date,
-                default: () => new Date()
+                // default: () => new Date()
             },
             scope: {
                 type: Array,
@@ -94,6 +94,7 @@
         },
         computed: {
             formattedDate() {
+                if(!this.value) return
                 let [year, month, day] = helper.yearMonthDay(this.value)
                 return `${year}-${month + 1}-${day}`
             },
@@ -125,7 +126,7 @@
                 this.displayYearAndMonth.month = m
             },
             onClickClear(){
-
+                this.$emit('input',undefined)
             },
             isToday(date){
                 let [y1,m1,d1] = helper.yearMonthDay(date)
@@ -133,6 +134,7 @@
                 return y1 === y2 && m1 === m2 && d1 === d2
             },
             isSelectedDay(date) {
+                if(!this.value) return false
                 let [y1, m1, d1] = helper.yearMonthDay(date)
                 let [y2, m2, d2] = helper.yearMonthDay(this.value)
                 return y1 === y2 && m1 === m2 && d1 === d2
