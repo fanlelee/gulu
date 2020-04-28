@@ -1,6 +1,6 @@
 <template>
     <div class="gulu-date-picker" ref="datePickerWrapper">
-        <g-popover position="bottom" :container="popoverContainer">
+        <g-popover ref="datePickerPopover" position="bottom" :container="popoverContainer">
             <template>
                 <g-input :value="formattedDate"></g-input>
             </template>
@@ -25,12 +25,16 @@
                         <div class="gulu-date-picker-content">
                             <template v-if="mode==='months'">
                                 <div :class="c('selectYearAndMonth')">
-                                    <select :value="displayYearAndMonth.year" @change="onChangeSelectYear">
-                                        <option v-for="year in scopeYears" :value="year">{{year}}</option>
-                                    </select>
-                                    <select :value="displayYearAndMonth.month" @change="onChangeSelectMonth">
-                                        <option :value="month" v-for="month in helper.range(0,12)">{{month+1}}</option>
-                                    </select>
+                                    <div :class="c('selects')">
+                                        <select :value="displayYearAndMonth.year" @change="onChangeSelectYear">
+                                            <option v-for="year in scopeYears" :value="year">{{year}}</option>
+                                        </select>
+                                        <select :value="displayYearAndMonth.month" @change="onChangeSelectMonth">
+                                            <option :value="month" v-for="month in helper.range(0,12)">{{month+1}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div @click.stop="mode='days'"><button>返回</button></div>
                                 </div>
                             </template>
 
@@ -53,8 +57,8 @@
                         </div>
                     </div>
                     <div :class="c('action')">
-                        <g-button @click="onClickToday">今天</g-button>
-                        <g-button @click="onClickClear">清除</g-button>
+                        <g-button @click.stop="onClickToday">今天</g-button>
+                        <g-button @click.stop="onClickClear">清除</g-button>
                     </div>
                 </div>
             </template>
@@ -94,7 +98,7 @@
         },
         computed: {
             formattedDate() {
-                if(!this.value) return
+                if (!this.value) return
                 let [year, month, day] = helper.yearMonthDay(this.value)
                 return `${year}-${month + 1}-${day}`
             },
@@ -119,22 +123,23 @@
             this.popoverContainer = this.$refs.datePickerWrapper
         },
         methods: {
-            onClickToday(){
-                this.$emit('input',new Date())
-                let [y,m] = helper.yearMonthDay(new Date())
+            onClickToday() {
+                this.$emit('input', new Date())
+                let [y, m] = helper.yearMonthDay(new Date())
                 this.displayYearAndMonth.year = y
                 this.displayYearAndMonth.month = m
             },
-            onClickClear(){
-                this.$emit('input',undefined)
+            onClickClear() {
+                this.$refs.datePickerPopover.close()
+                this.$emit('input', undefined)
             },
-            isToday(date){
-                let [y1,m1,d1] = helper.yearMonthDay(date)
-                let [y2,m2,d2] = helper.yearMonthDay(new Date())
+            isToday(date) {
+                let [y1, m1, d1] = helper.yearMonthDay(date)
+                let [y2, m2, d2] = helper.yearMonthDay(new Date())
                 return y1 === y2 && m1 === m2 && d1 === d2
             },
             isSelectedDay(date) {
-                if(!this.value) return false
+                if (!this.value) return false
                 let [y1, m1, d1] = helper.yearMonthDay(date)
                 let [y2, m2, d2] = helper.yearMonthDay(this.value)
                 return y1 === y2 && m1 === m2 && d1 === d2
@@ -142,7 +147,6 @@
             onChangeSelectYear(e) {
                 let year = e.target.value - 0
                 let d = new Date(year, this.displayYearAndMonth.month)
-
                 if (d > this.scope[0] && d < this.scope[1]) {
                     this.displayYearAndMonth.year = year
                 } else {
@@ -152,7 +156,6 @@
             },
             onChangeSelectMonth(e) {
                 this.displayYearAndMonth.month = e.target.value - 0
-
                 let month = e.target.value - 0
                 let d = new Date(this.displayYearAndMonth.year, month)
 
@@ -245,8 +248,8 @@
                     background-color: $blue;
                 }
             }
-            &.today{
-                border:1px solid $blue
+            &.today {
+                border: 1px solid $blue
             }
         }
 
@@ -256,6 +259,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
+
+            button {
+                margin-top: 4px;
+            }
         }
 
         /deep/ .gulu-popover-content-wrapper {
@@ -264,7 +272,7 @@
         &-action {
             text-align: right;
             padding: 4px;
-            .gulu-button{
+            .gulu-button {
                 height: 24px;
                 padding: 0 .2em;
             }
