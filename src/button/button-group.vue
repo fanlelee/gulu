@@ -1,5 +1,5 @@
 <template>
-    <div class="g-button-group">
+    <div class="gulu-button-group">
         <slot></slot>
     </div>
 </template>
@@ -9,17 +9,17 @@
         mounted() {
             for(let node of this.$el.children){
                 if(node.nodeName.toLowerCase() !== 'button'){
-                    console.log(`button-group的子元素必须是g-button，但是出现了子元素${node.nodeName.toLowerCase()}`)
+                    console.log(`button-group的子元素必须是gulu-button，但是出现了子元素${node.nodeName.toLowerCase()}`)
                 }
             }
         }
     }
 </script>
 <style lang="scss" scoped>
-    .g-button-group {
+    .gulu-button-group {
         display: inline-flex;
         vertical-align: middle;
-        > .g-button {
+        > .gulu-button {
             border-radius: 0;
             /*&:not(:first-child){*/
             /*    border-left: none;*/

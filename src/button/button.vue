@@ -1,5 +1,5 @@
 <template>
-    <button class="g-button" :class="{[`icon-${iconPosition}`]: true}"
+    <button class="gulu-button" :class="{[`icon-${iconPosition}`]: true}"
             @click="$emit('click')">
         <g-icon v-if="icon && !loading" :name="icon"></g-icon>
         <g-icon v-if="loading" class="loading" name="loading"></g-icon>
@@ -9,12 +9,12 @@
     </button>
 </template>
 <script>
-    import Icon from '../icon.vue'
+    import GIcon from '../icon.vue'
 
     export default {
         name: 'GuluButton',
         components: {
-            'g-icon': Icon
+            'g-icon': GIcon
         },
         // props: ['icon', 'iconPosition']
         props: {
@@ -37,7 +37,7 @@
 <style lang="scss" scoped>
     @import '../../styles/var';
 
-    .g-button {
+    .gulu-button {
         font-size: $font-size;height: $button-height;padding: 0 1em;background-color: $button-bg;
         border-radius: $button-radius;border-color: $button-border-color;color: #000;
         vertical-align: middle;display: inline-flex;justify-content: center;align-items: center;
@@ -59,5 +59,10 @@
         }
 
         .loading {@include spin;}
+
+        & + & {
+            margin-left: 4px;
+        }
+
     }
 </style>
