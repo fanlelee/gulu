@@ -33,9 +33,10 @@
                 }
                 if (translateY > 0) {
                     translateY = 0
-                }
-                if (translateY < -maxHeight) {
+                } else if (translateY < -maxHeight) {
                     translateY = -maxHeight
+                }else{
+                    e.preventDefault()
                 }
                 child.style.transform = `translateY(${translateY}px)`
             })
