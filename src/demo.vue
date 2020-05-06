@@ -1,7 +1,6 @@
 <template>
     <div class="demo">
-        <div class="parent" ref="parent">
-            <div class="child" ref="child">
+            <g-scroll style="width: 200px;height: 60vh;">
                 <p>1</p>
                 <p>2</p>
                 <p>3</p>
@@ -102,46 +101,15 @@
                 <p>98</p>
                 <p>99</p>
                 <p>100</p>
-            </div>
-        </div>
+            </g-scroll>
     </div>
 </template>
 
 <script>
+    import GScroll from './scroll'
     export default {
         name: "demo",
-        mounted() {
-            let parent = this.$refs.parent
-            let child = this.$refs.child
-            child.style.transition = 'transform .05s ease'
-            let translateY = 0
-            let {height: parentHeight} = parent.getBoundingClientRect()
-            let {height: childHeight} = child.getBoundingClientRect()
-            let {borderTopWidth, borderBottomWidth, paddingTop, paddingBottom} = window.getComputedStyle(parent)
-            borderTopWidth = parseInt(borderTopWidth)
-            borderBottomWidth = parseInt(borderBottomWidth)
-            paddingTop = parseInt(paddingTop)
-            paddingBottom = parseInt(paddingBottom)
-            let maxHeight = childHeight - parentHeight
-                + (borderTopWidth + borderBottomWidth + paddingTop + paddingBottom)
-            parent.addEventListener('wheel', (e) => {
-                if (e.deltaY > 20) {
-                    translateY -= 20 * 3
-                } else if (e.deltaY < -20) {
-                    translateY -= -20 * 3
-                } else {
-                    translateY -= e.deltaY * 3
-                }
-                if (translateY > 0) {
-                    translateY = 0
-                }
-                if (translateY < -maxHeight) {
-                    translateY = -maxHeight
-                }
-                child.style.transform = `translateY(${translateY}px)`
-            })
-
-        }
+        components:{GScroll}
     }
 </script>
 
@@ -153,14 +121,4 @@
         justify-content: center;
     }
 
-    .parent {
-        height: 60vh;
-        width: 200px;
-        overflow: hidden;
-        border: 5px solid red;
-    }
-
-    .child {
-        border: 5px solid blue;
-    }
 </style>
