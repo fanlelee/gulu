@@ -1,7 +1,7 @@
 <template>
     <div class="demo">
             <g-scroll style="width: 200px;height: 60vh;">
-                <p>1</p>
+                <p>1122343546457567112234354645756711223435464575671122343546457567</p>
                 <p>2</p>
                 <p>3</p>
                 <p>4</p>

@@ -1,10 +1,10 @@
 <template>
-    <div class="gulu-scroll-wrapper" ref="parent">
+    <div class="gulu-scroll-wrapper" ref="parent" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
         <div class="gulu-scroll" ref="child">
             <slot></slot>
         </div>
-        <div class="gulu-scroll-track">
-            <div class="gulu-scroll-bar">
+        <div class="gulu-scroll-track" v-show="scrollVisible">
+            <div class="gulu-scroll-bar" ref="bar">
                 <div class="gulu-scroll-bar-inner"></div>
             </div>
         </div>
@@ -15,12 +15,13 @@
     export default {
         name: "GuluScroll",
         data() {
-            return {}
+            return {
+                scrollVisible: false
+            }
         },
         mounted() {
             let parent = this.$refs.parent
             let child = this.$refs.child
-            child.style.transition = 'transform .05s ease'
             let translateY = 0
             let {height: parentHeight} = parent.getBoundingClientRect()
             let {height: childHeight} = child.getBoundingClientRect()
@@ -32,10 +33,13 @@
             let maxHeight = childHeight - parentHeight
                 + (borderTopWidth + borderBottomWidth + paddingTop + paddingBottom)
 
+            let parentContentHeight = parentHeight
+                - (borderTopWidth + borderBottomWidth + paddingTop + paddingBottom)
+
             parent.addEventListener('wheel', (e) => {
                 if (e.deltaY > 20) {
                     translateY -= 20 * 3
-                } else if (e.deltaY < -20) {
+                } else if (e.deltaY < -30) {
                     translateY -= -20 * 3
                 } else {
                     translateY -= e.deltaY * 3
@@ -48,14 +52,34 @@
                     e.preventDefault()
                 }
                 child.style.transform = `translateY(${translateY}px)`
+                this.setScrollBarTopHeight(parentContentHeight, childHeight, translateY)
             })
 
+            this.setScrollBarHeight(parentContentHeight, childHeight)
+        },
+        methods: {
+            setScrollBarHeight(parentHeight, childHeight) {
+                let barHeight = parentHeight * parentHeight / childHeight
+                this.$refs.bar.style.height = barHeight + 'px'
+            },
+            setScrollBarTopHeight(parentHeight, childHeight, contentY) {
+                let topHeight = parentHeight * contentY / childHeight
+                this.$refs.bar.style.transform = `translateY(${-topHeight}px)`
+            },
+            onMouseEnter() {
+                this.scrollVisible = true
+            },
+            onMouseLeave() {
+                this.scrollVisible = false
+            },
         }
+
     }
 </script>
 
 <style scoped lang="scss">
     .gulu-scroll {
+        transition: transform 0.05s ease;
         &-wrapper {
             overflow: hidden;
             border: 5px solid red;
@@ -68,12 +92,12 @@
             height: 100%;
             width: 15px;
             border-left: 1px solid #E8E7E8;background-color: #FAFAFA;
+            opacity: .8;
         }
         &-bar {
             position: absolute;
             top: 0;
             left: 50%;
-            height: 10%;
             width: 8px;
             margin-left: -4px;
             padding: 4px 0;
@@ -81,7 +105,7 @@
                 height: 100%;
                 background-color: #c2c2c2;
                 border-radius: 4px;
-                &:hover{
+                &:hover {
                     background-color: #7d7d7d;
                 }
             }
