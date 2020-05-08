@@ -3,8 +3,10 @@
         <div class="gulu-scroll" ref="child">
             <slot></slot>
         </div>
-        <div class="gulu-scroll-track" v-show="scrollVisible">
-            <div class="gulu-scroll-bar" ref="bar">
+        <div class="gulu-scroll-track" v-show="scrollVisible" ref="track">
+            <div class="gulu-scroll-bar" ref="bar"
+                 @mousedown="onMouseDownScrollBar($event)"
+                 @selectstart="onSelectStartBar">
                 <div class="gulu-scroll-bar-inner"></div>
             </div>
         </div>
@@ -16,10 +18,16 @@
         name: "GuluScroll",
         data() {
             return {
-                scrollVisible: false
+                scrollVisible: false,
+                startPositionY: 0,
+                endPositionY: 0,
+                scrolling: false,
+                translateY: 0
             }
         },
         mounted() {
+
+
             let parent = this.$refs.parent
             let child = this.$refs.child
             let translateY = 0
@@ -56,6 +64,13 @@
             })
 
             this.setScrollBarHeight(parentContentHeight, childHeight)
+
+            document.addEventListener('mouseup', (e) => {
+                this.onMouseUpScrollBar(e)
+            })
+            document.addEventListener('mousemove', (e) => {
+                this.onMouseMoveScrollBar(e, parentContentHeight, childHeight)
+            })
         },
         methods: {
             setScrollBarHeight(parentHeight, childHeight) {
@@ -65,6 +80,11 @@
             setScrollBarTopHeight(parentHeight, childHeight, contentY) {
                 let topHeight = parentHeight * contentY / childHeight
                 this.$refs.bar.style.transform = `translateY(${-topHeight}px)`
+                this.translateY = -topHeight
+            },
+            updateContentHeight(parentHeight, childHeight) {
+                let contentY = this.translateY * childHeight / parentHeight
+                this.$refs.child.style.transform = `translateY(${-contentY}px)`
             },
             onMouseEnter() {
                 this.scrollVisible = true
@@ -72,6 +92,34 @@
             onMouseLeave() {
                 this.scrollVisible = false
             },
+            onMouseDownScrollBar(e) {
+                this.scrolling = true
+                this.startPositionY = e.screenY
+            },
+            onMouseMoveScrollBar(e, parentContentHeight, childHeight) {
+                if (!this.scrolling) return
+                let deltaY = e.screenY - this.startPositionY
+
+                this.translateY += deltaY
+
+                let {height: trackHeight} = this.$refs.track.getBoundingClientRect()
+                let {height: barHeight} = this.$refs.bar.getBoundingClientRect()
+                if (this.translateY < 0) {
+                    this.translateY = 0
+                } else if (this.translateY > trackHeight - barHeight) {
+                    this.translateY = trackHeight - barHeight
+                }
+                this.$refs.bar.style.transform = `translateY(${this.translateY}px)`
+                this.startPositionY = e.screenY
+                this.updateContentHeight(parentContentHeight, childHeight)
+            },
+            onMouseUpScrollBar(e) {
+                this.scrolling = false
+                this.endPositionY = e.screenY
+            },
+            onSelectStartBar(e){
+                e.preventDefault()
+            }
         }
 
     }
@@ -80,34 +128,13 @@
 <style scoped lang="scss">
     .gulu-scroll {
         transition: transform 0.05s ease;
-        &-wrapper {
-            overflow: hidden;
-            border: 5px solid red;
-            position: relative;
+        &-wrapper {overflow: hidden;border: 5px solid red;position: relative;}
+        &-track {position: absolute;top: 0;right: 0;height: 100%;width: 15px;border-left: 1px solid #E8E7E8;
+            background-color: #FAFAFA;opacity: .8;
         }
-        &-track {
-            position: absolute;
-            top: 0;
-            right: 0;
-            height: 100%;
-            width: 15px;
-            border-left: 1px solid #E8E7E8;background-color: #FAFAFA;
-            opacity: .8;
-        }
-        &-bar {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 8px;
-            margin-left: -4px;
-            padding: 4px 0;
-            &-inner {
-                height: 100%;
-                background-color: #c2c2c2;
-                border-radius: 4px;
-                &:hover {
-                    background-color: #7d7d7d;
-                }
+        &-bar {position: absolute;top: 0;left: 50%;width: 8px;margin-left: -4px;padding: 4px 0;
+            &-inner {height: 100%;background-color: #c2c2c2;border-radius: 4px;
+                &:hover {background-color: #7d7d7d;}
             }
         }
     }
