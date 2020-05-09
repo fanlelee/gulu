@@ -1,6 +1,6 @@
 <template>
     <div class="gulu-scroll-wrapper" ref="parent"
-
+         @wheel="onWheel"
          @mouseenter="onMouseEnter"
          @mouseleave="onMouseLeave">
         <div class="gulu-scroll" ref="child"
@@ -27,64 +27,68 @@
                 endPositionY: 0,
                 scrolling: false,
                 scrollBarY: 0,
-                contentY: 0
+                contentY: 0,
+                parentHeight:0,
+                childHeight:0,
+            }
+        },
+        computed:{
+            parentContentHeight(){
+                let {borderTopWidth, borderBottomWidth, paddingTop, paddingBottom} = window.getComputedStyle(this.$refs.parent)
+                borderTopWidth = parseInt(borderTopWidth)
+                borderBottomWidth = parseInt(borderBottomWidth)
+                paddingTop = parseInt(paddingTop)
+                paddingBottom = parseInt(paddingBottom)
+                let parentContentHeight = this.parentHeight - (borderTopWidth + borderBottomWidth + paddingTop + paddingBottom)
+                return parentContentHeight
             }
         },
         mounted() {
-
-
-            let parent = this.$refs.parent
-            let child = this.$refs.child
-            let {height: parentHeight} = parent.getBoundingClientRect()
-            let {height: childHeight} = child.getBoundingClientRect()
-            let {borderTopWidth, borderBottomWidth, paddingTop, paddingBottom} = window.getComputedStyle(parent)
-            borderTopWidth = parseInt(borderTopWidth)
-            borderBottomWidth = parseInt(borderBottomWidth)
-            paddingTop = parseInt(paddingTop)
-            paddingBottom = parseInt(paddingBottom)
-            let maxHeight = childHeight - parentHeight
-                + (borderTopWidth + borderBottomWidth + paddingTop + paddingBottom)
-
-            let parentContentHeight = parentHeight
-                - (borderTopWidth + borderBottomWidth + paddingTop + paddingBottom)
-
-            parent.addEventListener('wheel', (e) => {
-                if (e.deltaY > 20) {
-                    this.contentY -= 20 * 3
-                } else if (e.deltaY < -30) {
-                    this.contentY -= -20 * 3
-                } else {
-                    this.contentY -= e.deltaY * 3
-                }
+            this.parentHeight = this.$refs.parent.getBoundingClientRect().height
+            this.childHeight = this.$refs.child.getBoundingClientRect().height
+            this.setScrollBarHeight()
+            this.documentListener()
+        },
+        methods: {
+            documentListener(){
+                document.addEventListener('mouseup', e => this.onMouseUpScrollBar(e))
+                document.addEventListener('mousemove', e => this.onMouseMoveScrollBar(e))
+            },
+            onWheel(e){
+                this.contentY = this.calculateContentY(e.deltaY)
+                this.limitContentY(()=>e.preventDefault())
+                this.updateScrollBarY()
+            },
+            limitContentY(fn){
+                let maxHeight = this.childHeight - this.parentContentHeight
                 if (this.contentY > 0) {
                     this.contentY = 0
                 } else if (this.contentY < -maxHeight) {
                     this.contentY = -maxHeight
                 } else {
-                    e.preventDefault()
+                    fn&&fn()
                 }
-                this.setScrollBarTopHeight(parentContentHeight, childHeight)
-            })
-
-            this.setScrollBarHeight(parentContentHeight, childHeight)
-
-            document.addEventListener('mouseup', (e) => {
-                this.onMouseUpScrollBar(e)
-            })
-            document.addEventListener('mousemove', (e) => {
-                this.onMouseMoveScrollBar(e, parentContentHeight, childHeight)
-            })
-        },
-        methods: {
-            setScrollBarHeight(parentHeight, childHeight) {
-                let barHeight = parentHeight * parentHeight / childHeight
+            },
+            calculateContentY(deltaY){
+                let contentY = this.contentY
+                if (deltaY > 20) {
+                    contentY -= 20 * 3
+                } else if (deltaY < -30) {
+                    contentY -= -20 * 3
+                } else {
+                    contentY -= deltaY * 3
+                }
+                return contentY
+            },
+            setScrollBarHeight() {
+                let barHeight = this.parentContentHeight * this.parentContentHeight / this.childHeight
                 this.$refs.bar.style.height = barHeight + 'px'
             },
-            setScrollBarTopHeight(parentHeight, childHeight) {
-                this.scrollBarY = -parentHeight * this.contentY / childHeight
+            updateScrollBarY() {
+                this.scrollBarY = -this.parentContentHeight * this.contentY / this.childHeight
             },
-            updateContentHeight(parentHeight, childHeight) {
-                this.contentY = -this.scrollBarY * childHeight / parentHeight
+            updateContentY() {
+                this.contentY = -this.scrollBarY * this.childHeight / this.parentContentHeight
             },
             onMouseEnter() {
                 this.scrollVisible = true
@@ -96,20 +100,24 @@
                 this.scrolling = true
                 this.startPositionY = e.screenY
             },
-            onMouseMoveScrollBar(e, parentContentHeight, childHeight) {
-                e.preventDefault()
-                if (!this.scrolling) return
-                let deltaY = e.screenY - this.startPositionY
+            limitScrollBarY(){
+                let scrollBarY = this.scrollBarY
                 let {height: trackHeight} = this.$refs.track.getBoundingClientRect()
                 let {height: barHeight} = this.$refs.bar.getBoundingClientRect()
-                this.scrollBarY += deltaY
-                if (this.scrollBarY < 0) {
-                    this.scrollBarY = 0
-                } else if (this.scrollBarY > trackHeight - barHeight) {
-                    this.scrollBarY = trackHeight - barHeight
+                if (scrollBarY < 0) {
+                    scrollBarY = 0
+                } else if (scrollBarY > trackHeight - barHeight) {
+                    scrollBarY = trackHeight - barHeight
                 }
+                return scrollBarY
+            },
+            onMouseMoveScrollBar(e) {
+                if (!this.scrolling) return
+                let deltaY = e.screenY - this.startPositionY
+                this.scrollBarY += deltaY
+                this.scrollBarY = this.limitScrollBarY()
                 this.startPositionY = e.screenY
-                this.updateContentHeight(parentContentHeight, childHeight)
+                this.updateContentY()
             },
             onMouseUpScrollBar(e) {
                 this.scrolling = false
