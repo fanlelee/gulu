@@ -66,7 +66,7 @@
 
             &:focus {
                 border: 1px solid $border-hover-color;
-                box-shadow: inset 0 1px 3px 0 $border-box-shadow;
+                box-shadow: inset 0 1px 3px 0 #aaa;
             }
 
             &[disabled], &[readonly] {
