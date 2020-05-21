@@ -1,14 +1,16 @@
 <template>
-    <div class="wrapper" :class="positionClass">
+    <div class="gulu-wrapper" :class="positionClass">
         <div class="toast" ref="toast">
             <div class="message">
                 <slot v-if="!enableHtml"></slot>
                 <div v-else v-html="$slots.default[0]"></div>
             </div>
-            <div class="line" ref="line"></div>
-            <span class="close" v-if="closeButton" @click="onCloseButton">
-            {{closeButton.text}}
-        </span>
+            <template v-if="closeButton">
+                <div class="line" ref="line"></div>
+                <span class="close" @click="onCloseButton">
+                    {{closeButton.text}}
+                </span>
+            </template>
         </div>
     </div>
 </template>
@@ -23,7 +25,7 @@
                 }
             },
             closeButton: {
-                type: Object,
+                type: [Object, Boolean],
                 default: () => {
                     return {
                         text: '关闭', callback: undefined
@@ -49,7 +51,7 @@
         },
         mounted() {
             this.doAutoClose()
-            this.setLineStyle()
+            this.closeButton && this.setLineStyle()
         },
         methods: {
             setLineStyle() {
@@ -68,10 +70,13 @@
             close() {
                 this.$el.remove()
                 this.$emit('close')
+                this.returnCallback()
                 this.$destroy()
             },
             onCloseButton() {
                 this.close()
+            },
+            returnCallback(){
                 if (this.closeButton.callback && typeof this.closeButton.callback === 'function') {
                     this.closeButton.callback(this)//回传toast实例，那么就可以在用户的callback里面调用toast的methods
                 }
@@ -102,7 +107,7 @@
         100% { opacity: 1;}
     }
 
-    .wrapper {
+    .gulu-wrapper {
         position: fixed;
         left: 50%;
 
