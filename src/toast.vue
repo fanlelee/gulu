@@ -153,7 +153,7 @@
 
         > .line {border-left: 1px solid #666;margin-left: 16px;}
 
-        > .close {margin-left: 16px;flex-shrink: 0;}
+        > .close {margin-left: 16px;flex-shrink: 0;cursor: pointer}
 
 
     }
