@@ -22,10 +22,11 @@
             }
         },
         mounted() {
+            let {left:headLeft} = this.$el.getBoundingClientRect()
             this.eventBus.$on('update:selected', (name,vm)=>{
                 let {width,height,top,left} = vm.$el.getBoundingClientRect()
                 this.$refs.line.style.width = `${width}px`
-                this.$refs.line.style.left = `${left}px`
+                this.$refs.line.style.left = `${ Math.abs(headLeft-left)}px`
             })
         }
     }
