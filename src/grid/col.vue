@@ -69,7 +69,7 @@
 </script>
 <style lang="scss" scoped>
     .col {
-        height: 100px;
+        /*height: 100px;*/
         /*width: 100%;*/
 
         $class: col-;
