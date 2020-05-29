@@ -39,10 +39,10 @@
 
     .gulu-button {
         font-size: $font-size;height: $button-height;padding: 0 1em;background-color: $button-bg;
-        border-radius: $button-radius;border-color: $button-border-color;color: #000;
+        border-radius: $button-radius;border: 1px solid $button-border-color;color: #000;
         vertical-align: middle;display: inline-flex;justify-content: center;align-items: center;
 
-        &:hover {border-color: $button-hover-color;}
+        &:hover {border-color: $button-hover-color;cursor: pointer;}
 
         &:active {background-color: $button-active-bg;}
 
