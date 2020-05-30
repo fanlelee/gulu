@@ -39,6 +39,9 @@
                     })
                 }
             })
+            this.eventBus.$on('update:selected',(name)=>{
+                this.$emit('update:selected',name)
+            })
         }
     }
 </script>
