@@ -1,6 +1,9 @@
 <template>
     <div class="collapseItem">
-        <div class="title" @click="onClick">{{title}}</div>
+        <div class="title" @click="onClick">
+            <g-icon name="right" ref="icon"></g-icon>
+            {{title}}
+        </div>
         <div class="content" ref="content" v-if="open">
             <slot></slot>
         </div>
@@ -8,8 +11,11 @@
 </template>
 
 <script>
+    import GIcon from '../icon.vue'
+
     export default {
         name: "GuluCollapseItem",
+        components: {GIcon},
         inject: ['eventBus'],
         props: {
             title: {
@@ -27,9 +33,10 @@
         methods: {
             onClick() {
                 if (this.open) {
+                    this.turnRightIcon()
                     this.eventBus && this.eventBus.$emit('update:removeSelected', this.name)
                 } else {
-                    console.log('add');
+                    this.turnDownIcon()
                     this.eventBus && this.eventBus.$emit('update:addSelected', this.name)
                 }
             },
@@ -37,6 +44,12 @@
                 this.$nextTick(() => {
                     this.$refs.content.style.borderTop = '1px solid #999'
                 })
+            },
+            turnDownIcon(){
+                this.$refs.icon.$el.style.transform = 'rotate(90deg)'
+            },
+            turnRightIcon(){
+                this.$refs.icon.$el.style.transform = 'rotate(0deg)'
             }
 
         },
@@ -45,7 +58,9 @@
                 if (selected.indexOf(this.name) >= 0) {
                     this.open = true
                     this.setContentBorder()
-                } else{
+                    this.turnDownIcon()
+                } else {
+                    this.turnRightIcon()
                     this.open = false
                 }
             })
@@ -58,12 +73,17 @@
     $border-radius: 4px;
     .collapseItem {
         margin-top: -1px;
-
         > .title {
             min-height: 32px;
             display: flex;
             align-items: center;
             padding: 0 6px;
+            cursor: pointer;
+            svg{
+                font-size: 14px;
+                padding: 5px;
+                transition: all .3s;
+            }
         }
 
         > .content {
