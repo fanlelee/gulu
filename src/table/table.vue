@@ -6,7 +6,7 @@
                    ref="table">
                 <thead>
                 <tr>
-                    <th :style="{width: '50px'}" v-if="checkBox">
+                    <th :style="{width: '50px'}" v-if="checkBox" style="text-align: center;">
                         <input type="checkbox"
                                @click="onClickAll"
                                ref="allChecked"
@@ -16,10 +16,10 @@
                     <th v-for="column in columns" :style="{width:column.width+'px'}">
                         <span class="gulu-table-sort-head"
                               :class="{'gulu-table-unordered':!sortRules[column.field]}"
-                              @click="OnClickSort(column.field,sortRules[column.field])">
+                              @click="(sortRules[column.field]!==undefined)&&OnClickSort(column.field,sortRules[column.field])">
                             {{column.title}}
-                            <template v-if="column.field in sortRules">
-                                <g-icon name="sort" v-if="sortRules[column.field]===true"></g-icon>
+                            <template v-if="sortRules[column.field]!==undefined">
+                                <g-icon name="sort" v-if="!clickSortStatus||sortRules[column.field]===''"></g-icon>
                                 <g-icon v-else name="sort-desc"
                                         :class="{asc:sortRules[column.field]==='asc'}"
                                 ></g-icon>
@@ -32,7 +32,7 @@
                 <tbody>
                 <template v-for="(item,index) in dataSource">
                     <tr :key="item.id" :class="{stripedItem:index%2===0}">
-                        <td :style="{width: '50px'}" v-if="checkBox">
+                        <td :style="{width: '50px'}" v-if="checkBox" class="gulu-table-checkbox">
                             <input type="checkbox" @click="onClickItem($event,item)"
                                    :checked="onChangeItem(item)">
                         </td>
@@ -53,8 +53,8 @@
                                 {{item[column.field]}}
                             </template>
                         </td>
-                        <td v-if="$scopedSlots.handle">
-                            <div ref="actions">
+                        <td v-if="$scopedSlots.handle" ref="actions">
+                            <div class="gulu-table-handle">
                                 <slot name="handle" :item="item"></slot>
                             </div>
                         </td>
@@ -89,7 +89,8 @@
         data() {
             return {
                 expandIds: [],
-                columns: []
+                columns: [],
+                clickSortStatus: false
             }
         },
         props: {
@@ -128,7 +129,7 @@
             },
             loading: {
                 type: Boolean,
-                default: true
+                default: false
             },
             checkBox: {
                 type: Boolean,
@@ -140,9 +141,11 @@
             },
         },
         mounted() {
-            this.columns = this.$slots.default.map((node) => {
-                let {title, field, width} = node.componentOptions.propsData
-                let render = node.data.scopedSlots.default
+            this.columns = this.$slots.default.filter(node =>
+                node.componentOptions
+            ).map((node) => {
+                let {title, field, width} = node.componentOptions && node.componentOptions.propsData
+                let render = node.data && node.data.scopedSlots.default
                 return {title, field, width, render}
             })
 
@@ -150,13 +153,16 @@
             let table2 = this.$refs.table.cloneNode(false)
             table2.classList.add('gulu-table-copy')
 
-            let thead = this.$refs.table.getElementsByTagName('thead')[0]
-            table2.appendChild(thead)
-            this.$refs.wrapper.appendChild(table2)
+            this.$nextTick(() => {
+                let thead = this.$refs.table.getElementsByTagName('thead')[0]
+                table2.appendChild(thead)
 
-            let {height} = thead.getBoundingClientRect()
-            this.$refs.wrapper.style.marginTop = height + 'px'
-            table2.style.top = -height + 'px'
+                this.$refs.wrapper.appendChild(table2)
+
+                let {height} = thead.getBoundingClientRect()
+                this.$refs.wrapper.style.marginTop = height + 'px'
+                table2.style.top = -height + 'px'
+            })
 
         },
         watch: {
@@ -209,13 +215,17 @@
                 }
             },
             OnClickSort(field, lastValue) {
-                if (!lastValue) return
+                if (!this.clickSortStatus) {
+                    this.clickSortStatus = true
+                    lastValue = ''
+                }
                 let copy = JSON.parse(JSON.stringify(this.sortRules))
+                Object.keys(copy).map((node) => {
+                    copy[node] = ''
+                })
                 if (lastValue === 'asc') {
                     copy[field] = 'desc'
-                } else if (lastValue === 'desc') {
-                    copy[field] = true
-                } else if (lastValue === true) {
+                } else if (lastValue === 'desc'||lastValue === '') {
                     copy[field] = 'asc'
                 }
                 this.$emit('update:sortRules', copy)
@@ -250,7 +260,8 @@
     .gulu-table {
         border-collapse: collapse;
         width: 100%;
-        table-layout:fixed;
+        table-layout: fixed;
+        display: table;
         &.bordered {border: 1px solid darken($grey, 10%);}
         &.cell {
             & th {border: 1px solid darken($grey, 10%);}
@@ -289,5 +300,7 @@
         }
         &-expand-icon {display: flex;align-items: center;justify-content: center;}
         &-expanded {transform: rotate(90deg);transition: all .3s;}
+        &-handle {display: flex;}
+        &-checkbox {text-align: center;}
     }
 </style>
