@@ -134,7 +134,7 @@
 <style scoped lang="scss">
     .gulu-scroll {
         transition: transform 0.05s ease;
-        &-wrapper {overflow: hidden;border: 5px solid red;position: relative;}
+        &-wrapper {overflow: hidden;position: relative;}
         &-track {position: absolute;top: 0;right: 0;height: 100%;width: 15px;border-left: 1px solid #E8E7E8;
             background-color: #FAFAFA;opacity: .8;
         }
