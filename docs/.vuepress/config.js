@@ -1,6 +1,6 @@
 module.exports = {
     base: '/gulu/',
-    title: 'Gulu组件',
+    title: 'UI组件',
     description: '这是一个好用的UI框架',
     themeConfig: {
         sidebar: [
@@ -13,14 +13,25 @@ module.exports = {
                 title: '组件',
                 collapsable: false,
                 children: [
+                    '/components/icon',
                     '/components/button',
-                    '/components/collapse',
-                    '/components/grid',
                     '/components/input',
+                    '/components/grid',
                     '/components/layout',
-                    '/components/popover',
-                    '/components/tabs',
                     '/components/toast',
+                    '/components/tabs',
+                    '/components/popover',
+                    '/components/collapse',
+                    '/components/cascader',
+                    '/components/carousel',
+                    '/components/nav',
+                    '/components/pager',
+                    '/components/validator',
+                    '/components/table',
+                    '/components/uploader',
+                    '/components/sticky',
+                    '/components/datepicker',
+                    '/components/scroll',
                 ]
             }
         ]
