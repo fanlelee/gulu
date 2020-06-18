@@ -9,8 +9,8 @@
   </div>
 </template>
 <script>
-import {Button as GButton} from 'fanlelee-t-1-1'
-import 'fanlelee-t-1-1/dist/gulu.css'
+import {Button as GButton} from 'fanlelee'
+import 'fanlelee/dist/gulu.css'
 export default {
   name: 'App',
   components: {GButton}

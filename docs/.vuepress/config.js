@@ -3,6 +3,9 @@ module.exports = {
     title: 'UI组件',
     description: '这是一个好用的UI框架',
     themeConfig: {
+        nav: [
+            {text:'GitHub',link:'https://github.com/fanlelee/gulu'}
+        ],
         sidebar: [
             {
                 title: '入门',
