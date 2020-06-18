@@ -1,3 +1,5 @@
+### [文档](https://fanlelee.github.io/gulu)
+
 # 安装
 ### 使用yarn安装
 `yarn add fanlelee`
@@ -5,7 +7,7 @@
 `npm install --save fanlelee`
 
 # 快速上手
-### 以Vue-Cli构建button为例：
+### 以Button组件为例：
 ```vue
 <template>
   <div id="app">
