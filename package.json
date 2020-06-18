@@ -1,6 +1,6 @@
 {
   "name": "fanlelee",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "VUE 组件 UI",
   "main": "dist/gulu.umd.min.js",
   "scripts": {
